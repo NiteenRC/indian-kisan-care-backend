@@ -1,0 +1,25 @@
+##### Application path ########## Server port #####
+server:
+  port: 8080
+#  servlet:#    context-path: /api/
+
+##### Profile Activation #####
+spring:
+  profiles:
+    active:
+    - h2
+    include:    - mail
+    #- log
+    - jasper
+    - validation
+    
+# App Properties
+bezkoder:
+  app:
+    jwtSecret: bezKoderSecretKey
+    jwtExpirationMs: 86400000
+    
+#INSERT INTO roles(name) VALUES('ROLE_USER');
+#INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
+#INSERT INTO roles(name) VALUES('ROLE_ADMIN');
+

@@ -76,6 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests().antMatchers("/salesOrder/**").permitAll()
 			.and()
 			.authorizeRequests().antMatchers("/company/**").permitAll()
+			.and()
+			.authorizeRequests().antMatchers("/actuator/**").permitAll()
 			.antMatchers("/test/**").permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable().formLogin().loginPage("/login").permitAll();

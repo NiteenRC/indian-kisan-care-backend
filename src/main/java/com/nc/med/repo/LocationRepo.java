@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.nc.med.model.Location;
 
 @Repository
-public interface LocationRepo extends JpaRepository<Location, Integer> {
+public interface LocationRepo extends JpaRepository<Location, Long> {
 	Location findByCityName(String cityName);
 }

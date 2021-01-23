@@ -14,7 +14,7 @@ public interface ProductService {
 
 	Product findByProductName(String productName);
 
-	Product findByProductID(Integer productID);
+	Product findByProductID(Long productID);
 
 	void deleteProduct(Product productID);
 

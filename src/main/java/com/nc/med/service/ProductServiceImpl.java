@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product findByProductID(Integer productID) {
+	public Product findByProductID(Long productID) {
 		return productRepo.findById(productID).get();
 	}
 

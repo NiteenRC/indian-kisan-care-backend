@@ -52,7 +52,7 @@ public class SupplierController {
 	}
 
 	@DeleteMapping("/{supplierID}")
-	public ResponseEntity<?> deleteSupplier(@PathVariable Integer supplierID) {
+	public ResponseEntity<?> deleteSupplier(@PathVariable Long supplierID) {
 		Supplier supplier = supplierService.findBySupplierID(supplierID);
 		if (supplier == null) {
 			return new ResponseEntity<>(
@@ -69,7 +69,7 @@ public class SupplierController {
 	}
 
 	@GetMapping("/{supplierID}")
-	public ResponseEntity<Supplier> findSupplierByID(@PathVariable Integer supplierID) {
+	public ResponseEntity<Supplier> findSupplierByID(@PathVariable Long supplierID) {
 		return new ResponseEntity<>(supplierService.findBySupplierID(supplierID), HttpStatus.OK);
 	}
 }

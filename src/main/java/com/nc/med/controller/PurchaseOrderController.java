@@ -54,7 +54,7 @@ public class PurchaseOrderController {
 	}
 
 	@GetMapping("/supplier/{supplierID}")
-	public ResponseEntity<?> fetchCustomerBalance(@PathVariable Integer supplierID) {
+	public ResponseEntity<?> fetchCustomerBalance(@PathVariable Long supplierID) {
 		return new ResponseEntity<>(orderService.findSupplierBalanceBySupplier(supplierID), HttpStatus.OK);
 	}
 

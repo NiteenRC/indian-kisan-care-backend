@@ -8,7 +8,7 @@ public interface SupplierService {
 
     Supplier saveSupplier(Supplier supplier);
 
-    Supplier findBySupplierID(Integer supplierID);
+    Supplier findBySupplierID(Long supplierID);
 
     void deleteSupplier(Supplier supplierID);
 
@@ -16,5 +16,5 @@ public interface SupplierService {
 
     List<Supplier> fetchAllCategories();
     
-    Supplier findSupplierById(Integer id);
+    Supplier findSupplierById(Long id);
 }

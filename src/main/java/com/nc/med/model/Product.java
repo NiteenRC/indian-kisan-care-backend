@@ -26,7 +26,7 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue
 	@Column(name = "PRODUCT_ID", nullable = false)
-	private int productID;
+	private Long id;
 	@Column(length = 255, nullable = false)
 	private String productName;
 	@Column(name = "Price", nullable = false)
@@ -110,12 +110,12 @@ public class Product implements Serializable {
 		this.category = category;
 	}
 
-	public int getProductID() {
-		return productID;
+	public Long getId() {
+		return id;
 	}
 
-	public void setProductID(int productID) {
-		this.productID = productID;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getProductName() {

@@ -75,15 +75,15 @@ public class AppLauncher extends SpringBootServletInitializer {
 		return new AuditorAwareImpl();
 	}
 
-	//@Bean
+	// @Bean
 	public void trials() {
 		try {
 			LOGGER.info("getSalesOrderByCreateDate {}"
 					+ salesOrderRepo.getSalesOrderByCreateDate(LocalDateTime.now()).size());
 			LOGGER.info("findByDateBetween {}",
 					salesOrderRepo.findByCreatedDateBetween(LocalDateTime.now(), LocalDateTime.now()).size());
-			LOGGER.info("findAllByLocationLocationID {}", customerRepo.findAllByLocationLocationID(3).size());
-			LOGGER.info("findByLocationLocationID {}", customerRepo.findByLocationLocationID(3).size());
+			LOGGER.info("findAllByLocationLocationID {}", customerRepo.findAllByLocationId(Long.valueOf(3)).size());
+			LOGGER.info("findByLocationLocationID {}", customerRepo.findByLocationId(Long.valueOf(3)).size());
 		} catch (Exception e) {
 			LOGGER.error("Failed {}", e);
 		}
@@ -118,42 +118,42 @@ public class AppLauncher extends SpringBootServletInitializer {
 					userRepo.saveAll(Arrays.asList(user1, user2));
 				}
 
-				Company company1 = new Company(1L, "Jai Kisan", "+98723452345");
-				Company company2 = new Company(2L, "Mangala", "+98723452345");
-				Company company3 = new Company(3L, "Daneshwari", "+98723452345");
-				Company company4 = new Company(4L, "Shakti", "+98723452345");
-				Company company5 = new Company(5L, "Mangam", "+98723452345");
+				Company company1 = new Company(1L, "Jai Kisan", "9872345234");
+				Company company2 = new Company(2L, "Mangala", "9872345231");
+				Company company3 = new Company(3L, "Daneshwari", "9872345232");
+				Company company4 = new Company(4L, "Shakti", "9872345233");
+				Company company5 = new Company(5L, "Mangam", "9872345235");
 				if (companyRepo.findByCompanyName("Reliance") == null) {
 					companyRepo.saveAll(Arrays.asList(company1, company2, company3, company4, company5));
 				}
 
-				Location location1 = new Location(1, "Shinal");
-				Location location2 = new Location(2, "Tangadi");
-				Location location3 = new Location(3, "Katral");
-				Location location4 = new Location(4, "Hulagabali");
-				Location location5 = new Location(5, "Other");
-				Location location6 = new Location(5, "Athani");
-				Location location7 = new Location(5, "Ainapur");
+				Location location1 = new Location(Long.valueOf(1), "Shinal");
+				Location location2 = new Location(Long.valueOf(2), "Tangadi");
+				Location location3 = new Location(Long.valueOf(3), "Katral");
+				Location location4 = new Location(Long.valueOf(4), "Hulagabali");
+				Location location5 = new Location(Long.valueOf(5), "Other");
+				Location location6 = new Location(Long.valueOf(5), "Athani");
+				Location location7 = new Location(Long.valueOf(5), "Ainapur");
 				if (locationRepo.findByCityName("Shinal") == null) {
 					locationRepo.saveAll(
 							Arrays.asList(location1, location2, location3, location4, location5, location6, location7));
 				}
 
-				Supplier supplier1 = new Supplier(1, "Badakambe", companyRepo.findByCompanyName("Jai Kisan"),
+				Supplier supplier1 = new Supplier(Long.valueOf(1), "Badakambe", companyRepo.findByCompanyName("Jai Kisan"),
 						locationRepo.findByCityName("Athani"), "+9038902342");
-				Supplier supplier2 = new Supplier(2, "JN Kumbar", companyRepo.findByCompanyName("Mangala"),
+				Supplier supplier2 = new Supplier(Long.valueOf(2), "JN Kumbar", companyRepo.findByCompanyName("Mangala"),
 						locationRepo.findByCityName("Athani"), "+9038902344");
-				Supplier supplier3 = new Supplier(3, "Ghatge", companyRepo.findByCompanyName("Mangam"),
+				Supplier supplier3 = new Supplier(Long.valueOf(3), "Ghatge", companyRepo.findByCompanyName("Mangam"),
 						locationRepo.findByCityName("Ainapur"), "+9038902342");
 				if (supplierRepo.findBySupplierName("Badakambe") == null) {
 					supplierRepo.saveAll(Arrays.asList(supplier1, supplier2, supplier3));
 				}
 
-				Customer customer1 = new Customer(1, "Kallappa", locationRepo.findByCityName("Shinal"), "+9878923745");
-				Customer customer2 = new Customer(2, "Mallappa", locationRepo.findByCityName("Katral"), "+9878923745");
-				Customer customer3 = new Customer(3, "Birappa", locationRepo.findByCityName("Tangadi"), "+9878923745");
-				Customer customer4 = new Customer(4, "Bairappa", locationRepo.findByCityName("Shinal"), "+9878923745");
-				Customer customer5 = new Customer(5, "Murgyappa", locationRepo.findByCityName("Other"), "+9878923745");
+				Customer customer1 = new Customer(Long.valueOf(1), "Kallappa", locationRepo.findByCityName("Shinal"), "9878923745");
+				Customer customer2 = new Customer(Long.valueOf(2), "Mallappa", locationRepo.findByCityName("Katral"), "9878923745");
+				Customer customer3 = new Customer(Long.valueOf(3), "Birappa", locationRepo.findByCityName("Tangadi"), "9878923745");
+				Customer customer4 = new Customer(Long.valueOf(4), "Bairappa", locationRepo.findByCityName("Shinal"), "9878923745");
+				Customer customer5 = new Customer(Long.valueOf(5), "Murgyappa", locationRepo.findByCityName("Other"), "9878923745");
 				if (customerRepo.findByCustomerName("Kallappa") == null) {
 					customerRepo.saveAll(Arrays.asList(customer1, customer2, customer3, customer4, customer5));
 				}

@@ -11,7 +11,7 @@ import java.util.List;
 public class SupplierServiceImpl implements SupplierService {
 
     @Autowired
-    SupplierRepo supplierRepo;
+    private SupplierRepo supplierRepo;
 
     @Override
     public Supplier saveSupplier(Supplier supplier) {
@@ -24,7 +24,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public Supplier findBySupplierID(Integer supplierID) {
+    public Supplier findBySupplierID(Long supplierID) {
         return supplierRepo.findById(supplierID).get();
     }
 
@@ -39,7 +39,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
 	@Override
-	public Supplier findSupplierById(Integer id) {
+	public Supplier findSupplierById(Long id) {
 		return supplierRepo.findById(id).get();
 	}
 }

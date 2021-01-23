@@ -11,7 +11,7 @@ import com.nc.med.model.SalesOrder;
 public interface SalesOrderService {
 	SalesOrder saveOrder(SalesOrder order);
 
-	SalesOrder findByOrderID(Integer orderID);
+	SalesOrder findByOrderID(Long orderID);
 
 	void deleteOrder(SalesOrder orderID);
 
@@ -19,7 +19,7 @@ public interface SalesOrderService {
 
 	List<SalesOrder> findAllOrders();
 
-	double findCustomerBalanceByCustomer(Integer customerID);
+	double findCustomerBalanceByCustomer(Long customerID);
 
 	double findAllCustomersBalance();
 
@@ -27,7 +27,7 @@ public interface SalesOrderService {
 
 	ReportBar findBarChartModels() throws ParseException;
 
-	List<SalesOrder> findAllByCustomer(Integer customerID);
+	List<SalesOrder> findAllByCustomer(Long customerID);
 
 	List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch);
 }

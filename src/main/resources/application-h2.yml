@@ -1,7 +1,7 @@
 spring:
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:test_mem
+    url: jdbc:h2:mem:test_mem005
     initialization-mode: always
 #   url: jdbc:h2:file:\${HOME}/Downloads/F_100;AUTO_SERVER=TRUE
   jpa:

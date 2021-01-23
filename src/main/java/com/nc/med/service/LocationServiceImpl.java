@@ -24,7 +24,7 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public Location findByLocationID(Integer categoryID) {
+	public Location findByLocationID(Long categoryID) {
 		return categoryRepo.findById(categoryID).get();
 	}
 
@@ -39,7 +39,7 @@ public class LocationServiceImpl implements LocationService {
 	}
 
 	@Override
-	public Location findLocationById(Integer id) {
+	public Location findLocationById(Long id) {
 		return categoryRepo.findById(id).get();
 	}
 }

@@ -52,7 +52,7 @@ public class LocationController {
 	}
 
 	@DeleteMapping("/{locationID}")
-	public ResponseEntity<?> deleteCategory(@PathVariable Integer locationID) {
+	public ResponseEntity<?> deleteCategory(@PathVariable Long locationID) {
 		Location location = locationService.findByLocationID(locationID);
 		if (location == null) {
 			return new ResponseEntity<>(
@@ -69,7 +69,7 @@ public class LocationController {
 	}
 
 	@GetMapping("/{locationID}")
-	public ResponseEntity<Location> findCategoryByID(@PathVariable Integer locationID) {
+	public ResponseEntity<Location> findCategoryByID(@PathVariable Long locationID) {
 		return new ResponseEntity<>(locationService.findByLocationID(locationID), HttpStatus.OK);
 	}
 }

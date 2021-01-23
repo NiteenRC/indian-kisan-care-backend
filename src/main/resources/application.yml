@@ -7,7 +7,7 @@ server:
 spring:
   profiles:
     active:
-    - h2
+     - h2
     include:    - mail
     #- log
     - jasper

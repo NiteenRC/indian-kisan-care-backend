@@ -8,7 +8,7 @@ public interface CustomerService {
 
 	Customer saveCustomer(Customer customer);
 
-	Customer findByCustomerID(Integer customerID);
+	Customer findByCustomerID(Long customerID);
 
 	void deleteCustomer(Customer customerID);
 
@@ -16,5 +16,5 @@ public interface CustomerService {
 
 	List<Customer> fetchAllCategories();
 
-	Customer findCustomerById(Integer id);
+	Customer findCustomerById(Long id);
 }

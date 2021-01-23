@@ -19,7 +19,7 @@ public interface PurchaseOrderService {
 
 	List<PurchaseOrder> findByDates(String startDate, String endDate) throws ParseException;
 
-	double findSupplierBalanceBySupplier(Integer supplierID);
+	double findSupplierBalanceBySupplier(Long supplierID);
 
 	double findAllSuppliersBalance();
 

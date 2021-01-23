@@ -17,11 +17,17 @@ public class Location implements Serializable {
 	private static final long serialVersionUID = -1000119078147252957L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int locationID;
+	private Long id;
 	private String cityName;
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
+
+	public Location(Long id, String cityName) {
+		super();
+		this.id = id;
+		this.cityName = cityName;
+	}
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
@@ -34,17 +40,12 @@ public class Location implements Serializable {
 	public Location() {
 	}
 
-	public Location(int locationID, String cityName) {
-		this.locationID = locationID;
-		this.cityName = cityName;
+	public Long getId() {
+		return id;
 	}
 
-	public int getLocationID() {
-		return locationID;
-	}
-
-	public void setLocationID(int locationID) {
-		this.locationID = locationID;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getCityName() {

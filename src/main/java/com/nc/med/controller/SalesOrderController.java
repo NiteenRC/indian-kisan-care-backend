@@ -68,7 +68,7 @@ public class SalesOrderController {
 	}
 
 	@GetMapping("/customer/balance/{customerID}")
-	public ResponseEntity<?> fetchCustomerBalanceByCustomerID(@PathVariable Integer customerID) {
+	public ResponseEntity<?> fetchCustomerBalanceByCustomerID(@PathVariable Long customerID) {
 		return new ResponseEntity<>(orderService.findCustomerBalanceByCustomer(customerID), HttpStatus.OK);
 	}
 
@@ -83,7 +83,7 @@ public class SalesOrderController {
 	}
 
 	@GetMapping("/customer/{customerID}")
-	public ResponseEntity<?> fetchAllByCustomer(@PathVariable Integer customerID) {
+	public ResponseEntity<?> fetchAllByCustomer(@PathVariable Long customerID) {
 		return ResponseEntity.ok(orderService.findAllByCustomer(customerID));
 	}
 
@@ -105,7 +105,7 @@ public class SalesOrderController {
 	}
 
 	@DeleteMapping("/{orderID}")
-	public ResponseEntity<?> deleteOrder(@PathVariable Integer orderID) {
+	public ResponseEntity<?> deleteOrder(@PathVariable Long orderID) {
 		SalesOrder order = orderService.findByOrderID(orderID);
 		if (order == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),

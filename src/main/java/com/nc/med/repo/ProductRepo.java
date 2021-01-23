@@ -5,14 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProductRepo extends JpaRepository<Product, Integer> {
+public interface ProductRepo extends JpaRepository<Product, Long> {
 
-    List<Product> findByCategoryCategoryID(int categoryID);
+    List<Product> findByCategoryId(int Id);
 
-    List<Product> findByCategoryCategoryIDAndProductNameContainingIgnoreCaseOrderByPriceDesc(Integer categoryID,
+    List<Product> findByCategoryIdAndProductNameContainingIgnoreCaseOrderByPriceDesc(Integer id,
                                                                                              String productName);
 
-    List<Product> findByCategoryCategoryIDAndProductNameContainingIgnoreCase(Integer categoryID, String productName);
+    List<Product> findByCategoryIdAndProductNameContainingIgnoreCase(Integer id, String productName);
 
     List<Product> findByProductNameContainingIgnoreCase(String productName);
 

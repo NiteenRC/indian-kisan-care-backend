@@ -26,10 +26,10 @@ public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "CATEGORY_ID", nullable = false)
-	private int categoryID;
+	private Long id;
 	private String categoryName;
 	private String categoryDesc;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL,orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
 	private List<Product> products = new ArrayList<>();
 	@CreationTimestamp
@@ -43,6 +43,14 @@ public class Category {
 		this.createdDate = createdDate;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -54,24 +62,12 @@ public class Category {
 	public Category() {
 	}
 
-	public Category(int categoryID) {
-		this.categoryID = categoryID;
-	}
-
 	public List<Product> getProducts() {
 		return products;
 	}
 
 	public void setProducts(List<Product> products) {
 		this.products = products;
-	}
-
-	public int getCategoryID() {
-		return categoryID;
-	}
-
-	public void setCategoryID(int categoryID) {
-		this.categoryID = categoryID;
 	}
 
 	public String getCategoryName() {

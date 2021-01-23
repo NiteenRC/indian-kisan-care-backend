@@ -71,7 +71,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/{productID}")
-	public ResponseEntity<?> deleteProduct(@PathVariable Integer productID) {
+	public ResponseEntity<?> deleteProduct(@PathVariable Long productID) {
 		Product product = productService.findByProductID(productID);
 		if (product == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("ProductID: " + productID + " not found."),
@@ -82,7 +82,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/{productID}")
-	public ResponseEntity<?> getProductsById(@PathVariable Integer productID) {
+	public ResponseEntity<?> getProductsById(@PathVariable Long productID) {
 		Product product = productService.findByProductID(productID);
 		if (product == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("ProductID: " + productID + " not found."),

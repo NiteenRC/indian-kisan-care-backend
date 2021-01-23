@@ -21,7 +21,7 @@ public class Supplier implements Serializable {
 	private static final long serialVersionUID = -1000119078147252957L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int supplierID;
+	private Long id;
 	private String supplierName;
 	@ManyToOne
 	private Company company;
@@ -53,20 +53,20 @@ public class Supplier implements Serializable {
 	public Supplier() {
 	}
 
-	public Supplier(int supplierID, String supplierName, Company company, Location location, String phoneNumber) {
-		this.supplierID = supplierID;
+	public Supplier(Long id, String supplierName, Company company, Location location, String phoneNumber) {
+		this.id = id;
 		this.supplierName = supplierName;
 		this.company = company;
 		this.location = location;
 		this.phoneNumber = phoneNumber;
 	}
 
-	public int getSupplierID() {
-		return supplierID;
+	public Long getId() {
+		return id;
 	}
 
-	public void setSupplierID(int supplierID) {
-		this.supplierID = supplierID;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getSupplierName() {

@@ -11,7 +11,7 @@ import java.util.List;
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
-    CompanyRepo companyRepo;
+    private CompanyRepo companyRepo;
 
     @Override
     public Company saveCompany(Company company) {

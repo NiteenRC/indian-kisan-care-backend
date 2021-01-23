@@ -11,7 +11,7 @@ import com.nc.med.mapper.OrderStatus;
 import com.nc.med.model.Customer;
 import com.nc.med.model.SalesOrder;
 
-public interface SalesOrderRepo extends JpaRepository<SalesOrder, Integer> {
+public interface SalesOrderRepo extends JpaRepository<SalesOrder, Long> {
 	List<SalesOrder> findAmountBalanceByCustomer(Customer customer);
 
 	@Query(value = "select CAST(created_date AS DATE), sum(total_price) from sales_order group by cast(created_date as date) order by 1", nativeQuery = true)
@@ -38,7 +38,7 @@ public interface SalesOrderRepo extends JpaRepository<SalesOrder, Integer> {
 	//List<SalesOrder> findByCustomerCustomerIDAndCreatedDateBetween(int customerId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 	//@Param is not required
 	
-	List<SalesOrder> findByCustomerCustomerIDAndCreatedDateBetweenAndStatus(int customerId, LocalDateTime startDate,
+	List<SalesOrder> findByCustomerIdAndCreatedDateBetweenAndStatus(Long customerId, LocalDateTime startDate,
 			LocalDateTime endDate, OrderStatus orderStatus);
 
 }

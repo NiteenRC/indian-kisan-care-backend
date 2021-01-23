@@ -48,7 +48,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 	}
 
 	@Override
-	public SalesOrder findByOrderID(Integer orderID) {
+	public SalesOrder findByOrderID(Long orderID) {
 		return salesOrderRepo.findById(orderID).get();
 	}
 
@@ -63,7 +63,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 	}
 
 	@Override
-	public double findCustomerBalanceByCustomer(Integer customerID) {
+	public double findCustomerBalanceByCustomer(Long customerID) {
 		List<SalesOrder> salesOrders = salesOrderRepo
 				.findAmountBalanceByCustomer(customerRepo.findById(customerID).get());
 
@@ -222,7 +222,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 	}
 
 	@Override
-	public List<SalesOrder> findAllByCustomer(Integer customerID) {
+	public List<SalesOrder> findAllByCustomer(Long customerID) {
 		LOGGER.info("filter by customer id: {}", customerID);
 		return salesOrderRepo.findAllByCustomer(customerRepo.findById(customerID).get());
 	}
@@ -230,7 +230,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 	@Override
 	public List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch) {
 		LOGGER.info("salesOrderSearch data to filter: {}", salesOrderSearch);
-		return salesOrderRepo.findByCustomerCustomerIDAndCreatedDateBetweenAndStatus(salesOrderSearch.getCustomerId(),
+		return salesOrderRepo.findByCustomerIdAndCreatedDateBetweenAndStatus(Long.valueOf(salesOrderSearch.getCustomerId()),
 				salesOrderSearch.getStartDate(), salesOrderSearch.getEndDate(), salesOrderSearch.getStatus());
 	}
 }

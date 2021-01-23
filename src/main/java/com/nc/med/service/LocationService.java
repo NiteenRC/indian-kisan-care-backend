@@ -8,7 +8,7 @@ public interface LocationService {
 
 	Location saveLocation(Location category);
 
-	Location findByLocationID(Integer categoryID);
+	Location findByLocationID(Long categoryID);
 
 	void deleteLocation(Location categoryID);
 
@@ -16,5 +16,5 @@ public interface LocationService {
 
 	List<Location> fetchAllCategories();
 
-	Location findLocationById(Integer id);
+	Location findLocationById(Long id);
 }

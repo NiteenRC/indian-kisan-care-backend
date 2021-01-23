@@ -21,7 +21,7 @@ public class Customer implements Serializable {
 	private static final long serialVersionUID = -1000119078147252957L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int customerID;
+	private Long id;
 	private String customerName;
 	@ManyToOne
 	private Location location;
@@ -43,19 +43,19 @@ public class Customer implements Serializable {
 	public Customer() {
 	}
 
-	public Customer(int customerID, String customerName, Location location, String phoneNumber) {
-		this.customerID = customerID;
+	public Customer(Long id, String customerName, Location location, String phoneNumber) {
+		this.id = id;
 		this.customerName = customerName;
 		this.location = location;
 		this.phoneNumber = phoneNumber;
 	}
 
-	public int getCustomerID() {
-		return customerID;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCustomerID(int customerID) {
-		this.customerID = customerID;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getCustomerName() {

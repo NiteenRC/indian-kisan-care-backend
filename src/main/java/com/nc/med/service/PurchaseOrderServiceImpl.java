@@ -67,7 +67,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 	}
 
 	@Override
-	public double findSupplierBalanceBySupplier(Integer supplierID) {
+	public double findSupplierBalanceBySupplier(Long supplierID) {
 		List<PurchaseOrder> purchaseOrders = purchaseOrderRepo
 				.findAmountBalanceBySupplier(supplierRepo.findById(supplierID).get());
 

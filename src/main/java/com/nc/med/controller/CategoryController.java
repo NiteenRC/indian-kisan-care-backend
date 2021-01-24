@@ -56,7 +56,7 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("/{categoryID}")
-	public ResponseEntity<?> deleteCategory(@PathVariable Integer categoryID) {
+	public ResponseEntity<?> deleteCategory(@PathVariable Long categoryID) {
 		Category category = categoryService.findByCategoryID(categoryID);
 		if (category == null) {
 			return new ResponseEntity<>(
@@ -73,7 +73,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{categoryID}")
-	public ResponseEntity<Category> findCategoryByID(@PathVariable Integer categoryID) {
+	public ResponseEntity<Category> findCategoryByID(@PathVariable Long categoryID) {
 		return new ResponseEntity<>(categoryService.findByCategoryID(categoryID), HttpStatus.OK);
 	}
 }

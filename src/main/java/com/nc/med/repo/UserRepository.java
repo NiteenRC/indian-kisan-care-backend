@@ -11,7 +11,7 @@ import com.nc.med.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByUsername(String username);
 
-	Boolean existsByUsername(String username);
+	Boolean existsByUsernameContainingIgnoreCase(String username);
 
 	Boolean existsByEmail(String email);
 }

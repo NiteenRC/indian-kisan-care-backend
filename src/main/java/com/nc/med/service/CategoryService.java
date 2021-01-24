@@ -8,7 +8,7 @@ public interface CategoryService {
 
     Category saveCategory(Category category);
 
-    Category findByCategoryID(Integer categoryID);
+    Category findByCategoryID(Long categoryID);
 
     void deleteCategory(Category categoryID);
 
@@ -16,5 +16,5 @@ public interface CategoryService {
 
     List<Category> fetchAllCategories();
     
-    Category findCategoryById(Integer id);
+    Category findCategoryById(Long id);
 }

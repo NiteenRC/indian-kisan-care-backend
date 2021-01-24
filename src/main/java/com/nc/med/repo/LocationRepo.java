@@ -7,5 +7,5 @@ import com.nc.med.model.Location;
 
 @Repository
 public interface LocationRepo extends JpaRepository<Location, Long> {
-	Location findByCityName(String cityName);
+	Location findByCityNameContainingIgnoreCase(String cityName);
 }

@@ -35,7 +35,7 @@ public class LocationServiceImpl implements LocationService {
 
 	@Override
 	public Location findByLocationName(String cityName) {
-		return categoryRepo.findByCityName(cityName);
+		return categoryRepo.findByCityNameContainingIgnoreCase(cityName);
 	}
 
 	@Override

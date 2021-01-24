@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category findByCategoryID(Integer categoryID) {
+    public Category findByCategoryID(Long categoryID) {
         return categoryRepo.findById(categoryID).get();
     }
 
@@ -35,11 +35,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findByCategoryName(String categoryName) {
-        return categoryRepo.findByCategoryName(categoryName);
+        return categoryRepo.findByCategoryNameContainingIgnoreCase(categoryName);
     }
 
 	@Override
-	public Category findCategoryById(Integer id) {
+	public Category findCategoryById(Long id) {
 		return categoryRepo.findById(id).get();
 	}
 }

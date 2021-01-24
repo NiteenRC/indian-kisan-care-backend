@@ -58,7 +58,7 @@ public class ProductController {
 	}
 
 	@PostMapping("/{categoryID}")
-	public ResponseEntity<?> saveProduct(@PathVariable int categoryID, @RequestBody Product product) {
+	public ResponseEntity<?> saveProduct(@PathVariable Long categoryID, @RequestBody Product product) {
 		Category category = categoryService.findByCategoryID(categoryID);
 		product.setCategory(category);
 		Product productName = productService.findByProductName(product.getProductName());

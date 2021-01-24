@@ -134,49 +134,49 @@ public class AppLauncher extends SpringBootServletInitializer {
 				Location location5 = new Location(Long.valueOf(5), "Other");
 				Location location6 = new Location(Long.valueOf(5), "Athani");
 				Location location7 = new Location(Long.valueOf(5), "Ainapur");
-				if (locationRepo.findByCityName("Shinal") == null) {
+				if (locationRepo.findByCityNameContainingIgnoreCase("Shinal") == null) {
 					locationRepo.saveAll(
 							Arrays.asList(location1, location2, location3, location4, location5, location6, location7));
 				}
 
 				Supplier supplier1 = new Supplier(Long.valueOf(1), "Badakambe", companyRepo.findByCompanyName("Jai Kisan"),
-						locationRepo.findByCityName("Athani"), "+9038902342");
+						locationRepo.findByCityNameContainingIgnoreCase("Athani"), "+9038902342");
 				Supplier supplier2 = new Supplier(Long.valueOf(2), "JN Kumbar", companyRepo.findByCompanyName("Mangala"),
-						locationRepo.findByCityName("Athani"), "+9038902344");
+						locationRepo.findByCityNameContainingIgnoreCase("Athani"), "+9038902344");
 				Supplier supplier3 = new Supplier(Long.valueOf(3), "Ghatge", companyRepo.findByCompanyName("Mangam"),
-						locationRepo.findByCityName("Ainapur"), "+9038902342");
-				if (supplierRepo.findBySupplierName("Badakambe") == null) {
+						locationRepo.findByCityNameContainingIgnoreCase("Ainapur"), "+9038902342");
+				if (supplierRepo.findBySupplierNameContainingIgnoreCase("Badakambe") == null) {
 					supplierRepo.saveAll(Arrays.asList(supplier1, supplier2, supplier3));
 				}
 
-				Customer customer1 = new Customer(Long.valueOf(1), "Kallappa", locationRepo.findByCityName("Shinal"), "9878923745");
-				Customer customer2 = new Customer(Long.valueOf(2), "Mallappa", locationRepo.findByCityName("Katral"), "9878923745");
-				Customer customer3 = new Customer(Long.valueOf(3), "Birappa", locationRepo.findByCityName("Tangadi"), "9878923745");
-				Customer customer4 = new Customer(Long.valueOf(4), "Bairappa", locationRepo.findByCityName("Shinal"), "9878923745");
-				Customer customer5 = new Customer(Long.valueOf(5), "Murgyappa", locationRepo.findByCityName("Other"), "9878923745");
-				if (customerRepo.findByCustomerName("Kallappa") == null) {
+				Customer customer1 = new Customer(Long.valueOf(1), "Kallappa", locationRepo.findByCityNameContainingIgnoreCase("Shinal"), "9878923745");
+				Customer customer2 = new Customer(Long.valueOf(2), "Mallappa", locationRepo.findByCityNameContainingIgnoreCase("Katral"), "9878923745");
+				Customer customer3 = new Customer(Long.valueOf(3), "Birappa", locationRepo.findByCityNameContainingIgnoreCase("Tangadi"), "9878923745");
+				Customer customer4 = new Customer(Long.valueOf(4), "Bairappa", locationRepo.findByCityNameContainingIgnoreCase("Shinal"), "9878923745");
+				Customer customer5 = new Customer(Long.valueOf(5), "Murgyappa", locationRepo.findByCityNameContainingIgnoreCase("Other"), "9878923745");
+				if (customerRepo.findByCustomerNameContainingIgnoreCase("Kallappa") == null) {
 					customerRepo.saveAll(Arrays.asList(customer1, customer2, customer3, customer4, customer5));
 				}
 
 				Category category1 = new Category("fertilizer desc", "Fertilizer", new Date());
 				Category category2 = new Category("seed desc", "Seed", new Date());
 				Category category3 = new Category("pestiside desc", "Pesticide", new Date());
-				if (categoryRepo.findByCategoryName("Fertilizer") == null) {
+				if (categoryRepo.findByCategoryNameContainingIgnoreCase("Fertilizer") == null) {
 					categoryRepo.saveAll(Arrays.asList(category1, category2, category3));
 				}
 
 				Product product1 = new Product(new Date(), 267, "urea desc", "Urea", 100,
-						categoryRepo.findByCategoryName("Fertilizer"));
+						categoryRepo.findByCategoryNameContainingIgnoreCase("Fertilizer"));
 				Product product2 = new Product(new Date(), 1360, "tanger desc", "Tanger", 150,
-						categoryRepo.findByCategoryName("Pesticide"));
+						categoryRepo.findByCategoryNameContainingIgnoreCase("Pesticide"));
 				Product product3 = new Product(new Date(), 1700, "Mico desc", "Mico", 250,
-						categoryRepo.findByCategoryName("Seed"));
+						categoryRepo.findByCategoryNameContainingIgnoreCase("Seed"));
 				Product product4 = new Product(new Date(), 260, "24D desc", "24D", 500,
-						categoryRepo.findByCategoryName("Pesticide"));
+						categoryRepo.findByCategoryNameContainingIgnoreCase("Pesticide"));
 				Product product5 = new Product(new Date(), 170, "ultrazen desc", "Ultrazen", 250,
-						categoryRepo.findByCategoryName("Pesticide"));
+						categoryRepo.findByCategoryNameContainingIgnoreCase("Pesticide"));
 				Product product6 = new Product(new Date(), 1200, "dap desc", "DAP", 50,
-						categoryRepo.findByCategoryName("Fertilizer"));
+						categoryRepo.findByCategoryNameContainingIgnoreCase("Fertilizer"));
 				if (productRepo.findByProductName("24D") == null) {
 					productRepo.saveAll(Arrays.asList(product1, product2, product3, product4, product5, product6));
 				}
@@ -199,7 +199,7 @@ public class AppLauncher extends SpringBootServletInitializer {
 				List<Category> products = Files.lines(Paths.get(fileName)).skip(1).map(line -> {
 					String[] result = line.split(",");
 					try {
-						if (categoryRepo.findByCategoryName(result[2].replaceAll("\"", "")) == null) {
+						if (categoryRepo.findByCategoryNameContainingIgnoreCase(result[2].replaceAll("\"", "")) == null) {
 							return new Category(result[1].replaceAll("\"", ""), result[2].replaceAll("\"", ""),
 									new SimpleDateFormat("yyyy-MM-dd")
 											.parse(result[3].replaceAll("00:00.0", "").replaceAll("\"", "")));
@@ -229,7 +229,7 @@ public class AppLauncher extends SpringBootServletInitializer {
 											.parse(result[1].replaceAll("00:00.0", "").replaceAll("\"", "")),
 									Double.valueOf(result[2].replaceAll("\"", "")), result[3].replaceAll("\"", ""),
 									result[4].replaceAll("\"", ""), Integer.valueOf(result[5].replaceAll("\"", "")),
-									categoryRepo.findById(Integer.valueOf(result[6].replaceAll("\"", ""))).get());
+									categoryRepo.findById(Long.valueOf(result[6].replaceAll("\"", ""))).get());
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

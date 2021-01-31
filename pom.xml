@@ -15,7 +15,7 @@
 	<name>indian-kisan-care-backend</name>
 	<description>indian-kisan-care-backend project for Spring Boot</description>
 
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>

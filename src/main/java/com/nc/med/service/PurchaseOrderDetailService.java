@@ -1,20 +1,20 @@
 package com.nc.med.service;
 
-import java.util.List;
-
 import com.nc.med.model.PurchaseOrderDetail;
 
+import java.util.List;
+
 public interface PurchaseOrderDetailService {
-	PurchaseOrderDetail savePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail);
+    PurchaseOrderDetail savePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail);
 
-	List<PurchaseOrderDetail> savePurchaseOrderDetail(List<PurchaseOrderDetail> purchaseOrderDetails);
+    List<PurchaseOrderDetail> savePurchaseOrderDetail(List<PurchaseOrderDetail> purchaseOrderDetails);
 
-	PurchaseOrderDetail findByPurchaseOrderDetailID(Integer purchaseOrderDetailID);
+    PurchaseOrderDetail findByPurchaseOrderDetailID(Integer purchaseOrderDetailID);
 
-	void deletePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetailID);
+    void deletePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetailID);
 
-	PurchaseOrderDetail findPurchaseOrderDetailByProductName(String productName);
+    PurchaseOrderDetail findPurchaseOrderDetailByProductName(String productName);
 
-	List<PurchaseOrderDetail> findAllPurchaseOrderDetails();
+    List<PurchaseOrderDetail> findAllPurchaseOrderDetails();
 
 }

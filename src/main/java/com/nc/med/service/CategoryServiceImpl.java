@@ -38,8 +38,8 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepo.findByCategoryNameContainingIgnoreCase(categoryName);
     }
 
-	@Override
-	public Category findCategoryById(Long id) {
-		return categoryRepo.findById(id).get();
-	}
+    @Override
+    public Category findCategoryById(Long id) {
+        return categoryRepo.findById(id).get();
+    }
 }

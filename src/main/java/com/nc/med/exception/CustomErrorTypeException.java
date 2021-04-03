@@ -5,7 +5,7 @@ public class CustomErrorTypeException {
 
     private String errorMessage;
 
-    public CustomErrorTypeException(String errorMessage){
+    public CustomErrorTypeException(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 

@@ -10,36 +10,36 @@ import java.util.List;
 @Service
 public class LocationServiceImpl implements LocationService {
 
-	@Autowired
-	LocationRepo categoryRepo;
+    @Autowired
+    LocationRepo categoryRepo;
 
-	@Override
-	public Location saveLocation(Location category) {
-		return categoryRepo.save(category);
-	}
+    @Override
+    public Location saveLocation(Location category) {
+        return categoryRepo.save(category);
+    }
 
-	@Override
-	public List<Location> fetchAllCategories() {
-		return categoryRepo.findAll();
-	}
+    @Override
+    public List<Location> fetchAllCategories() {
+        return categoryRepo.findAll();
+    }
 
-	@Override
-	public Location findByLocationID(Long categoryID) {
-		return categoryRepo.findById(categoryID).get();
-	}
+    @Override
+    public Location findByLocationID(Long categoryID) {
+        return categoryRepo.findById(categoryID).get();
+    }
 
-	@Override
-	public void deleteLocation(Location categoryID) {
-		categoryRepo.delete(categoryID);
-	}
+    @Override
+    public void deleteLocation(Location categoryID) {
+        categoryRepo.delete(categoryID);
+    }
 
-	@Override
-	public Location findByLocationName(String cityName) {
-		return categoryRepo.findByCityNameContainingIgnoreCase(cityName);
-	}
+    @Override
+    public Location findByLocationName(String cityName) {
+        return categoryRepo.findByCityNameContainingIgnoreCase(cityName);
+    }
 
-	@Override
-	public Location findLocationById(Long id) {
-		return categoryRepo.findById(id).get();
-	}
+    @Override
+    public Location findLocationById(Long id) {
+        return categoryRepo.findById(id).get();
+    }
 }

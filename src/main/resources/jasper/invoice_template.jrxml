@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice_template" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="jasper.localization.i18n" uuid="cd759d20-cfa9-48d7-9532-01dc8f55f04e">
+<jasperReport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="invoice_template" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20"
+              rightMargin="20" topMargin="20" bottomMargin="20" resourceBundle="jasper.localization.i18n"
+              uuid="cd759d20-cfa9-48d7-9532-01dc8f55f04e">
     <style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
         <box>
             <pen lineWidth="0.5" lineColor="#FFFFFF"/>
@@ -54,11 +59,13 @@
                 <imageExpression><![CDATA[$P{logo}]]></imageExpression>
             </image>
             <textField>
-                <reportElement key="" x="190" y="30" width="360" height="30" uuid="e086d53d-1677-4b80-b167-4855d4c118ec"/>
+                <reportElement key="" x="190" y="30" width="360" height="30"
+                               uuid="e086d53d-1677-4b80-b167-4855d4c118ec"/>
                 <textElement verticalAlignment="Middle">
                     <font fontName="Arial Black" size="16" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$R{jasper.invoice.title.label} + ": " + $P{order}.getCode()]]></textFieldExpression>
+                <textFieldExpression>
+                    <![CDATA[$R{jasper.invoice.title.label} + ": " + $P{order}.getCode()]]></textFieldExpression>
             </textField>
         </band>
     </title>
@@ -81,7 +88,8 @@
                     <textElement verticalAlignment="Top">
                         <font fontName="Arial" size="11" isBold="false"/>
                     </textElement>
-                    <textFieldExpression><![CDATA[$P{order}.getAddress().getFirstName()  + " " +  $P{order}.getAddress().getLastName()]]></textFieldExpression>
+                    <textFieldExpression>
+                        <![CDATA[$P{order}.getAddress().getFirstName()  + " " +  $P{order}.getAddress().getLastName()]]></textFieldExpression>
                 </textField>
                 <textField>
                     <reportElement x="0" y="51" width="380" height="19" uuid="76193d2c-2228-4944-b5d1-999cd7ef6168"/>
@@ -95,7 +103,8 @@
                     <textElement verticalAlignment="Top">
                         <font fontName="Arial" size="11" isBold="false"/>
                     </textElement>
-                    <textFieldExpression><![CDATA[$P{order}.getAddress().getPostalCode()  + " " + $P{order}.getAddress().getTown()]]></textFieldExpression>
+                    <textFieldExpression>
+                        <![CDATA[$P{order}.getAddress().getPostalCode()  + " " + $P{order}.getAddress().getTown()]]></textFieldExpression>
                 </textField>
                 <textField>
                     <reportElement x="0" y="91" width="380" height="19" uuid="76193d2c-2228-4944-b5d1-999cd7ef6168"/>
@@ -111,23 +120,27 @@
         <band height="266" splitType="Stretch">
             <componentElement>
                 <reportElement x="0" y="20" width="550" height="246" uuid="2f83ba28-a8c9-4c66-bb5f-929ad20e542f">
-                    <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+                    <property name="com.jaspersoft.studio.layout"
+                              value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
                     <property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
                     <property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
                     <property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
                 </reportElement>
-                <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+                <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components"
+                          xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
                     <datasetRun subDataset="products" uuid="47024da5-a65b-4b02-b58b-b240df4becf2">
                         <datasetParameter name="order">
                             <datasetParameterExpression><![CDATA[$P{order}]]></datasetParameterExpression>
                         </datasetParameter>
-                        <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{order}.getEntries())]]></dataSourceExpression>
+                        <dataSourceExpression>
+                            <![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{order}.getEntries())]]></dataSourceExpression>
                     </datasetRun>
                     <jr:column width="338" uuid="d238fe2a-8965-446a-8296-6e671cf996f9">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
                         <jr:tableFooter style="Table_TH" height="30" rowSpan="1">
                             <textField>
-                                <reportElement x="0" y="0" width="338" height="30" uuid="559779d9-29a1-4e51-81ed-9cb64e068ea9"/>
+                                <reportElement x="0" y="0" width="338" height="30"
+                                               uuid="559779d9-29a1-4e51-81ed-9cb64e068ea9"/>
                                 <textElement>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -136,17 +149,20 @@
                         </jr:tableFooter>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <textField>
-                                <reportElement x="0" y="0" width="338" height="30" uuid="c37ffe1c-cf80-49c7-8a32-5d86df171799"/>
+                                <reportElement x="0" y="0" width="338" height="30"
+                                               uuid="c37ffe1c-cf80-49c7-8a32-5d86df171799"/>
                                 <textElement verticalAlignment="Middle">
                                     <font fontName="Arial Rounded MT Bold" size="12" isBold="true"/>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
-                                <textFieldExpression><![CDATA[$R{jasper.invoice.entry.product.label}]]></textFieldExpression>
+                                <textFieldExpression>
+                                    <![CDATA[$R{jasper.invoice.entry.product.label}]]></textFieldExpression>
                             </textField>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="338" height="30" uuid="b3c7e012-5e8d-46d4-a124-0d8c65f4c8f1"/>
+                                <reportElement x="0" y="0" width="338" height="30"
+                                               uuid="b3c7e012-5e8d-46d4-a124-0d8c65f4c8f1"/>
                                 <textElement>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -159,17 +175,20 @@
                         <jr:tableFooter style="Table_TH" height="30" rowSpan="1"/>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <textField>
-                                <reportElement x="0" y="0" width="57" height="30" uuid="f2d1c1bd-4786-4109-8abf-56f7930c1d99"/>
+                                <reportElement x="0" y="0" width="57" height="30"
+                                               uuid="f2d1c1bd-4786-4109-8abf-56f7930c1d99"/>
                                 <textElement verticalAlignment="Middle">
                                     <font fontName="Arial Rounded MT Bold" size="12" isBold="true"/>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
-                                <textFieldExpression><![CDATA[$R{jasper.invoice.entry.price.label}]]></textFieldExpression>
+                                <textFieldExpression>
+                                    <![CDATA[$R{jasper.invoice.entry.price.label}]]></textFieldExpression>
                             </textField>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="57" height="30" uuid="2724d0d4-07a0-445a-a929-26c41671e893"/>
+                                <reportElement x="0" y="0" width="57" height="30"
+                                               uuid="2724d0d4-07a0-445a-a929-26c41671e893"/>
                                 <textElement>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -181,7 +200,8 @@
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
                         <jr:tableFooter style="Table_TH" height="30" rowSpan="1">
                             <textField>
-                                <reportElement x="0" y="0" width="57" height="30" uuid="eb15c525-10bb-48ae-b7d2-f676afbd05fa"/>
+                                <reportElement x="0" y="0" width="57" height="30"
+                                               uuid="eb15c525-10bb-48ae-b7d2-f676afbd05fa"/>
                                 <textElement>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -190,17 +210,20 @@
                         </jr:tableFooter>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <textField>
-                                <reportElement x="0" y="0" width="57" height="30" uuid="6400e6e0-49bd-4378-9d86-e0b49db68d01"/>
+                                <reportElement x="0" y="0" width="57" height="30"
+                                               uuid="6400e6e0-49bd-4378-9d86-e0b49db68d01"/>
                                 <textElement verticalAlignment="Middle">
                                     <font fontName="Arial Rounded MT Bold" size="12" isBold="true"/>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
-                                <textFieldExpression><![CDATA[$R{jasper.invoice.entry.quantity.label}]]></textFieldExpression>
+                                <textFieldExpression>
+                                    <![CDATA[$R{jasper.invoice.entry.quantity.label}]]></textFieldExpression>
                             </textField>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="57" height="30" uuid="67310739-ae89-47a6-b92e-42a20f4118e9"/>
+                                <reportElement x="0" y="0" width="57" height="30"
+                                               uuid="67310739-ae89-47a6-b92e-42a20f4118e9"/>
                                 <textElement>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -212,7 +235,8 @@
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
                         <jr:tableFooter style="Table_TH" height="30" rowSpan="1">
                             <textField>
-                                <reportElement x="0" y="0" width="75" height="30" uuid="712780ee-8b7b-4b16-9b6b-519f8ff1dbdc"/>
+                                <reportElement x="0" y="0" width="75" height="30"
+                                               uuid="712780ee-8b7b-4b16-9b6b-519f8ff1dbdc"/>
                                 <textElement>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
@@ -221,17 +245,20 @@
                         </jr:tableFooter>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <textField>
-                                <reportElement x="0" y="0" width="75" height="30" uuid="e1b3e777-27e3-4645-9377-a993624c7d2c"/>
+                                <reportElement x="0" y="0" width="75" height="30"
+                                               uuid="e1b3e777-27e3-4645-9377-a993624c7d2c"/>
                                 <textElement verticalAlignment="Middle">
                                     <font fontName="Arial Rounded MT Bold" size="12" isBold="true"/>
                                     <paragraph leftIndent="5"/>
                                 </textElement>
-                                <textFieldExpression><![CDATA[$R{jasper.invoice.entry.total.label}]]></textFieldExpression>
+                                <textFieldExpression>
+                                    <![CDATA[$R{jasper.invoice.entry.total.label}]]></textFieldExpression>
                             </textField>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="75" height="30" uuid="1d72a8f6-fe86-4935-9f21-8b1ae442c849"/>
+                                <reportElement x="0" y="0" width="75" height="30"
+                                               uuid="1d72a8f6-fe86-4935-9f21-8b1ae442c849"/>
                                 <textElement>
                                     <paragraph leftIndent="5"/>
                                 </textElement>

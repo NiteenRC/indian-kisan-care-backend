@@ -38,8 +38,8 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepo.findByCompanyName(companyName);
     }
 
-	@Override
-	public Company findCompanyById(Long id) {
-		return companyRepo.findById(id).get();
-	}
+    @Override
+    public Company findCompanyById(Long id) {
+        return companyRepo.findById(id).get();
+    }
 }

@@ -15,6 +15,6 @@ public interface CompanyService {
     Company findByCompanyName(String companyName);
 
     List<Company> fetchAllCategories();
-    
+
     Company findCompanyById(Long id);
 }

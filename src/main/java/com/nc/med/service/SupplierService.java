@@ -15,6 +15,6 @@ public interface SupplierService {
     Supplier findBySupplierName(String supplierName);
 
     List<Supplier> fetchAllCategories();
-    
+
     Supplier findSupplierById(Long id);
 }

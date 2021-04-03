@@ -1,33 +1,33 @@
 package com.nc.med.service;
 
-import java.text.ParseException;
-import java.util.List;
-
 import com.nc.med.mapper.CustomerBalanceSheet;
 import com.nc.med.mapper.ReportBar;
 import com.nc.med.mapper.SalesOrderSearch;
 import com.nc.med.model.SalesOrder;
 
+import java.text.ParseException;
+import java.util.List;
+
 public interface SalesOrderService {
-	SalesOrder saveOrder(SalesOrder order);
+    SalesOrder saveOrder(SalesOrder order);
 
-	SalesOrder findByOrderID(Long orderID);
+    SalesOrder findByOrderID(Long orderID);
 
-	void deleteOrder(SalesOrder orderID);
+    void deleteOrder(SalesOrder orderID);
 
-	SalesOrder findOrderByProductName(String productName);
+    SalesOrder findOrderByProductName(String productName);
 
-	List<SalesOrder> findAllOrders();
+    List<SalesOrder> findAllOrders();
 
-	double findCustomerBalanceByCustomer(Long customerID);
+    double findCustomerBalanceByCustomer(Long customerID);
 
-	double findAllCustomersBalance();
+    double findAllCustomersBalance();
 
-	List<CustomerBalanceSheet> findCurrentBalanceByCustomers();
+    List<CustomerBalanceSheet> findCurrentBalanceByCustomers();
 
-	ReportBar findBarChartModels() throws ParseException;
+    ReportBar findBarChartModels() throws ParseException;
 
-	List<SalesOrder> findAllByCustomer(Long customerID);
+    List<SalesOrder> findAllByCustomer(Long customerID);
 
-	List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch);
+    List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch);
 }

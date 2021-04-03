@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface LocationService {
 
-	Location saveLocation(Location category);
+    Location saveLocation(Location category);
 
-	Location findByLocationID(Long categoryID);
+    Location findByLocationID(Long categoryID);
 
-	void deleteLocation(Location categoryID);
+    void deleteLocation(Location categoryID);
 
-	Location findByLocationName(String cityName);
+    Location findByLocationName(String cityName);
 
-	List<Location> fetchAllCategories();
+    List<Location> fetchAllCategories();
 
-	Location findLocationById(Long id);
+    Location findLocationById(Long id);
 }

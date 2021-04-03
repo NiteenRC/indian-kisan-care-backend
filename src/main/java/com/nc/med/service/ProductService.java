@@ -1,31 +1,30 @@
 package com.nc.med.service;
 
-import java.util.List;
-
+import com.nc.med.model.Product;
 import org.springframework.http.ResponseEntity;
 
-import com.nc.med.model.Product;
+import java.util.List;
 
 public interface ProductService {
 
-	List<Product> saveProducts(List<Product> products);
+    List<Product> saveProducts(List<Product> products);
 
-	Product saveProduct(Product product);
+    Product saveProduct(Product product);
 
-	Product findByProductName(String productName);
+    Product findByProductName(String productName);
 
-	Product findByProductID(Long productID);
+    Product findByProductID(Long productID);
 
-	void deleteProduct(Product productID);
+    void deleteProduct(Product productID);
 
-	ResponseEntity<?> removeFromStock(List<Product> products);
+    ResponseEntity<?> removeFromStock(List<Product> products);
 
-	Product addToStock(List<Product> products);
+    Product addToStock(List<Product> products);
 
-	List<Product> findAllProduct();
-	
-	ResponseEntity<?> removeProductTemp(List<Product> products);
+    List<Product> findAllProduct();
 
-	List<Product> removeProductGetTemp();
+    ResponseEntity<?> removeProductTemp(List<Product> products);
+
+    List<Product> removeProductGetTemp();
 
 }

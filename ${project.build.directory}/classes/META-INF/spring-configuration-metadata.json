@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "sales-order",
+      "type": "com.nc.med.util.ValidationProperties",
+      "sourceType": "com.nc.med.util.ValidationProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sales-order.stock",
+      "type": "java.lang.String",
+      "sourceType": "com.nc.med.util.ValidationProperties"
+    }
+  ],
+  "hints": []
+}

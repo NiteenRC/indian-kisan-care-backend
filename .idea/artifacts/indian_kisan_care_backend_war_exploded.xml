@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="indian-kisan-care-backend:war exploded">
-    <output-path>$PROJECT_DIR$/target/indian-kisan-care-backend-0.0.1-SNAPSHOT</output-path>
+    <output-path>$PROJECT_DIR$/target/indian-kisan-care-backend</output-path>
     <properties id="maven-jee-properties">
       <options>
         <exploded>true</exploded>
@@ -112,7 +112,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/target/indian-kisan-care-backend-0.0.1-SNAPSHOT/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/target/indian-kisan-care-backend/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="indian-kisan-care-backend/web/Web" />
     </root>

@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="indian-kisan-care-backend-0.0.1-SNAPSHOT.war">
+    <root id="archive" name="indian-kisan-care-backend.war">
       <element id="artifact" artifact-name="indian-kisan-care-backend:war exploded" />
     </root>
   </artifact>

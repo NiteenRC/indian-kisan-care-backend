@@ -3,6 +3,7 @@ package com.nc.med.service;
 import com.nc.med.model.Supplier;
 import com.nc.med.repo.SupplierRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public List<Supplier> fetchAllCategories() {
-        return supplierRepo.findAll();
+        return supplierRepo.findAll(Sort.by("id").descending());
     }
 
     @Override

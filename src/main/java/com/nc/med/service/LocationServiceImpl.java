@@ -3,6 +3,7 @@ package com.nc.med.service;
 import com.nc.med.model.Location;
 import com.nc.med.repo.LocationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<Location> fetchAllCategories() {
-        return categoryRepo.findAll();
+        return categoryRepo.findAll(Sort.by("id").descending());
     }
 
     @Override

@@ -27,6 +27,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public PurchaseOrder saveOrder(PurchaseOrder order) {
+        int totalQty = order.getPurchaseOrderDetail().stream().mapToInt(x -> x.getQtyOrdered()).sum();
+        order.setTotalQty(totalQty);
         return purchaseOrderRepo.save(order);
     }
 

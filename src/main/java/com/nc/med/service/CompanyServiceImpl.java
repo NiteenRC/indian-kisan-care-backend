@@ -3,6 +3,7 @@ package com.nc.med.service;
 import com.nc.med.model.Company;
 import com.nc.med.repo.CompanyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<Company> fetchAllCategories() {
-        return companyRepo.findAll();
+        return companyRepo.findAll(Sort.by("id").descending());
     }
 
     @Override

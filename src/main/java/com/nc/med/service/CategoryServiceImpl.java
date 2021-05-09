@@ -3,6 +3,7 @@ package com.nc.med.service;
 import com.nc.med.model.Category;
 import com.nc.med.repo.CategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> fetchAllCategories() {
-        return categoryRepo.findAll();
+        return categoryRepo.findAll(Sort.by("id").descending());
     }
 
     @Override

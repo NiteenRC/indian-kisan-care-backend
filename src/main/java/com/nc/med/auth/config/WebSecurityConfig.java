@@ -62,6 +62,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/product/**").permitAll()
                 .and()
+                .authorizeRequests().antMatchers("/h2-console/**").permitAll()
+                .and()
                 .authorizeRequests().antMatchers("/customer/**").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/supplier/**").permitAll()
@@ -78,10 +80,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/indian-kisan-care-backend/**").permitAll()
                 .and()
+                .authorizeRequests().antMatchers("/").permitAll()
+                .and()
                 .authorizeRequests().antMatchers("/actuator/**").permitAll()
                 .antMatchers("/test/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable().formLogin().loginPage("/login").permitAll();
+        
+        		//h2-console for authorizeRequests
+        		http.csrf().disable();
+        		http.headers().frameOptions().disable();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

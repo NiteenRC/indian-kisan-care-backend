@@ -10,6 +10,7 @@ import com.nc.med.repo.SalesOrderRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -53,7 +54,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Override
     public List<SalesOrder> findAllOrders() {
-        return salesOrderRepo.findAll();
+        return salesOrderRepo.findAll(Sort.by("createdDate").descending());
     }
 
     @Override

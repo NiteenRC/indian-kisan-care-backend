@@ -1,14 +1,11 @@
 package com.nc.med.model;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 @Entity
-public class PurchaseOrder implements Serializable {
+public class PurchaseOrder extends BaseEntity<String> implements Serializable {
     private static final long serialVersionUID = -1000119078147252957L;
     @Id
     @GeneratedValue // (strategy = GenerationType.IDENTITY)
@@ -22,9 +19,6 @@ public class PurchaseOrder implements Serializable {
     private Supplier supplier;
     @OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<PurchaseOrderDetail> purchaseOrderDetail;
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
     private double currentBalance;
     private double previousBalance;
 
@@ -50,14 +44,6 @@ public class PurchaseOrder implements Serializable {
 
     public void setAmountPaid(double amountPaid) {
         this.amountPaid = amountPaid;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
     }
 
     public int getPurchaseOrderID() {

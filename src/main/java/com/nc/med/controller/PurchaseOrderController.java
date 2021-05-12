@@ -41,7 +41,7 @@ public class PurchaseOrderController {
 
     @GetMapping
     public ResponseEntity<?> fetchAllOrderList() {
-        return new ResponseEntity<>(orderDetailService.findAllPurchaseOrderDetails(), HttpStatus.OK);
+        return ResponseEntity.ok(orderService.findAllOrders());
     }
 
     @GetMapping("/supplier/{supplierID}")

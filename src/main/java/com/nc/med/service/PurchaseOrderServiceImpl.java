@@ -7,10 +7,13 @@ import com.nc.med.repo.SupplierRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +52,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public List<PurchaseOrder> findAllOrders() {
-        return purchaseOrderRepo.findAll();
+        return purchaseOrderRepo.findAll(Sort.by("createdDate").descending());
     }
 
     @Override
@@ -60,8 +63,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             Date fromDate = new SimpleDateFormat("dd-MM-yyyy").parse(startDate);
             Date toDate = new SimpleDateFormat("dd-MM-yyyy").parse(endDate);
 
-            return orders.stream().filter(order -> order.getCreatedDate().getTime() >= fromDate.getTime()
-                    && order.getCreatedDate().getTime() <= toDate.getTime()).collect(Collectors.toList());
+            //return orders.stream().filter(order -> order.getCreatedDate().getTime() >= fromDate.getTime()
+            //        && order.getCreatedDate().getTime() <= toDate.getTime()).collect(Collectors.toList());
+            return Collections.emptyList();
         } catch (ParseException e) {
             throw new ParseException("Please enter valid date formats", 0);
         }

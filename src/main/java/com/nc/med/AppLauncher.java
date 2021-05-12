@@ -119,7 +119,7 @@ public class AppLauncher extends SpringBootServletInitializer {
         }
     }
 
-    @Bean
+    //@Bean
     public CommandLineRunner setup(UserRepository userRepo, CompanyRepo companyRepo, LocationRepo locationRepo,
                                    SupplierRepo supplierRepo, CustomerRepo customerRepo, CategoryRepo categoryRepo, ProductRepo productRepo,
                                    RoleRepository roleRepository) {

@@ -1,6 +1,9 @@
 package com.nc.med.model;
 
 import javax.persistence.*;
+
+import com.nc.med.mapper.OrderStatus;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,7 +17,8 @@ public class PurchaseOrder extends BaseEntity<String> implements Serializable {
     private double totalPrice;
     private double amountPaid;
     private int totalQty;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
     @ManyToOne
     private Supplier supplier;
     @OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -70,11 +74,11 @@ public class PurchaseOrder extends BaseEntity<String> implements Serializable {
         this.totalQty = totalQty;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

@@ -1,6 +1,7 @@
 package com.nc.med.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class SalesOrderDetail implements Serializable {
     @JoinColumn(name = "productID") // , insertable = false, updatable = false
     private Product product;
     private Integer qtyOrdered;
+    @JsonProperty("price")
     private double salesPrice;
     private double purchasePrice;
     private double profit;

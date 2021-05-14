@@ -15,7 +15,7 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "PRODUCT_ID", nullable = false)
+    @Column(name = "PRODUCT_ID")
     private Long id;
     @Column(length = 255, nullable = false)
     private String productName;
@@ -33,6 +33,7 @@ public class Product implements Serializable {
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
+    private int gst;
 
     public Product() {
     }
@@ -123,4 +124,12 @@ public class Product implements Serializable {
     public void setPrice(double price) {
         this.price = price;
     }
+
+	public int getGst() {
+		return gst;
+	}
+
+	public void setGst(int gst) {
+		this.gst = gst;
+	}
 }

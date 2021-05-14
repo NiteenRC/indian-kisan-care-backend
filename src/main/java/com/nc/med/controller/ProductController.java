@@ -32,6 +32,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> saveProducts(@RequestBody Product product) {
+    	//product.setQty(0);
         if (product == null) {
             return new ResponseEntity<>(new CustomErrorTypeException("input is empty"), HttpStatus.NO_CONTENT);
         }

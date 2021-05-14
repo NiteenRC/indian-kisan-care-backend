@@ -147,69 +147,7 @@ public class AppLauncher extends SpringBootServletInitializer {
                     user2.setRoles(roles2);
                     userRepo.saveAll(Arrays.asList(user1, user2));
                 }
-
-                Company company1 = new Company(1L, "Jai Kisan", "9872345234");
-                Company company2 = new Company(2L, "Mangala", "9872345231");
-                Company company3 = new Company(3L, "Daneshwari", "9872345232");
-                Company company4 = new Company(4L, "Shakti", "9872345233");
-                Company company5 = new Company(5L, "Mangam", "9872345235");
-                if (companyRepo.findByCompanyName("Reliance") == null) {
-                    companyRepo.saveAll(Arrays.asList(company1, company2, company3, company4, company5));
-                }
-
-                Location location1 = new Location(Long.valueOf(1), "Shinal");
-                Location location2 = new Location(Long.valueOf(2), "Tangadi");
-                Location location3 = new Location(Long.valueOf(3), "Katral");
-                Location location4 = new Location(Long.valueOf(4), "Hulagabali");
-                Location location5 = new Location(Long.valueOf(5), "Other");
-                Location location6 = new Location(Long.valueOf(5), "Athani");
-                Location location7 = new Location(Long.valueOf(5), "Ainapur");
-                if (locationRepo.findByCityNameContainingIgnoreCase("Shinal") == null) {
-                    locationRepo.saveAll(
-                            Arrays.asList(location1, location2, location3, location4, location5, location6, location7));
-                }
-
-                Supplier supplier1 = new Supplier(Long.valueOf(1), "Badakambe", companyRepo.findByCompanyName("Jai Kisan"),
-                        locationRepo.findByCityNameContainingIgnoreCase("Athani"), "+9038902342");
-                Supplier supplier2 = new Supplier(Long.valueOf(2), "JN Kumbar", companyRepo.findByCompanyName("Mangala"),
-                        locationRepo.findByCityNameContainingIgnoreCase("Athani"), "+9038902344");
-                Supplier supplier3 = new Supplier(Long.valueOf(3), "Ghatge", companyRepo.findByCompanyName("Mangam"),
-                        locationRepo.findByCityNameContainingIgnoreCase("Ainapur"), "+9038902342");
-                if (supplierRepo.findBySupplierNameContainingIgnoreCase("Badakambe") == null) {
-                    supplierRepo.saveAll(Arrays.asList(supplier1, supplier2, supplier3));
-                }
-
-                Customer customer1 = new Customer(Long.valueOf(1), "Kallappa", locationRepo.findByCityNameContainingIgnoreCase("Shinal"), "9878923745");
-                Customer customer2 = new Customer(Long.valueOf(2), "Mallappa", locationRepo.findByCityNameContainingIgnoreCase("Katral"), "9878923745");
-                Customer customer3 = new Customer(Long.valueOf(3), "Birappa", locationRepo.findByCityNameContainingIgnoreCase("Tangadi"), "9878923745");
-                Customer customer4 = new Customer(Long.valueOf(4), "Bairappa", locationRepo.findByCityNameContainingIgnoreCase("Shinal"), "9878923745");
-                Customer customer5 = new Customer(Long.valueOf(5), "Murgyappa", locationRepo.findByCityNameContainingIgnoreCase("Other"), "9878923745");
-                if (customerRepo.findByCustomerNameContainingIgnoreCase("Kallappa") == null) {
-                    customerRepo.saveAll(Arrays.asList(customer1, customer2, customer3, customer4, customer5));
-                }
-
-                Category category1 = new Category("fertilizer desc", "Fertilizer", new Date());
-                Category category2 = new Category("seed desc", "Seed", new Date());
-                Category category3 = new Category("pestiside desc", "Pesticide", new Date());
-                if (categoryRepo.findByCategoryNameContainingIgnoreCase("Fertilizer") == null) {
-                    categoryRepo.saveAll(Arrays.asList(category1, category2, category3));
-                }
-
-                Product product1 = new Product(new Date(), 267, "urea desc", "Urea", 100,
-                        categoryRepo.findByCategoryNameContainingIgnoreCase("Fertilizer"));
-                Product product2 = new Product(new Date(), 1360, "tanger desc", "Tanger", 150,
-                        categoryRepo.findByCategoryNameContainingIgnoreCase("Pesticide"));
-                Product product3 = new Product(new Date(), 1700, "Mico desc", "Mico", 250,
-                        categoryRepo.findByCategoryNameContainingIgnoreCase("Seed"));
-                Product product4 = new Product(new Date(), 260, "24D desc", "24D", 500,
-                        categoryRepo.findByCategoryNameContainingIgnoreCase("Pesticide"));
-                Product product5 = new Product(new Date(), 170, "ultrazen desc", "Ultrazen", 250,
-                        categoryRepo.findByCategoryNameContainingIgnoreCase("Pesticide"));
-                Product product6 = new Product(new Date(), 1200, "dap desc", "DAP", 50,
-                        categoryRepo.findByCategoryNameContainingIgnoreCase("Fertilizer"));
-                if (productRepo.findByProductName("24D") == null) {
-                    productRepo.saveAll(Arrays.asList(product1, product2, product3, product4, product5, product6));
-                }
+                
             }
         };
     }

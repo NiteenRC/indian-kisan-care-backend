@@ -21,10 +21,28 @@ public class InitializeData {
 	private DataSource dataSource;
 
 	@EventListener(ApplicationReadyEvent.class)
-	public void loadData() {
+	public void loadDataMaster() {
 		if (customerRepo.findAll().isEmpty()) {
 			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
-					new ClassPathResource("/scripts/schema.sql"));
+					new ClassPathResource("/scripts/master_schema.sql"));
+			resourceDatabasePopulator.execute(dataSource);
+		}
+	}
+	
+	//@EventListener(ApplicationReadyEvent.class)
+	public void loadDataProduct() {
+		if (customerRepo.findAll().isEmpty()) {
+			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
+					new ClassPathResource("/scripts/product_schema.sql"));
+			resourceDatabasePopulator.execute(dataSource);
+		}
+	}
+	
+	@EventListener(ApplicationReadyEvent.class)
+	public void loadDataUser() {
+		if (customerRepo.findAll().isEmpty()) {
+			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
+					new ClassPathResource("/scripts/user_schema.sql"));
 			resourceDatabasePopulator.execute(dataSource);
 		}
 	}

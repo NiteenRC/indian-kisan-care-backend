@@ -31,7 +31,7 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
         int productQty = product.getQty();
         int qtyOrdered = salesOrderDetail.getQtyOrdered();
 
-        if (productQty <= qtyOrdered) {
+        if (productQty < qtyOrdered) {
             throw new Exception(validationProperties.getStock());
         }
 

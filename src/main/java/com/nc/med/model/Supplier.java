@@ -24,6 +24,7 @@ public class Supplier implements Serializable {
     private Date createdDate;
     @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
     private Set<PurchaseOrder> purchaseOrders;
+    private String gstIn;
 
 //	public Set<PurchaseOrder> getPurchaseOrders() {
 //		return purchaseOrders;
@@ -91,4 +92,12 @@ public class Supplier implements Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+	public String getGstIn() {
+		return gstIn;
+	}
+
+	public void setGstIn(String gstIn) {
+		this.gstIn = gstIn;
+	}
 }

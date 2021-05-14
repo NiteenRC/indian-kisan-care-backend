@@ -13,12 +13,12 @@ INSERT INTO `Location` (`id`,`city_name`,`created_date`) VALUES (6,'Katral','202
 INSERT INTO `Location` (`id`,`city_name`,`created_date`) VALUES (7,'Mole','2021-05-12 17:20:07');
 INSERT INTO `Location` (`id`,`city_name`,`created_date`) VALUES (8,'Wadratti','2021-05-12 17:20:30');
 
-INSERT INTO `Customer` (`id`,`created_date`,`customer_name`,`phone_number`,`location_id`) VALUES (1,'2021-05-12 17:24:16','Dadasaheb','9786786734',1);
-INSERT INTO `Customer` (`id`,`created_date`,`customer_name`,`phone_number`,`location_id`) VALUES (2,'2021-05-12 17:24:30','Sadashiv','8676232342',2);
-INSERT INTO `Customer` (`id`,`created_date`,`customer_name`,`phone_number`,`location_id`) VALUES (3,'2021-05-12 17:25:20','Ganapati','7234235423',2);
-INSERT INTO `Customer` (`id`,`created_date`,`customer_name`,`phone_number`,`location_id`) VALUES (4,'2021-05-12 17:25:36','Ankush Khare','8782342345',5);
+INSERT INTO `Customer` (`id`,`created_date`,`customer_name`,`phone_number`,`location_id`,`gst_in`) VALUES (1,'2021-05-12 17:24:16','Dadasaheb','9786786734',1,'29FN765391234741');
+INSERT INTO `Customer` (`id`,`created_date`,`customer_name`,`phone_number`,`location_id`,`gst_in`) VALUES (2,'2021-05-12 17:24:30','Sadashiv','8676232342',2,'29FN765391234742');
+INSERT INTO `Customer` (`id`,`created_date`,`customer_name`,`phone_number`,`location_id`,`gst_in`) VALUES (3,'2021-05-12 17:25:20','Ganapati','7234235423',2,'29FN765391234743');
+INSERT INTO `Customer` (`id`,`created_date`,`customer_name`,`phone_number`,`location_id`,`gst_in`) VALUES (4,'2021-05-12 17:25:36','Ankush Khare','8782342345',5,'29FN765391234744');
 
-INSERT INTO `Supplier` (`id`,`created_date`,`phone_number`,`supplier_name`,`company_id`,`location_id`) VALUES (1,'2021-05-12 17:21:54','9786823445','Badakambe',3,3);
-INSERT INTO `Supplier` (`id`,`created_date`,`phone_number`,`supplier_name`,`company_id`,`location_id`) VALUES (2,'2021-05-12 17:22:20','8729342345','JN Kumbar',1,3);
-INSERT INTO `Supplier` (`id`,`created_date`,`phone_number`,`supplier_name`,`company_id`,`location_id`) VALUES (3,'2021-05-12 17:22:37','9876776565','Ghatge',4,3);
+INSERT INTO `Supplier` (`id`,`created_date`,`phone_number`,`supplier_name`,`company_id`,`location_id`,`gst_in`) VALUES (1,'2021-05-12 17:21:54','9786823445','Badakambe',3,3,'29FN765391234745');
+INSERT INTO `Supplier` (`id`,`created_date`,`phone_number`,`supplier_name`,`company_id`,`location_id`,`gst_in`) VALUES (2,'2021-05-12 17:22:20','8729342345','JN Kumbar',1,3,'29FN765391234746');
+INSERT INTO `Supplier` (`id`,`created_date`,`phone_number`,`supplier_name`,`company_id`,`location_id`,`gst_in`) VALUES (3,'2021-05-12 17:22:37','9876776565','Ghatge',4,3,'29FN765391234747');
 

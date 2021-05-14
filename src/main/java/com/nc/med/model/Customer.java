@@ -22,7 +22,8 @@ public class Customer implements Serializable {
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-
+    private String gstIn;
+    
     public Customer() {
     }
 
@@ -72,6 +73,14 @@ public class Customer implements Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+	public String getGstIn() {
+		return gstIn;
+	}
+
+	public void setGstIn(String gstIn) {
+		this.gstIn = gstIn;
+	}
 
 //	public void setSalesOrders(Set<SalesOrder> salesOrders) {
 //		this.salesOrders = salesOrders;

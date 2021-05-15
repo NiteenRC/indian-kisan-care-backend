@@ -34,6 +34,7 @@ public class Product implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
     private int gst;
+    private String hsnNo;
 
     public Product() {
     }
@@ -131,5 +132,13 @@ public class Product implements Serializable {
 
 	public void setGst(int gst) {
 		this.gst = gst;
+	}
+
+	public String getHsnNo() {
+		return hsnNo;
+	}
+
+	public void setHsnNo(String hsnNo) {
+		this.hsnNo = hsnNo;
 	}
 }

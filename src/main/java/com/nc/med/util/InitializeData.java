@@ -28,7 +28,7 @@ public class InitializeData {
 	@Autowired
 	private DataSource dataSource;
 
-	@EventListener(ApplicationReadyEvent.class)
+	//@EventListener(ApplicationReadyEvent.class)
 	public void loadDataMaster() {
 		if (customerRepo.findAll().isEmpty()) {
 			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
@@ -36,6 +36,16 @@ public class InitializeData {
 			resourceDatabasePopulator.execute(dataSource);
 		}
 	}
+	
+	@EventListener(ApplicationReadyEvent.class)
+	public void loadDataUnknown() {
+		if (customerRepo.findAll().isEmpty()) {
+			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
+					new ClassPathResource("/scripts/unknown_schema.sql"));
+			resourceDatabasePopulator.execute(dataSource);
+		}
+	}
+	
 
 	// @EventListener(ApplicationReadyEvent.class)
 	public void loadDataProduct() {

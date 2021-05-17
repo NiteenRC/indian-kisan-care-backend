@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  indian-kisan-care-backend:
+    image: indian-kisan-care-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - employee-mysql
+    depends_on:
+      - mysqldb
+ 
+  mysqldb:
+    image: mysql:8
+    networks:
+      - employee-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=ikc_001  
+
+networks:
+  employee-mysql:

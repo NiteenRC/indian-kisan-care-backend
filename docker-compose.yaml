@@ -1,0 +1,27 @@
+version: '2.1'
+services:
+  ekar-mysql:
+    container_name: ikc-mysql
+    image: 'mysql/mysql-server:5.7'
+    volumes:
+      - ./dbdata:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ikcdb_001
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - '3306:3306'
+    restart: always
+  indian-kisan-care-backend:
+    image: indian-kisan-care-backend
+    build:
+      context: ./indian-kisan-care-backend
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    volumes:
+      - /data/indian-kisan-care-backend
+    depends_on:
+      ekar-mysql:
+        condition: service_healthy
+

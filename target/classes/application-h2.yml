@@ -2,18 +2,22 @@ spring:
   datasource:
     driverClassName: org.h2.Driver
     initialization-mode: always
-    url: jdbc:h2:file:\${HOME}/Downloads/F_181;AUTO_SERVER=TRUE
+    url: jdbc:h2:file:~/ikcdb_004?createDatabaseIfNotExist=true;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE;
+    #url: jdbc:h2:file:\${HOME}/Downloads/F_182;AUTO_SERVER=TRUE
          #jdbc:h2:file:/Users/niteenchougula/Downloads/F_110;AUTO_SERVER=TRUE
          #jdbc:h2:mem:test_mem006;DB_CLOSE_DELAY=-1
   jpa:
     hibernate:
       ddl-auto: update
     properties:
-      hibernate.dialect: org.hibernate.dialect.H2Dialect
-      hibernate.format_sql: false
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
      # naming:
      #   physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   h2:
     console:
       enabled: true
       path: /h2-console
+      settings:
+        web-allow-others: true      

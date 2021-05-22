@@ -2,63 +2,119 @@ package com.nc.med.auth.payload;
 
 import java.util.List;
 
+import javax.persistence.OneToOne;
+
+import com.nc.med.model.BankAccount;
+
 public class JwtResponse {
-    private String token;
-    private String type = "Bearer";
-    private Long id;
-    private String username;
-    private String email;
-    private List<String> roles;
+	private String token;
+	private String type = "Bearer";
+	private Long id;
+	private String username;
+	private String email;
+	private List<String> roles;
+	private String brandName;
+	private String gstNo;
+	private String panNo;
+	private String phoneNumber;
+	@OneToOne
+	private BankAccount bankAccount;
 
-    public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
-        this.token = accessToken;
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.roles = roles;
-    }
+	public String getGstNo() {
+		return gstNo;
+	}
 
-    public String getAccessToken() {
-        return token;
-    }
+	public void setGstNo(String gstNo) {
+		this.gstNo = gstNo;
+	}
 
-    public void setAccessToken(String accessToken) {
-        this.token = accessToken;
-    }
+	public String getPanNo() {
+		return panNo;
+	}
 
-    public String getTokenType() {
-        return type;
-    }
+	public void setPanNo(String panNo) {
+		this.panNo = panNo;
+	}
 
-    public void setTokenType(String tokenType) {
-        this.type = tokenType;
-    }
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public BankAccount getBankAccount() {
+		return bankAccount;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setBankAccount(BankAccount bankAccount) {
+		this.bankAccount = bankAccount;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public JwtResponse(String accessToken, Long id, String username, String email, String gstNo, String panNo,
+			String phoneNumber, String brandName, BankAccount bankAccount, List<String> roles) {
+		this.token = accessToken;
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.gstNo = gstNo;
+		this.panNo = panNo;
+		this.phoneNumber = phoneNumber;
+		this.brandName = brandName;
+		this.bankAccount = bankAccount;
+		this.roles = roles;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getAccessToken() {
+		return token;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setAccessToken(String accessToken) {
+		this.token = accessToken;
+	}
 
-    public List<String> getRoles() {
-        return roles;
-    }
+	public String getTokenType() {
+		return type;
+	}
+
+	public void setTokenType(String tokenType) {
+		this.type = tokenType;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
 }

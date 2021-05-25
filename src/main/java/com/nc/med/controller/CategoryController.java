@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nc.med.exception.CustomErrorTypeException;
@@ -81,5 +82,16 @@ public class CategoryController {
 	@GetMapping("/{categoryID}")
 	public ResponseEntity<Category> findCategoryByID(@PathVariable Long categoryID) {
 		return new ResponseEntity<>(categoryService.findByCategoryID(categoryID), HttpStatus.OK);
+	}
+
+	@GetMapping("/categoryName")
+	public ResponseEntity<?> findCategoryByID(@RequestParam String categoryName) {
+		Category category = categoryService.findByCategoryName(categoryName);
+		if (category == null) {
+			return new ResponseEntity<>(new CustomErrorTypeException("Category name not exist!!"),
+					HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(category, HttpStatus.OK);
+
 	}
 }

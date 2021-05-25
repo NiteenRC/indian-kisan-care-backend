@@ -54,13 +54,4 @@ public class AppLauncher extends SpringBootServletInitializer {
 			}
 		};
 	}
-
-	@Bean
-	public void expire() {
-		Calendar expireDate = Calendar.getInstance();
-		expireDate.set(2021, 7, 31);
-		if (Calendar.getInstance().after(expireDate)) {
-			System.exit(0);
-		}
-	}
 }

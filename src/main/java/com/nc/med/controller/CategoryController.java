@@ -87,10 +87,6 @@ public class CategoryController {
 	@GetMapping("/categoryName")
 	public ResponseEntity<?> findCategoryByID(@RequestParam String categoryName) {
 		Category category = categoryService.findByCategoryName(categoryName);
-		if (category == null) {
-			return new ResponseEntity<>(new CustomErrorTypeException("Category name not exist!!"),
-					HttpStatus.NOT_FOUND);
-		}
 		return new ResponseEntity<>(category, HttpStatus.OK);
 
 	}

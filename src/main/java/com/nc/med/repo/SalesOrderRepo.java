@@ -3,6 +3,8 @@ package com.nc.med.repo;
 import com.nc.med.mapper.OrderStatus;
 import com.nc.med.model.Customer;
 import com.nc.med.model.SalesOrder;
+import com.nc.med.model.Supplier;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,5 +41,8 @@ public interface SalesOrderRepo extends JpaRepository<SalesOrder, Long> {
 
     List<SalesOrder> findByCustomerIdAndCreatedDateBetweenAndStatus(Long customerId, LocalDateTime startDate,
                                                                     LocalDateTime endDate, OrderStatus orderStatus);
+
+    @Query(value = "SELECT sum(current_balance) FROM SALES_ORDER where customer_id = :#{#customer.id}  group by customer_id", nativeQuery = true)
+	int findCurrentSum(@Param("customer") Customer customer);
 
 }

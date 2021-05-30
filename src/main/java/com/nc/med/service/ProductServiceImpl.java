@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product findByProductName(String productName) {
-		return productRepo.findByProductName(productName);
+		return productRepo.findByProductNameContainingIgnoreCase(productName);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
 	public Product addToStock(List<Product> products) {
 		for (Product product : products) {
 			if (product.getProductName() != null) {
-				Product product2 = productRepo.findByProductName(product.getProductName());
+				Product product2 = productRepo.findByProductNameContainingIgnoreCase(product.getProductName());
 				if (product2 == null) {
 					productRepo.save(product);
 				} else {
@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
 	public ResponseEntity<?> removeFromStock(List<Product> products) {
 		for (Product product : products) {
 			if (product.getProductName() != null) {
-				Product product2 = productRepo.findByProductName(product.getProductName());
+				Product product2 = productRepo.findByProductNameContainingIgnoreCase(product.getProductName());
 				// deduct from stock
 				product2.setQty(product2.getQty() - product.getQty());
 				productRepo.save(product2);
@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
 	public ResponseEntity<?> removeProductTemp(List<Product> products) {
 		boolean validation = true;
 		for (Product product : products) {
-			Product product2 = productRepo.findByProductName(product.getProductName());
+			Product product2 = productRepo.findByProductNameContainingIgnoreCase(product.getProductName());
 			if (product.getProductName() != null) {
 				if (product2 == null) {
 					validation = false;

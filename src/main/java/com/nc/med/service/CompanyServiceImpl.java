@@ -36,7 +36,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company findByCompanyName(String companyName) {
-        return companyRepo.findByCompanyName(companyName);
+        return companyRepo.findByCompanyNameContainingIgnoreCase(companyName);
     }
 
     @Override

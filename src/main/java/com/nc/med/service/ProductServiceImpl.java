@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.nc.med.exception.CustomErrorTypeException;
+import com.nc.med.model.Category;
 import com.nc.med.model.Product;
 import com.nc.med.model.PurchaseOrder;
+import com.nc.med.repo.CategoryRepo;
 import com.nc.med.repo.ProductRepo;
 import com.nc.med.repo.PurchaseOrderRepo;
 
@@ -25,6 +27,9 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	PurchaseOrderRepo orderRepo;
 	List<Product> productsList = null;
+
+	@Autowired
+	private CategoryRepo categoryRepo;
 
 	@Override
 	public void deleteProduct(Product productID) {
@@ -53,6 +58,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product saveProduct(Product product) {
+		Category category = categoryRepo
+				.findByCategoryNameContainingIgnoreCase(product.getCategory().getCategoryName());
+
+		if (category == null) {
+			product.setCategory(categoryRepo.save(new Category(product.getCategory().getCategoryName())));
+		}
 		return productRepo.save(product);
 	}
 

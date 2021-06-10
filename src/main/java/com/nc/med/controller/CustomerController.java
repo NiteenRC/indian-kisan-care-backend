@@ -38,11 +38,13 @@ public class CustomerController {
 			return new ResponseEntity<>(new CustomErrorTypeException("Customer is not saved"), HttpStatus.NOT_FOUND);
 		}
 
-		Customer customer1 = customerService.findByCustomerName(customer.getCustomerName());
+		String customerName = customer.getCustomerName().toUpperCase();
+		Customer customer1 = customerService.findByCustomerName(customerName);
 		if (customer1 != null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("Customer name already exist!!"),
 					HttpStatus.NOT_FOUND);
 		}
+		customer.setCustomerName(customerName);
 		return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.CREATED);
 	}
 

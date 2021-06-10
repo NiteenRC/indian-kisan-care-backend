@@ -31,3 +31,10 @@ docker system prune -a
 
 docker logs -f ps_id
 
+H2-database:
+backup to '/Users/niteenchougula/Documents/back.zip'
+
+//System configuration
+ipconfig/all
+ifconfig
+

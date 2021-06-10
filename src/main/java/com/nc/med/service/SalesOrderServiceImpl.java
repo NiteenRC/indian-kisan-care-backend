@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -46,9 +47,30 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 		order.setTotalQty(totalQty);
 
 		Customer customer = order.getCustomer();
-		try {
-			sum = ((double) salesOrderRepo.findCurrentSum(customer)) + order.getCurrentBalance();
-		} catch (Exception e) {
+		Customer customerObj = null;
+
+		if (customer.getCustomerName() == "") {
+			List<Customer> customers = customerRepo.findAll();
+			Long maxId = 1L;
+			if (!customers.isEmpty()) {
+				maxId = customerRepo.findAll().stream().max(Comparator.comparing(Customer::getId)).get().getId();
+			}
+			order.setCustomer(customerRepo.save(new Customer("UNKNOWN" + maxId)));
+
+		} else {
+			String customerName = customer.getCustomerName().toUpperCase();
+			customerObj = customerRepo.findByCustomerNameContainingIgnoreCase(customerName);
+
+			if (customerObj == null) {
+				customerObj = customerRepo.save(new Customer(customerName));
+			}
+			order.setCustomer(customerObj);
+
+			try {
+				sum = order.getCurrentBalance();
+				sum += ((double) salesOrderRepo.findCurrentSum(customerObj));
+			} catch (Exception e) {
+			}
 		}
 		// purchaseOrderRepo.updateAddress(supplier, sum);
 		order.setPreviousBalance(sum);
@@ -90,11 +112,22 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
 	@Override
 	public List<CustomerBalanceSheet> findCurrentBalanceByCustomers() {
-		return salesOrderRepo.findAll().stream().collect(
-				Collectors.groupingBy(SalesOrder::getCustomer, Collectors.summingDouble(SalesOrder::getCurrentBalance)))
-				.entrySet().stream().map(x -> {
-					return new CustomerBalanceSheet(x.getKey(), x.getValue());
+		List<CustomerBalanceSheet> customerBalanceSheets = salesOrderRepo.findAll().stream()
+				.collect(Collectors.groupingBy(SalesOrder::getCustomer)).entrySet().stream().map(x -> {
+					List<SalesOrder> salesOrders = x.getValue();
+					double totalPrice = salesOrders.stream().mapToDouble(SalesOrder::getTotalPrice).sum();
+					double amountPaid = salesOrders.stream().mapToDouble(SalesOrder::getAmountPaid).sum();
+					double dueAmount = salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+
+					int size = salesOrders.size();
+					SalesOrder order = salesOrders.get(size - 1);
+					Date billDate = order.getBillDate();
+					Date dueDate = order.getDueDate();
+					return new CustomerBalanceSheet(x.getKey(), totalPrice, amountPaid, dueAmount, billDate, dueDate);
 				}).collect(Collectors.toList());
+
+		customerBalanceSheets.sort((c1, c2) -> c1.getBillDate().compareTo(c2.getBillDate()));
+		return customerBalanceSheets;
 	}
 
 	@Override

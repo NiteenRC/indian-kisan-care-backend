@@ -3,6 +3,7 @@ package com.nc.med.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,9 +37,29 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 		order.setTotalQty(totalQty);
 
 		Supplier supplier = order.getSupplier();
-		try {
-			sum = ((double) purchaseOrderRepo.findCurrentSum(supplier)) + order.getCurrentBalance();
-		} catch (Exception e) {
+		Supplier supplierObj = null;
+
+		if (supplier.getSupplierName() == "") {
+			List<Supplier> suppliers = supplierRepo.findAll();
+			Long maxId = 1L;
+			if (!suppliers.isEmpty()) {
+				maxId += suppliers.stream().max(Comparator.comparing(Supplier::getId)).get().getId();
+			}
+			order.setSupplier(supplierRepo.save(new Supplier("UNKNOWN" + maxId)));
+		} else {
+			String supplierName = supplier.getSupplierName().toUpperCase();
+			supplierObj = supplierRepo.findBySupplierNameContainingIgnoreCase(supplierName);
+
+			if (supplierObj == null) {
+				supplierObj = supplierRepo.save(new Supplier(supplierName));
+			}
+			order.setSupplier(supplierObj);
+
+			try {
+				sum = order.getCurrentBalance();
+				sum += ((double) purchaseOrderRepo.findCurrentSum(supplierObj));
+			} catch (Exception e) {
+			}
 		}
 		// purchaseOrderRepo.updateAddress(supplier, sum);
 		order.setPreviousBalance(sum);

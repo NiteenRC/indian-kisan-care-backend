@@ -37,6 +37,10 @@ public class Supplier implements Serializable {
     public Supplier() {
     }
 
+    public Supplier(String supplierName) {
+    	this.supplierName = supplierName;
+    }
+    
     public Supplier(Long id, String supplierName, Company company, Location location, String phoneNumber) {
         this.id = id;
         this.supplierName = supplierName;

@@ -37,12 +37,13 @@ public class SupplierController {
 		if (supplier == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("Supplier is not saved"), HttpStatus.NOT_FOUND);
 		}
-
-		Supplier supplier1 = supplierService.findBySupplierName(supplier.getSupplierName());
+		String supplierName = supplier.getSupplierName().toUpperCase();
+		Supplier supplier1 = supplierService.findBySupplierName(supplierName);
 		if (supplier1 != null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("Supplier name already exist!!"),
 					HttpStatus.NOT_FOUND);
 		}
+		supplier.setSupplierName(supplierName);
 		return new ResponseEntity<>(supplierService.saveSupplier(supplier), HttpStatus.CREATED);
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -65,7 +66,11 @@ public class LocationController {
 					new CustomErrorTypeException("Location with locationID " + locationID + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-		locationService.deleteLocation(location);
+		try {
+			locationService.deleteLocation(location);
+		} catch (DataIntegrityViolationException e) {
+			return new ResponseEntity<>(new CustomErrorTypeException("Location is already in use"), HttpStatus.CONFLICT);
+		}
 		return new ResponseEntity<>(location, HttpStatus.OK);
 	}
 

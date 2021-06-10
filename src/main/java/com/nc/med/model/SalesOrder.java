@@ -20,7 +20,7 @@ import javax.persistence.TemporalType;
 import com.nc.med.mapper.OrderStatus;
 
 @Entity
-public class SalesOrder extends BaseEntity<String> implements Serializable {
+public class SalesOrder extends BaseEntity<String> implements Serializable, Comparable<SalesOrder> {
 	private static final long serialVersionUID = -1000219078147252957L;
 	@Id
 	@GeneratedValue
@@ -33,7 +33,7 @@ public class SalesOrder extends BaseEntity<String> implements Serializable {
 	private int totalQty;
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.MERGE)
 	private Customer customer;
 	@OneToMany(mappedBy = "salesOrder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<SalesOrderDetail> salesOrderDetail;
@@ -41,6 +41,15 @@ public class SalesOrder extends BaseEntity<String> implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dueDate;
 	private String comment;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date billDate;
+	public Date getBillDate() {
+		return billDate;
+	}
+
+	public void setBillDate(Date billDate) {
+		this.billDate = billDate;
+	}
 
 	public String getComment() {
 		return comment;
@@ -136,5 +145,10 @@ public class SalesOrder extends BaseEntity<String> implements Serializable {
 
 	public void setVehicleNo(String vehicleNo) {
 		this.vehicleNo = vehicleNo;
+	}
+
+	@Override
+	public int compareTo(SalesOrder o) {
+		return o.getBillDate().compareTo(this.getBillDate());
 	}
 }

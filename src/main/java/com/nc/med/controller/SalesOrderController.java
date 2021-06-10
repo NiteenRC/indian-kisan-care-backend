@@ -1,7 +1,11 @@
 package com.nc.med.controller;
 
 import java.text.ParseException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +17,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nc.med.exception.CustomErrorTypeException;
+import com.nc.med.mapper.BalancePayment;
 import com.nc.med.mapper.SalesOrderSearch;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.model.SalesOrderDetail;
+import com.nc.med.repo.CustomerRepo;
 import com.nc.med.service.SalesOrderDetailService;
 import com.nc.med.service.SalesOrderService;
 import com.nc.med.util.ValidationProperties;
@@ -36,9 +43,12 @@ public class SalesOrderController {
 
 	@Autowired
 	private SalesOrderDetailService orderDetailService;
-	
+
 	@Autowired
 	private ValidationProperties validationProperties;
+
+	@Autowired
+	private CustomerRepo customerRepo;
 
 	@PostMapping
 	public ResponseEntity<?> addOrderList(@RequestBody SalesOrder salesOrder) {
@@ -55,6 +65,18 @@ public class SalesOrderController {
 				return ResponseEntity.ok(new CustomErrorTypeException(validationProperties.getStock()));
 			}
 		}
+		return ResponseEntity.ok(salesOrderRes);
+	}
+
+	@PutMapping
+	public ResponseEntity<?> updateOrderList(@RequestBody BalancePayment balancePayment) {
+		SalesOrder order = new SalesOrder();
+		order.setCustomer(customerRepo.findById(balancePayment.getId()).get());
+		order.setAmountPaid(balancePayment.getPayAmount());
+		order.setCurrentBalance(-balancePayment.getPayAmount());
+		order.setSalesOrderDetail(Collections.emptyList());
+		order.setBillDate(new Date());
+		SalesOrder salesOrderRes = orderService.saveOrder(order);
 		return ResponseEntity.ok(salesOrderRes);
 	}
 

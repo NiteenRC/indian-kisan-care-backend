@@ -35,7 +35,11 @@ public class Category {
     public Category() {
     }
 
-    public Long getId() {
+    public Category(String categoryName) {
+    	this.categoryName = categoryName;
+    }
+
+	public Long getId() {
         return id;
     }
 

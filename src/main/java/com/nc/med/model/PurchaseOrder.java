@@ -31,7 +31,7 @@ public class PurchaseOrder extends BaseEntity<String> implements Serializable {
 	private int totalQty;
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	private Supplier supplier;
 	@OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<PurchaseOrderDetail> purchaseOrderDetail;
@@ -40,6 +40,16 @@ public class PurchaseOrder extends BaseEntity<String> implements Serializable {
 	private String vehicleNo;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dueDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date billDate;
+	public Date getBillDate() {
+		return billDate;
+	}
+
+	public void setBillDate(Date billDate) {
+		this.billDate = billDate;
+	}
+
 	private String comment;
 
 	public String getVehicleNo() {

@@ -1,14 +1,14 @@
 ##### Application path ########## Server port #####
-server:
-  port: 8080
-#  servlet:
-#    context-path: /api/
-
+#server:
+ # port: 8081
+  #servlet:
+    #context-path: /indian-kisan-care-backend
+      
 ##### Profile Activation #####
 spring:
   profiles:
     active:
-      - mysql
+      - h2
     include:
       - mail
       #- log

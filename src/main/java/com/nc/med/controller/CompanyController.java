@@ -5,7 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,7 +59,7 @@ public class CompanyController {
 		}
 	}
 
-	@DeleteMapping("/{companyID}")
+	@DeleteMapping(value = "/{companyID}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteCompany(@PathVariable Long companyID) {
 		Company company = companyService.findByCompanyID(companyID);
 		if (company == null) {
@@ -65,7 +67,12 @@ public class CompanyController {
 					new CustomErrorTypeException("Company with companyID " + companyID + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-		companyService.deleteCompany(company);
+
+		try {
+			companyService.deleteCompany(company);
+		} catch (DataIntegrityViolationException e) {
+			return new ResponseEntity<>(new CustomErrorTypeException("Company is already in use"), HttpStatus.CONFLICT);
+		}
 		return new ResponseEntity<>(company, HttpStatus.OK);
 	}
 

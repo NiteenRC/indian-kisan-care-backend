@@ -1,8 +1,12 @@
 package com.nc.med.util;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -65,4 +69,37 @@ public class HostConfiguration {
 		return decryptedText;
 	}
 
+	@PostConstruct
+	public static void hostCheck() {
+		InetAddress ip;
+		try {
+			ip = InetAddress.getLocalHost();
+			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+			byte[] mac = network.getHardwareAddress();
+
+			StringBuilder sbMac = new StringBuilder();
+			StringBuilder sbWindows = new StringBuilder();
+
+			for (int i = 0; i < mac.length; i++) {
+				sbMac.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? ":" : ""));
+				sbWindows.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+			}
+
+			List<String> list = Arrays.asList("60:30:d4:64:9e:c8", "60-30-d4-64-9e-c8");
+			boolean isValid = false;
+			for (String x : list) {
+				if (x.equalsIgnoreCase(sbMac.toString()) || x.equalsIgnoreCase(sbWindows.toString())) {
+					isValid = true;
+				}
+			}
+
+			if (!isValid) {
+				// System.exit(0);
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+	}
 }

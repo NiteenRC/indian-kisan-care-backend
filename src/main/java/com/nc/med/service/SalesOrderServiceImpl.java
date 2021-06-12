@@ -94,7 +94,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
 	@Override
 	public List<SalesOrder> findAllOrders() {
-		return salesOrderRepo.findAll(Sort.by("createdDate").descending());
+		return salesOrderRepo.findAll(Sort.by("billDate").descending());
 	}
 
 	@Override

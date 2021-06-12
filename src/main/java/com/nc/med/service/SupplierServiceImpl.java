@@ -36,6 +36,11 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier findBySupplierName(String supplierName) {
+        return supplierRepo.findBySupplierName(supplierName);
+    }
+    
+    @Override
+    public Supplier findBySupplierNameContainingIgnoreCase(String supplierName) {
         return supplierRepo.findBySupplierNameContainingIgnoreCase(supplierName);
     }
 

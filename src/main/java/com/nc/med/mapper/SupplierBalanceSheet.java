@@ -1,30 +1,72 @@
 package com.nc.med.mapper;
 
+import java.util.Date;
+
 import com.nc.med.model.Supplier;
 
 public class SupplierBalanceSheet {
-    private Supplier supplier;
-    private Double currentBalance;
+	private Supplier supplier;
+	private Double currentBalance;
+	private Double totalPrice;
+	private Double amountPaid;
+	private Date billDate;
+	private Date dueDate;
 
-    public SupplierBalanceSheet(Supplier supplier, Double currentBalance) {
-        super();
-        this.setSupplier(supplier);
-        this.currentBalance = currentBalance;
-    }
+	public SupplierBalanceSheet(Supplier supplier, Double totalPrice, Double amountPaid, Double currentBalance,
+			Date billDate, Date dueDate) {
+		this.setSupplier(supplier);
+		this.setCurrentBalance(currentBalance);
+		this.setAmountPaid(amountPaid);
+		this.totalPrice = totalPrice;
+		this.setBillDate(billDate);
+		this.setDueDate(dueDate);
+	}
 
-    public Double getCurrentBalance() {
-        return currentBalance;
-    }
+	public Supplier getSupplier() {
+		return supplier;
+	}
 
-    public void setCurrentBalance(Double currentBalance) {
-        this.currentBalance = currentBalance;
-    }
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
+	public Double getCurrentBalance() {
+		return currentBalance;
+	}
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
+	public void setCurrentBalance(Double currentBalance) {
+		this.currentBalance = currentBalance;
+	}
+
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public Double getAmountPaid() {
+		return amountPaid;
+	}
+
+	public void setAmountPaid(Double amountPaid) {
+		this.amountPaid = amountPaid;
+	}
+
+	public Date getBillDate() {
+		return billDate;
+	}
+
+	public void setBillDate(Date billDate) {
+		this.billDate = billDate;
+	}
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
 }

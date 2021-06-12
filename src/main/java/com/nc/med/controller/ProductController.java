@@ -44,21 +44,24 @@ public class ProductController {
 			return new ResponseEntity<>(new CustomErrorTypeException("input is empty"), HttpStatus.NO_CONTENT);
 		}
 
-		Product productObj = productService.findByProductName(product.getProductName());
+		String productName = product.getProductName().toUpperCase();
+		Product productObj = productService.findByProductName(productName);
 		if (productObj != null) {
-			return new ResponseEntity<>(new CustomErrorTypeException("Product name already exist!!"),
-					HttpStatus.CONFLICT);
+			return new ResponseEntity<>(new CustomErrorTypeException("Product already exist!!"), HttpStatus.CONFLICT);
 		}
+		product.setProductName(productName);
 		return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.CREATED);
 	}
 
 	@PutMapping
 	public ResponseEntity<?> updateProduct(@RequestBody Product product) {
-		Product productObj = productService.findByProductName(product.getProductName());
+		String productName = product.getProductName().toUpperCase();
+		Product productObj = productService.findByProductName(productName);
 		if (productObj == null || productObj.getId() == product.getId()) {
+			product.setProductName(productName);
 			return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<>(new CustomErrorTypeException("Product name already exist!!"),
+			return new ResponseEntity<>(new CustomErrorTypeException("Product already exist!!"),
 					HttpStatus.CONFLICT);
 		}
 
@@ -70,8 +73,8 @@ public class ProductController {
 		product.setCategory(category);
 		Product productName = productService.findByProductName(product.getProductName());
 		if (productName != null) {
-			LOGGER.info("Product name already exist!!");
-			return new ResponseEntity<>(new CustomErrorTypeException("Product name already exist!!"),
+			LOGGER.info("Product already exist!!");
+			return new ResponseEntity<>(new CustomErrorTypeException("Product already exist!!"),
 					HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.CREATED);

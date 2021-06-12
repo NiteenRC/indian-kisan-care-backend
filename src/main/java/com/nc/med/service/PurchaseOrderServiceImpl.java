@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.nc.med.mapper.CustomerBalanceSheet;
 import com.nc.med.mapper.SupplierBalanceSheet;
 import com.nc.med.model.PurchaseOrder;
+import com.nc.med.model.SalesOrder;
 import com.nc.med.model.Supplier;
 import com.nc.med.repo.PurchaseOrderRepo;
 import com.nc.med.repo.SupplierRepo;
@@ -83,7 +85,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 	@Override
 	public List<PurchaseOrder> findAllOrders() {
-		return purchaseOrderRepo.findAll(Sort.by("createdDate").descending());
+		return purchaseOrderRepo.findAll(Sort.by("billDate").descending());
 	}
 
 	@Override
@@ -119,9 +121,21 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 	@Override
 	public List<SupplierBalanceSheet> findCurrentBalanceBySuppliers() {
-		return purchaseOrderRepo.findAll().stream().collect(Collectors.groupingBy(PurchaseOrder::getSupplier,
-				Collectors.summingDouble(PurchaseOrder::getCurrentBalance))).entrySet().stream().map(x -> {
-					return new SupplierBalanceSheet(x.getKey(), x.getValue());
+		List<SupplierBalanceSheet> supplierBalanceSheets = purchaseOrderRepo.findAll().stream()
+				.collect(Collectors.groupingBy(PurchaseOrder::getSupplier)).entrySet().stream().map(x -> {
+					List<PurchaseOrder> purchaseOrders = x.getValue();
+					double totalPrice = purchaseOrders.stream().mapToDouble(PurchaseOrder::getTotalPrice).sum();
+					double amountPaid = purchaseOrders.stream().mapToDouble(PurchaseOrder::getAmountPaid).sum();
+					double dueAmount = purchaseOrders.stream().mapToDouble(PurchaseOrder::getCurrentBalance).sum();
+
+					int size = purchaseOrders.size();
+					PurchaseOrder order = purchaseOrders.get(size - 1);
+					Date billDate = order.getBillDate();
+					Date dueDate = order.getDueDate();
+					return new SupplierBalanceSheet(x.getKey(), totalPrice, amountPaid, dueAmount, billDate, dueDate);
 				}).collect(Collectors.toList());
+
+		supplierBalanceSheets.sort((c1, c2) -> c1.getBillDate().compareTo(c2.getBillDate()));
+		return supplierBalanceSheets;
 	}
 }

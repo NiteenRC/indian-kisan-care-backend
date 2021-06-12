@@ -11,4 +11,6 @@ public interface CustomerRepo extends JpaRepository<Customer, Long> {
     List<Customer> findAllByLocationId(Long locationId);
 
     List<Customer> findByLocationId(Long locationId);// same as above
+
+	Customer findByCustomerName(String customerName);
 }

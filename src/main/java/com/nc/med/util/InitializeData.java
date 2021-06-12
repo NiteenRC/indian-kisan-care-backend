@@ -47,7 +47,7 @@ public class InitializeData {
 	}
 	
 
-	// @EventListener(ApplicationReadyEvent.class)
+	@EventListener(ApplicationReadyEvent.class)
 	public void loadDataProduct() {
 		if (productRepo.findAll().isEmpty()) {
 			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",

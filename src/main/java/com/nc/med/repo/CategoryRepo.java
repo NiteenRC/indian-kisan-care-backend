@@ -11,6 +11,8 @@ public interface CategoryRepo extends JpaRepository<Category, Long> {
     @Query(value = "SELECT category, COUNT(*) as count FROM Product GROUP BY category", nativeQuery = true)
     int findCount();
 
+	Category findByCategoryName(String categoryName);
+
     //List<Category> findByCategoryNameContainingIgnoreCase(String categoryName);
 
     //List<Category> findAllByCategory();

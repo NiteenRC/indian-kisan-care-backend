@@ -1,5 +1,7 @@
 package com.nc.med.controller;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,12 +14,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nc.med.exception.CustomErrorTypeException;
+import com.nc.med.mapper.BalancePayment;
 import com.nc.med.model.PurchaseOrder;
+import com.nc.med.model.SalesOrder;
+import com.nc.med.repo.SupplierRepo;
 import com.nc.med.service.PurchaseOrderDetailService;
 import com.nc.med.service.PurchaseOrderService;
 
@@ -32,6 +38,9 @@ public class PurchaseOrderController {
 	
 	@Autowired
 	private PurchaseOrderDetailService orderDetailService;
+	
+	@Autowired
+	private SupplierRepo supplierRepo;
 
 	@PostMapping
 	public ResponseEntity<?> addOrderList(@RequestBody PurchaseOrder purchaseOrder) {
@@ -42,6 +51,18 @@ public class PurchaseOrderController {
 			orderDetailService.savePurchaseOrderDetail(purchaseOrderDetail);
 		});
 		return new ResponseEntity<>(purchaseOrderRes, HttpStatus.OK);
+	}
+	
+	@PutMapping
+	public ResponseEntity<?> updateOrderList(@RequestBody BalancePayment balancePayment) {
+		PurchaseOrder order = new PurchaseOrder();
+		order.setSupplier(supplierRepo.findById(balancePayment.getId()).get());
+		order.setAmountPaid(balancePayment.getPayAmount());
+		order.setCurrentBalance(-balancePayment.getPayAmount());
+		order.setPurchaseOrderDetail(Collections.emptyList());
+		order.setBillDate(new Date());
+		PurchaseOrder purchasesOrderRes = orderService.saveOrder(order);
+		return ResponseEntity.ok(purchasesOrderRes);
 	}
 
 	@GetMapping

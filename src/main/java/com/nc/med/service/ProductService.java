@@ -27,4 +27,6 @@ public interface ProductService {
 
     List<Product> removeProductGetTemp();
 
+	Product findByProductNameIgnoreCase(String productName);
+
 }

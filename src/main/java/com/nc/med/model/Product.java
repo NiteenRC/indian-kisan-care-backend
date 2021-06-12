@@ -9,13 +9,14 @@ import java.util.Date;
 
 @Entity
 // @Table(name = "Products")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product implements Serializable {
     private static final long serialVersionUID = -1000119078147252957L;
 
     @Id
-    @GeneratedValue
-    @Column(name = "PRODUCT_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    //@Column(name = "PRODUCT_ID")
     private Long id;
     @Column(length = 255, nullable = false)
     private String productName;
@@ -26,7 +27,7 @@ public class Product implements Serializable {
     // @JoinColumn(name = "CATEGORY_ID")
     // @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_ID")
+    //@JoinColumn(name = "CATEGORY_ID")
     private Category category;
     private String productDesc;
     private int qty;

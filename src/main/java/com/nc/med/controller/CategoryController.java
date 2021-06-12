@@ -41,24 +41,25 @@ public class CategoryController {
 		if (category == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("Category is not saved"), HttpStatus.NOT_FOUND);
 		}
-
-		Category category1 = categoryService.findByCategoryName(category.getCategoryName());
+		String categoryName = category.getCategoryName().toUpperCase();
+		Category category1 = categoryService.findByCategoryName(categoryName);
 		if (category1 != null) {
-			return new ResponseEntity<>(new CustomErrorTypeException("Category name already exist!!"),
-					HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new CustomErrorTypeException("Category already exist!!"), HttpStatus.CONFLICT);
 		}
+		category.setCategoryName(categoryName);
 		return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
 	}
 
 	@PutMapping
 	public ResponseEntity<?> updateCategory(@RequestBody Category category) {
 		LOGGER.info("category " + category.getCategoryName());
-		Category categoryObj = categoryService.findByCategoryName(category.getCategoryName());
+		String categoryName = category.getCategoryName().toUpperCase();
+		Category categoryObj = categoryService.findByCategoryName(categoryName);
 		if (categoryObj == null || categoryObj.getId() == category.getId()) {
+			category.setCategoryName(categoryName);
 			return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<>(new CustomErrorTypeException("Category name already exist!!"),
-					HttpStatus.CONFLICT);
+			return new ResponseEntity<>(new CustomErrorTypeException("Category already exist!!"), HttpStatus.CONFLICT);
 		}
 	}
 
@@ -86,7 +87,7 @@ public class CategoryController {
 
 	@GetMapping("/categoryName")
 	public ResponseEntity<?> findCategoryByID(@RequestParam String categoryName) {
-		Category category = categoryService.findByCategoryName(categoryName);
+		Category category = categoryService.findByCategoryNameContainIgnoreCase(categoryName);
 		return new ResponseEntity<>(category, HttpStatus.OK);
 
 	}

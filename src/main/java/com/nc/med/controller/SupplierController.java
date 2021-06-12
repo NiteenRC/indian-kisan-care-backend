@@ -55,6 +55,7 @@ public class SupplierController {
 	@PutMapping
 	public ResponseEntity<?> updateSupplier(@RequestBody Supplier supplier) {
 		LOGGER.info("supplier " + supplier.getSupplierName());
+		supplier.setSupplierName(supplier.getSupplierName().toUpperCase());
 		return new ResponseEntity<>(supplierService.saveSupplier(supplier), HttpStatus.CREATED);
 	}
 
@@ -82,6 +83,6 @@ public class SupplierController {
 
 	@GetMapping("/supplierName")
 	public ResponseEntity<?> findBySupplierName(@RequestParam String supplierName) {
-		return new ResponseEntity<>(supplierService.findBySupplierName(supplierName), HttpStatus.OK);
+		return new ResponseEntity<>(supplierService.findBySupplierNameContainingIgnoreCase(supplierName), HttpStatus.OK);
 	}
 }

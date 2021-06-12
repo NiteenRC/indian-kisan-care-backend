@@ -56,6 +56,7 @@ public class CustomerController {
 	@PutMapping
 	public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
 		LOGGER.info("customer " + customer.getCustomerName());
+		customer.setCustomerName(customer.getCustomerName().toUpperCase());
 		return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.CREATED);
 	}
 
@@ -83,6 +84,6 @@ public class CustomerController {
 
 	@GetMapping("/customerName")
 	public ResponseEntity<?> findBySupplierName(@RequestParam String customerName) {
-		return new ResponseEntity<>(customerService.findByCustomerName(customerName), HttpStatus.OK);
+		return new ResponseEntity<>(customerService.findByCustomerNameContainingIgnoreCase(customerName), HttpStatus.OK);
 	}
 }

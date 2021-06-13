@@ -56,8 +56,15 @@ public class CustomerController {
 	@PutMapping
 	public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
 		LOGGER.info("customer " + customer.getCustomerName());
-		customer.setCustomerName(customer.getCustomerName().toUpperCase());
-		return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.CREATED);
+		String customerName = customer.getCustomerName().toUpperCase();
+
+		Customer categoryObj = customerService.findByCustomerName(customerName);
+		if (categoryObj == null || categoryObj.getId() == customer.getId()) {
+			customer.setCustomerName(customerName);
+			return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(new CustomErrorTypeException("Customer already exist!!"), HttpStatus.CONFLICT);
+		}
 	}
 
 	@DeleteMapping("/{customerID}")
@@ -84,6 +91,7 @@ public class CustomerController {
 
 	@GetMapping("/customerName")
 	public ResponseEntity<?> findBySupplierName(@RequestParam String customerName) {
-		return new ResponseEntity<>(customerService.findByCustomerNameContainingIgnoreCase(customerName), HttpStatus.OK);
+		return new ResponseEntity<>(customerService.findByCustomerNameContainingIgnoreCase(customerName),
+				HttpStatus.OK);
 	}
 }

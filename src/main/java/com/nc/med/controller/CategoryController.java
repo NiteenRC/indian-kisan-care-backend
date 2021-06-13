@@ -38,7 +38,7 @@ public class CategoryController {
 
 	@PostMapping
 	public ResponseEntity<?> addCategory(@RequestBody Category category) {
-		if (category == null) {
+		if (category == null || category.getCategoryName() == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("Category is not saved"), HttpStatus.NOT_FOUND);
 		}
 		String categoryName = category.getCategoryName().toUpperCase();
@@ -57,7 +57,7 @@ public class CategoryController {
 		Category categoryObj = categoryService.findByCategoryName(categoryName);
 		if (categoryObj == null || categoryObj.getId() == category.getId()) {
 			category.setCategoryName(categoryName);
-			return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
+			return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(new CustomErrorTypeException("Category already exist!!"), HttpStatus.CONFLICT);
 		}
@@ -70,6 +70,11 @@ public class CategoryController {
 			return new ResponseEntity<>(
 					new CustomErrorTypeException("Category with categoryID " + categoryID + " not found."),
 					HttpStatus.NOT_FOUND);
+		}
+		if(!category.getProducts().isEmpty()) {
+			return new ResponseEntity<>(
+					new CustomErrorTypeException("Category is associated with product. Please delete product before deleting category"),
+					HttpStatus.CONFLICT);
 		}
 		categoryService.deleteCategory(category);
 		return new ResponseEntity<>(category, HttpStatus.OK);

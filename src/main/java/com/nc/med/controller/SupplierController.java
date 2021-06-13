@@ -55,8 +55,14 @@ public class SupplierController {
 	@PutMapping
 	public ResponseEntity<?> updateSupplier(@RequestBody Supplier supplier) {
 		LOGGER.info("supplier " + supplier.getSupplierName());
-		supplier.setSupplierName(supplier.getSupplierName().toUpperCase());
-		return new ResponseEntity<>(supplierService.saveSupplier(supplier), HttpStatus.CREATED);
+		String supplierName = supplier.getSupplierName().toUpperCase();
+		Supplier supplierObj = supplierService.findBySupplierName(supplierName);
+		if (supplierObj == null || supplierObj.getId() == supplier.getId()) {
+			supplier.setSupplierName(supplierName);
+			return new ResponseEntity<>(supplierService.saveSupplier(supplier), HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(new CustomErrorTypeException("Supplier already exist!!"), HttpStatus.CONFLICT);
+		}
 	}
 
 	@DeleteMapping("/{supplierID}")
@@ -83,6 +89,7 @@ public class SupplierController {
 
 	@GetMapping("/supplierName")
 	public ResponseEntity<?> findBySupplierName(@RequestParam String supplierName) {
-		return new ResponseEntity<>(supplierService.findBySupplierNameContainingIgnoreCase(supplierName), HttpStatus.OK);
+		return new ResponseEntity<>(supplierService.findBySupplierNameContainingIgnoreCase(supplierName),
+				HttpStatus.OK);
 	}
 }

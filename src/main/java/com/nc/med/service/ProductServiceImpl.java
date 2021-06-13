@@ -67,7 +67,8 @@ public class ProductServiceImpl implements ProductService {
 		Category category = categoryRepo.findByCategoryName(CategoryName);
 
 		if (category == null) {
-			product.setCategory(categoryRepo.save(new Category(CategoryName)));
+			category = categoryRepo.save(new Category(CategoryName));
+			product.setCategory(category);
 		}
 		return productRepo.save(product);
 	}

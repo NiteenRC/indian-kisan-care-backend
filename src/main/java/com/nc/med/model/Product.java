@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,6 +28,7 @@ public class Product implements Serializable {
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "CATEGORY_ID")
     // @JsonIgnore
+    @NotNull(message = "Name may not be null")
     @ManyToOne(fetch = FetchType.LAZY)
     //@JoinColumn(name = "CATEGORY_ID")
     private Category category;

@@ -7,7 +7,7 @@ spring:
     #url: jdbc:h2:file:\${HOME}/Downloads/DB_113;AUTO_SERVER=TRUE
          #jdbc:h2:file:/Users/niteenchougula/Downloads/F_110;AUTO_SERVER=TRUE
     #url: jdbc:h2:mem:test_mem1015;DB_CLOSE_DELAY=-1
-    url: jdbc:h2:file:./build/h2db/db/praveen-traders-db-050?createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:file:./build/h2db/db/praveen-traders-db-051?createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
   jpa:
     hibernate:
       ddl-auto: update

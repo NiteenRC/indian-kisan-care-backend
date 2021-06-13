@@ -10,7 +10,7 @@ public class PurchaseOrderDetail implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue // (strategy = GenerationType.IDENTITY)
-    private Integer purchaseOrderDetailID;
+    private Long purchaseOrderDetailID;
     @ManyToOne // (fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "purchaseOrderID")
     @JsonIgnore
@@ -21,11 +21,11 @@ public class PurchaseOrderDetail implements Serializable {
     private Integer qtyOrdered;
     private Integer price;
 
-    public Integer getPurchaseOrderDetailID() {
+    public Long getPurchaseOrderDetailID() {
         return purchaseOrderDetailID;
     }
 
-    public void setPurchaseOrderDetailID(Integer purchaseOrderDetailID) {
+    public void setPurchaseOrderDetailID(Long purchaseOrderDetailID) {
         this.purchaseOrderDetailID = purchaseOrderDetailID;
     }
 

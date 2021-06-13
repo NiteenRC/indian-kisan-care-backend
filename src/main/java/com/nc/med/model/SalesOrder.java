@@ -24,7 +24,7 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 	private static final long serialVersionUID = -1000219078147252957L;
 	@Id
 	@GeneratedValue
-	private int salesOrderID;
+	private Long salesOrderID;
 	@Column(name = "totalPrice", nullable = false)
 	private double totalPrice;
 	private double amountPaid;
@@ -91,11 +91,11 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 		this.amountPaid = amountPaid;
 	}
 
-	public int getSalesOrderID() {
+	public Long getSalesOrderID() {
 		return salesOrderID;
 	}
 
-	public void setSalesOrderID(int salesOrderID) {
+	public void setSalesOrderID(Long salesOrderID) {
 		this.salesOrderID = salesOrderID;
 	}
 

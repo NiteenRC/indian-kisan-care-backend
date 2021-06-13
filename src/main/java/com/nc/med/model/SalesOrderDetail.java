@@ -11,7 +11,7 @@ public class SalesOrderDetail implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue
-    private Integer salesOrderDetailID;
+    private Long salesOrderDetailID;
     @ManyToOne // (fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "salesOrderID")
     @JsonIgnore
@@ -33,11 +33,11 @@ public class SalesOrderDetail implements Serializable {
         this.profit = profit;
     }
 
-    public Integer getSalesOrderDetailID() {
+    public Long getSalesOrderDetailID() {
         return salesOrderDetailID;
     }
 
-    public void setSalesOrderDetailID(Integer salesOrderDetailID) {
+    public void setSalesOrderDetailID(Long salesOrderDetailID) {
         this.salesOrderDetailID = salesOrderDetailID;
     }
 

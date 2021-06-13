@@ -24,7 +24,7 @@ public class PurchaseOrder extends BaseEntity<String> implements Serializable {
 	private static final long serialVersionUID = -1000119078147252957L;
 	@Id
 	@GeneratedValue // (strategy = GenerationType.IDENTITY)
-	private int purchaseOrderID;
+	private Long purchaseOrderID;
 	@Column(name = "totalPrice", nullable = false)
 	private double totalPrice;
 	private double amountPaid;
@@ -100,11 +100,11 @@ public class PurchaseOrder extends BaseEntity<String> implements Serializable {
 		this.amountPaid = amountPaid;
 	}
 
-	public int getPurchaseOrderID() {
+	public Long getPurchaseOrderID() {
 		return purchaseOrderID;
 	}
 
-	public void setPurchaseOrderID(int purchaseOrderID) {
+	public void setPurchaseOrderID(Long purchaseOrderID) {
 		this.purchaseOrderID = purchaseOrderID;
 	}
 

@@ -11,6 +11,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -23,7 +24,7 @@ import com.nc.med.mapper.OrderStatus;
 public class PurchaseOrder extends BaseEntity<String> implements Serializable {
 	private static final long serialVersionUID = -1000119078147252957L;
 	@Id
-	@GeneratedValue // (strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long purchaseOrderID;
 	@Column(name = "totalPrice", nullable = false)
 	private double totalPrice;

@@ -36,9 +36,11 @@ public class UserDetailsImpl implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
+	private byte[] image;
+
 	public UserDetailsImpl(Long id, String username, String email, String password, String gstNo, String panNo,
 			String phoneNumber, String brandName, BankAccount bankAccount,
-			Collection<? extends GrantedAuthority> authorities) {
+			Collection<? extends GrantedAuthority> authorities, byte [] image) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
@@ -49,6 +51,7 @@ public class UserDetailsImpl implements UserDetails {
 		this.brandName = brandName;
 		this.bankAccount = bankAccount;
 		this.panNo = panNo;
+		this.image = image;
 	}
 
 	public static UserDetailsImpl build(User user) {
@@ -57,7 +60,7 @@ public class UserDetailsImpl implements UserDetails {
 
 		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),
 				user.getGstNo(), user.getPanNo(), user.getPhoneNumber(), user.getBrandName(), user.getBankAccount(),
-				authorities);
+				authorities, user.getImage());
 	}
 
 	@Override
@@ -147,5 +150,13 @@ public class UserDetailsImpl implements UserDetails {
 
 	public void setBrandName(String brandName) {
 		this.brandName = brandName;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+	
+	public void setImage(byte [] image) {
+		this.image = image;
 	}
 }

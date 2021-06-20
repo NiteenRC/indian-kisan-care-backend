@@ -19,6 +19,7 @@ public class JwtResponse {
 	private String phoneNumber;
 	@OneToOne
 	private BankAccount bankAccount;
+	private byte [] image;
 
 	public String getGstNo() {
 		return gstNo;
@@ -53,7 +54,7 @@ public class JwtResponse {
 	}
 
 	public JwtResponse(String accessToken, Long id, String username, String email, String gstNo, String panNo,
-			String phoneNumber, String brandName, BankAccount bankAccount, List<String> roles) {
+			String phoneNumber, String brandName, BankAccount bankAccount, List<String> roles, byte[] image) {
 		this.token = accessToken;
 		this.id = id;
 		this.username = username;
@@ -64,6 +65,7 @@ public class JwtResponse {
 		this.brandName = brandName;
 		this.bankAccount = bankAccount;
 		this.roles = roles;
+		this.image = image;
 	}
 
 	public String getAccessToken() {

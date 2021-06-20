@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/dbname-ikc-006?createDatabaseIfNotExist=true
-    username: root-user
+    url: jdbc:mysql://localhost:3306/dbname-ikc-007?createDatabaseIfNotExist=true
+    username: root
     password: root@123
     platform: mysql
   jpa:

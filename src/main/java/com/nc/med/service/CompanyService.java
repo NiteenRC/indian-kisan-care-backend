@@ -17,4 +17,6 @@ public interface CompanyService {
     List<Company> fetchAllCategories();
 
     Company findCompanyById(Long id);
+
+	Company findByCompanyNameContainingIgnoreCase(String companyName);
 }

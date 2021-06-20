@@ -38,23 +38,26 @@ public class CompanyController {
 		if (company == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("Company is not saved"), HttpStatus.NOT_FOUND);
 		}
-
-		Company companyObj = companyService.findByCompanyName(company.getCompanyName());
+		String companyName = company.getCompanyName().toUpperCase();
+		Company companyObj = companyService.findByCompanyName(companyName);
 		if (companyObj != null) {
-			return new ResponseEntity<>(new CustomErrorTypeException("Company name already exist!!"),
+			return new ResponseEntity<>(new CustomErrorTypeException("Company is already exist!!"),
 					HttpStatus.NOT_FOUND);
 		}
+		company.setCompanyName(companyName);
 		return new ResponseEntity<>(companyService.saveCompany(company), HttpStatus.CREATED);
 	}
 
 	@PutMapping
 	public ResponseEntity<?> updateCompany(@RequestBody Company company) {
 		LOGGER.info("company " + company.getCompanyName());
-		Company companyObj = companyService.findByCompanyName(company.getCompanyName());
+		String companyName = company.getCompanyName().toUpperCase();
+		Company companyObj = companyService.findByCompanyName(companyName);
 		if (companyObj == null || companyObj.getId() == company.getId()) {
+			company.setCompanyName(companyName);
 			return new ResponseEntity<>(companyService.saveCompany(company), HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<>(new CustomErrorTypeException("Company name already exist!!"),
+			return new ResponseEntity<>(new CustomErrorTypeException("Company is already exist!!"),
 					HttpStatus.CONFLICT);
 		}
 	}

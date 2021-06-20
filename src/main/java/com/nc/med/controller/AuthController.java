@@ -1,13 +1,16 @@
 package com.nc.med.controller;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,14 +22,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nc.med.auth.jwt.JwtUtils;
 import com.nc.med.auth.payload.JwtResponse;
 import com.nc.med.auth.payload.LoginRequest;
 import com.nc.med.auth.payload.MessageResponse;
 import com.nc.med.auth.payload.SignupRequest;
+import com.nc.med.exception.CustomErrorTypeException;
 import com.nc.med.model.ERole;
 import com.nc.med.model.Role;
+import com.nc.med.model.User;
 import com.nc.med.repo.RoleRepository;
 import com.nc.med.repo.UserRepository;
 import com.nc.med.service.UserDetailsImpl;
@@ -65,7 +72,27 @@ public class AuthController {
 
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
 				userDetails.getEmail(), userDetails.getGstNo(), userDetails.getPanNo(), userDetails.getPhoneNumber(),
-				userDetails.getBrandName(), userDetails.getBankAccount(), roles));
+				userDetails.getBrandName(), userDetails.getBankAccount(), roles, userDetails.getImage()));
+	}
+
+	@PostMapping("/signup1")
+	public ResponseEntity<?> registerUser(@RequestParam MultipartFile image, @RequestParam String userName) {
+		Optional<User> userOpt = userRepository.findByUsername(userName);
+
+		if (!userOpt.isPresent()) {
+			return new ResponseEntity(new CustomErrorTypeException("User is not found"), HttpStatus.NOT_FOUND);
+		}
+
+		try {
+			byte[] bytes = image.getBytes();
+			User user = userOpt.get();
+			user.setImage(bytes);
+			userRepository.save(user);
+		} catch (IOException e) {
+			return new ResponseEntity(new CustomErrorTypeException("File is failed to save" + e),
+					HttpStatus.BAD_REQUEST);
+		}
+		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 
 	@PostMapping("/signup")
@@ -79,8 +106,8 @@ public class AuthController {
 		}
 
 		// Create new user's account
-		// User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
-		// encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
+				encoder.encode(signUpRequest.getPassword()), "image".getBytes());
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
@@ -112,8 +139,8 @@ public class AuthController {
 			});
 		}
 
-		// user.setRoles(roles);
-		// userRepository.save(user);
+		user.setRoles(roles);
+		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}

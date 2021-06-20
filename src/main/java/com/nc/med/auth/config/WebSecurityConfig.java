@@ -80,6 +80,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/indian-kisan-care-backend/**").permitAll()
                 .and()
+                .authorizeRequests().antMatchers("/auth/**").permitAll()
+                .and()
                 .authorizeRequests().antMatchers("/").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/actuator/**").permitAll()

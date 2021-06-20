@@ -11,5 +11,7 @@ public interface CompanyRepo extends JpaRepository<Company, Long> {
     // List<Company> findByCompanyNameIs(String name);//same
     // List<Company> findByCompanyNameEquals(String name);//same
 
+	Company findByCompanyName(String companyName);
+
     // boolean existsById(Integer id);//in-built method
 }

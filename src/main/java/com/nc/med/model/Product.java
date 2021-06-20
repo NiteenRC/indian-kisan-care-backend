@@ -31,6 +31,7 @@ public class Product implements Serializable {
 	@Column(name = "Price", nullable = false)
 	private double price;
 	private double currentPrice;
+	private double profit;
 	// @ManyToOne(fetch = FetchType.LAZY)
 	// @JoinColumn(name = "CATEGORY_ID")
 	// @JsonIgnore
@@ -150,5 +151,13 @@ public class Product implements Serializable {
 
 	public void setHsnNo(String hsnNo) {
 		this.hsnNo = hsnNo;
+	}
+
+	public double getProfit() {
+		return profit;
+	}
+
+	public void setProfit(double profit) {
+		this.profit = profit;
 	}
 }

@@ -59,7 +59,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
 		} else {
 			String customerName = customer.getCustomerName().toUpperCase();
-			customerObj = customerRepo.findByCustomerNameContainingIgnoreCase(customerName);
+			customerObj = customerRepo.findByCustomerName(customerName);
 
 			if (customerObj == null) {
 				customerObj = customerRepo.save(new Customer(customerName));

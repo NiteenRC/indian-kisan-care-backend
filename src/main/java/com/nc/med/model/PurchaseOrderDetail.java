@@ -19,7 +19,7 @@ public class PurchaseOrderDetail implements Serializable {
     @JoinColumn(name = "productID") // , insertable = false, updatable = false
     private Product product;
     private Integer qtyOrdered;
-    private Integer price;
+    private double price;
 
     public Long getPurchaseOrderDetailID() {
         return purchaseOrderDetailID;
@@ -53,11 +53,11 @@ public class PurchaseOrderDetail implements Serializable {
         this.qtyOrdered = qtyOrdered;
     }
 
-    public Integer getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

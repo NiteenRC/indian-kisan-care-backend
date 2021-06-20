@@ -17,4 +17,6 @@ public interface LocationService {
     List<Location> fetchAllCategories();
 
     Location findLocationById(Long id);
+
+	Location findByLocationNameContainingIgnoreCase(String cityName);
 }

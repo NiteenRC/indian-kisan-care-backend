@@ -14,10 +14,19 @@ docker run -d -p 3306:3306 --name mysql-docker-container -e MYSQL_ROOT_PASSWORD=
 
 **MYSQL START:**
 docker exec -it mysql-docker-container bash
-mysql -uroot-user -proot@321
+mysql -uroot-user -p
+root@321
+
+Server -> Data Import
+
+LOCAL:
+brew install mysql
+brew services start mysql
+brew services list
+brew services stop mysql
 
 **LINK & RUN APPLCATION:**
-docker run -d -t --name spring-app-jpa-container --link mysql-docker-container:mysql -p 8080:8080 niteenjava/praveen-traders-service-001
+docker run -t --name spring-app-jpa-container --link mysql-docker-container:mysql -p 8080:8080 niteenjava/praveen-traders-service-001
 
 
 **USEFUL DOCKER COMMANDS:**

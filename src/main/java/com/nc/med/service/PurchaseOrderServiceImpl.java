@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.nc.med.mapper.CustomerBalanceSheet;
 import com.nc.med.mapper.SupplierBalanceSheet;
 import com.nc.med.model.PurchaseOrder;
-import com.nc.med.model.SalesOrder;
 import com.nc.med.model.Supplier;
 import com.nc.med.repo.PurchaseOrderRepo;
 import com.nc.med.repo.SupplierRepo;
@@ -50,7 +48,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 			order.setSupplier(supplierRepo.save(new Supplier("UNKNOWN" + maxId)));
 		} else {
 			String supplierName = supplier.getSupplierName().toUpperCase();
-			supplierObj = supplierRepo.findBySupplierNameContainingIgnoreCase(supplierName);
+			supplierObj = supplierRepo.findBySupplierName(supplierName);
 
 			if (supplierObj == null) {
 				supplierObj = supplierRepo.save(new Supplier(supplierName));

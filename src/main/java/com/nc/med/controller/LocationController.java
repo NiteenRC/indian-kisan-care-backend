@@ -37,20 +37,23 @@ public class LocationController {
 		if (location == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("Location is not saved"), HttpStatus.NOT_FOUND);
 		}
-
-		Location category1 = locationService.findByLocationName(location.getCityName());
+		String locationName = location.getCityName().toUpperCase();
+		Location category1 = locationService.findByLocationName(locationName);
 		if (category1 != null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("Location name already exist!!"),
 					HttpStatus.NOT_FOUND);
 		}
+		location.setCityName(locationName);
 		return new ResponseEntity<>(locationService.saveLocation(location), HttpStatus.CREATED);
 	}
 
 	@PutMapping
 	public ResponseEntity<?> updateCategory(@RequestBody Location location) {
 		LOGGER.info("location " + location.getCityName());
-		Location locationObj = locationService.findByLocationName(location.getCityName());
+		String locationName = location.getCityName().toUpperCase();
+		Location locationObj = locationService.findByLocationName(locationName);
 		if (locationObj == null || locationObj.getId() == location.getId()) {
+			location.setCityName(locationName);
 			return new ResponseEntity<>(locationService.saveLocation(location), HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(new CustomErrorTypeException("Location name already exist!!"),

@@ -48,7 +48,7 @@ public class HostConfiguration {
 	@PostConstruct
 	public void expire() {
 		Calendar expireDate = Calendar.getInstance();
-		expireDate.set(2021, 7, 31);
+		expireDate.set(2022, 7, 31);
 		if (Calendar.getInstance().after(expireDate)) {
 			roleRepository.deleteAll();
 			System.exit(0);

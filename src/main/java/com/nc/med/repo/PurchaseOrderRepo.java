@@ -12,7 +12,7 @@ import com.nc.med.model.PurchaseOrder;
 import com.nc.med.model.Supplier;
 
 @Transactional
-public interface PurchaseOrderRepo extends JpaRepository<PurchaseOrder, Integer> {
+public interface PurchaseOrderRepo extends JpaRepository<PurchaseOrder, Long> {
 
 	// Order findByProductName(String productName);
 

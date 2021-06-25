@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nc.med.exception.CustomErrorTypeException;
 import com.nc.med.mapper.BalancePayment;
 import com.nc.med.model.PurchaseOrder;
-import com.nc.med.model.SalesOrder;
 import com.nc.med.repo.SupplierRepo;
 import com.nc.med.service.PurchaseOrderDetailService;
 import com.nc.med.service.PurchaseOrderService;
@@ -35,10 +34,10 @@ public class PurchaseOrderController {
 
 	@Autowired
 	private PurchaseOrderService orderService;
-	
+
 	@Autowired
 	private PurchaseOrderDetailService orderDetailService;
-	
+
 	@Autowired
 	private SupplierRepo supplierRepo;
 
@@ -52,7 +51,7 @@ public class PurchaseOrderController {
 		});
 		return new ResponseEntity<>(purchaseOrderRes, HttpStatus.OK);
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<?> updateOrderList(@RequestBody BalancePayment balancePayment) {
 		PurchaseOrder order = new PurchaseOrder();
@@ -86,7 +85,7 @@ public class PurchaseOrderController {
 	}
 
 	@DeleteMapping("/{orderID}")
-	public ResponseEntity<?> deleteOrder(@PathVariable Integer orderID) {
+	public ResponseEntity<?> deleteOrder(@PathVariable Long orderID) {
 		PurchaseOrder order = orderService.findByOrderID(orderID);
 		if (order == null) {
 			return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),

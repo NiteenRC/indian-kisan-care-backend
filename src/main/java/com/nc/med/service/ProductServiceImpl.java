@@ -22,10 +22,13 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	public PurchaseOrderService orderService;
+
 	@Autowired
 	ProductRepo productRepo;
+
 	@Autowired
 	PurchaseOrderRepo orderRepo;
+
 	List<Product> productsList = null;
 
 	@Autowired
@@ -43,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> findAllProduct() {
-		return productRepo.findAll(Sort.by("id").descending());
+		return productRepo.findAll(Sort.by("productName"));
 	}
 
 	@Override

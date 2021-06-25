@@ -72,7 +72,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 	}
 
 	@Override
-	public PurchaseOrder findByOrderID(Integer orderID) {
+	public PurchaseOrder findByOrderID(Long orderID) {
 		return purchaseOrderRepo.findById(orderID).get();
 	}
 

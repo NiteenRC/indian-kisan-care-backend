@@ -21,7 +21,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<Location> fetchAllCategories() {
-        return categoryRepo.findAll(Sort.by("id").descending());
+        return categoryRepo.findAll(Sort.by("cityName"));
     }
 
     @Override

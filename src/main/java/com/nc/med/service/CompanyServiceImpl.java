@@ -21,7 +21,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<Company> fetchAllCategories() {
-        return companyRepo.findAll(Sort.by("id").descending());
+        return companyRepo.findAll(Sort.by("companyName"));
     }
 
     @Override

@@ -41,7 +41,7 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
         profit += Math.round((salesPrice - purchasePrice) * qtyOrdered);
 
         product.setQty(productQty - qtyOrdered);
-        product.setCurrentPrice(salesPrice);
+        //product.setCurrentPrice(salesPrice);
         product.setProfit(profit);
         
         salesOrderDetail.setPurchasePrice(purchasePrice);

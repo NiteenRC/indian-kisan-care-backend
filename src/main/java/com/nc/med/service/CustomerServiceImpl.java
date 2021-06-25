@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<Customer> fetchAllCategories() {
-		return customerRepo.findAll(Sort.by("id").descending());
+		return customerRepo.findAll(Sort.by("customerName"));
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import java.util.List;
 public interface PurchaseOrderService {
     PurchaseOrder saveOrder(PurchaseOrder order);
 
-    PurchaseOrder findByOrderID(Integer orderID);
+    PurchaseOrder findByOrderID(Long orderID);
 
     void deleteOrder(PurchaseOrder orderID);
 

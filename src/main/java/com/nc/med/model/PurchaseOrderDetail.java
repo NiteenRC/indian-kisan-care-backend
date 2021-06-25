@@ -16,7 +16,7 @@ public class PurchaseOrderDetail implements Serializable {
     @JsonIgnore
     private PurchaseOrder purchaseOrder;
     @ManyToOne
-    @JoinColumn(name = "productID") // , insertable = false, updatable = false
+    //@JoinColumn(name = "productID") // , insertable = false, updatable = false
     private Product product;
     private Integer qtyOrdered;
     private double price;

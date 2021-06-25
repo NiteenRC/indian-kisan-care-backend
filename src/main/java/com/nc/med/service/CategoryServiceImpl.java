@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> fetchAllCategories() {
-        return categoryRepo.findAll(Sort.by("id").descending());
+        return categoryRepo.findAll(Sort.by("categoryName"));
     }
 
     @Override

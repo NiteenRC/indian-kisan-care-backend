@@ -21,7 +21,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public List<Supplier> fetchAllCategories() {
-        return supplierRepo.findAll(Sort.by("id").descending());
+        return supplierRepo.findAll(Sort.by("supplierName"));
     }
 
     @Override

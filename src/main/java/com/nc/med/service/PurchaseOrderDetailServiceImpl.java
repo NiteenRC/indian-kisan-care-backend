@@ -23,7 +23,7 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
 
     @Override
     public PurchaseOrderDetail savePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail) {
-        Product product = purchaseOrderDetail.getProduct();
+        Product product = productRepo.getOne(purchaseOrderDetail.getProduct().getId());
 
         double previousPrice = product.getPrice() * Double.valueOf(product.getQty());
         double currentPrice = purchaseOrderDetail.getPrice() * purchaseOrderDetail.getQtyOrdered();
@@ -31,8 +31,7 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
         double avaragePrice = (previousPrice + currentPrice)
                 / (Double.valueOf(product.getQty()) + purchaseOrderDetail.getQtyOrdered());
           
-        
-        avaragePrice += avaragePrice * product.getGst() / 100;
+        //avaragePrice += avaragePrice * product.getGst() / 100;
         long avaragePriceRoundUp = Math.round(avaragePrice);
         product.setQty(product.getQty() + purchaseOrderDetail.getQtyOrdered());
         product.setPrice(avaragePriceRoundUp);

@@ -1,11 +1,9 @@
 package com.nc.med.controller;
 
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,17 +52,20 @@ public class SalesOrderController {
 	public ResponseEntity<?> addOrderList(@RequestBody SalesOrder salesOrder) {
 		salesOrder.setTotalQty(salesOrder.getSalesOrderDetail().size());
 		SalesOrder salesOrderRes = orderService.saveOrder(salesOrder);
-
+		double totalProfit = 0d;
 		for (SalesOrderDetail salesOrderDetail : salesOrder.getSalesOrderDetail()) {
 			salesOrderDetail.setSalesOrder(salesOrderRes);
 			try {
-				orderDetailService.saveSalesOrderDetail(salesOrderDetail);
+				SalesOrderDetail orderDetail = orderDetailService.saveSalesOrderDetail(salesOrderDetail);
+				totalProfit += orderDetail.getProfit();
 			} catch (Exception e) {
 				e.printStackTrace();
 				orderService.deleteOrder(salesOrderRes);
 				return ResponseEntity.ok(new CustomErrorTypeException(validationProperties.getStock()));
 			}
 		}
+		salesOrder.setTotalProfit(totalProfit);
+		salesOrderRes = orderService.saveOrder(salesOrder);
 		return ResponseEntity.ok(salesOrderRes);
 	}
 
@@ -109,6 +110,11 @@ public class SalesOrderController {
 	@GetMapping("/barChart")
 	public ResponseEntity<?> fetchBarChart() throws ParseException {
 		return ResponseEntity.ok(orderService.findBarChartModels());
+	}
+	
+	@GetMapping("/barChart1")
+	public ResponseEntity<?> fetchBarChart1() throws ParseException {
+		return ResponseEntity.ok(orderService.findStockBook());
 	}
 
 	@GetMapping("/product")

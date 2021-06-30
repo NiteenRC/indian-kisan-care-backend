@@ -27,7 +27,7 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
 
     @Override
     public SalesOrderDetail saveSalesOrderDetail(SalesOrderDetail salesOrderDetail) throws Exception {
-        Product product = salesOrderDetail.getProduct();
+    	Product product = productRepo.getOne(salesOrderDetail.getProduct().getId());
         int productQty = product.getQty();
         int qtyOrdered = salesOrderDetail.getQtyOrdered();
 
@@ -45,7 +45,7 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
         product.setProfit(profit);
         
         salesOrderDetail.setPurchasePrice(purchasePrice);
-        salesOrderDetail.setProfit(profit);
+        salesOrderDetail.setProfit(Math.round((salesPrice - purchasePrice) * qtyOrdered));
 
         LOGGER.info("Profit for this {} is {} ", product.getProductName(), profit);
         productRepo.save(product);

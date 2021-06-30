@@ -3,6 +3,7 @@ package com.nc.med.service;
 import com.nc.med.mapper.CustomerBalanceSheet;
 import com.nc.med.mapper.ReportBar;
 import com.nc.med.mapper.SalesOrderSearch;
+import com.nc.med.mapper.StockBook;
 import com.nc.med.model.SalesOrder;
 
 import java.text.ParseException;
@@ -30,4 +31,6 @@ public interface SalesOrderService {
     List<SalesOrder> findAllByCustomer(Long customerID);
 
     List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch);
+
+	StockBook findStockBook();
 }

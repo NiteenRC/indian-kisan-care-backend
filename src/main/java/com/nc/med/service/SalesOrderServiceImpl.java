@@ -25,6 +25,7 @@ import com.nc.med.mapper.BarChartModel;
 import com.nc.med.mapper.CustomerBalanceSheet;
 import com.nc.med.mapper.ReportBar;
 import com.nc.med.mapper.SalesOrderSearch;
+import com.nc.med.mapper.StockBook;
 import com.nc.med.model.Customer;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.repo.CustomerRepo;
@@ -176,6 +177,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 		// currentWeek
 		LOGGER.info("barChartModelMonthData : {}", barChartModelList);
 
+		// Collections.sort(monthlyBarCharts);
 		ReportBar reportBar = new ReportBar(weeklyBarCharts, monthlyBarCharts);
 
 		return reportBar;
@@ -279,5 +281,10 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 		return salesOrderRepo.findByCustomerIdAndCreatedDateBetweenAndStatus(
 				Long.valueOf(salesOrderSearch.getCustomerId()), salesOrderSearch.getStartDate(),
 				salesOrderSearch.getEndDate(), salesOrderSearch.getStatus());
+	}
+
+	@Override
+	public StockBook findStockBook() {
+		return null;
 	}
 }

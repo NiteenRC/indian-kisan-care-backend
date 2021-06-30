@@ -64,6 +64,6 @@ public class BarChartModel implements Comparable<BarChartModel> {
 
     @Override
     public int compareTo(BarChartModel o) {
-        return this.getCreatedDate().compareTo(o.getCreatedDate());
+        return o.getCreatedDate().compareTo(this.getCreatedDate());
     }
 }

@@ -60,59 +60,6 @@ public class Product implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public double getCurrentPrice() {
-		return currentPrice;
-	}
-
-	public void setCurrentPrice(double currentPrice) {
-		this.currentPrice = currentPrice;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	/*
-	 * @ManyToOne(fetch = FetchType.LAZY)
-	 *
-	 * @JoinColumn(name = "CART_ID", foreignKey = @ForeignKey(name =
-	 * "PRODUCT__CART_FK"))
-	 *
-	 * @JsonIgnore private Cart cart;
-	 *
-	 * //bi-directional many-to-one association to ProductImage
-	 *
-	 * @OneToMany(mappedBy = "product") private List<ProductImage> productImages;
-	 */
-
-	public int getQty() {
-		return qty;
-	}
-
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
-
-	public String getProductDesc() {
-		return productDesc;
-	}
-
-	public void setProductDesc(String productDesc) {
-		this.productDesc = productDesc;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -137,6 +84,54 @@ public class Product implements Serializable {
 		this.price = price;
 	}
 
+	public double getCurrentPrice() {
+		return currentPrice;
+	}
+
+	public void setCurrentPrice(double currentPrice) {
+		this.currentPrice = currentPrice;
+	}
+
+	public double getProfit() {
+		return profit;
+	}
+
+	public void setProfit(double profit) {
+		this.profit = profit;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public String getProductDesc() {
+		return productDesc;
+	}
+
+	public void setProductDesc(String productDesc) {
+		this.productDesc = productDesc;
+	}
+
+	public int getQty() {
+		return qty;
+	}
+
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
 	public int getGst() {
 		return gst;
 	}
@@ -153,11 +148,5 @@ public class Product implements Serializable {
 		this.hsnNo = hsnNo;
 	}
 
-	public double getProfit() {
-		return profit;
-	}
-
-	public void setProfit(double profit) {
-		this.profit = profit;
-	}
+	
 }

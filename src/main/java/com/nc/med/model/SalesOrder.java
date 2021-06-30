@@ -44,6 +44,8 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 	private String comment;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date billDate;
+	private double totalProfit;
+	
 	public Date getBillDate() {
 		return billDate;
 	}
@@ -151,5 +153,13 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 	@Override
 	public int compareTo(SalesOrder o) {
 		return o.getBillDate().compareTo(this.getBillDate());
+	}
+
+	public double getTotalProfit() {
+		return totalProfit;
+	}
+
+	public void setTotalProfit(double totalProfit) {
+		this.totalProfit = totalProfit;
 	}
 }

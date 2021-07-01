@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,7 +61,7 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
                     double sumOfProfit = x.getValue().stream().mapToDouble(SalesOrderDetail::getProfit).sum();
                     return new ProductSaleSummary(x.getKey().getProductName(), sumOfQtyOrdered, sumOfProfit);
                 }).collect(Collectors.toList());
-
+        Collections.sort(productSaleSummaries);
         LOGGER.info("productSaleSummaries {} ", productSaleSummaries);
         return productSaleSummaries;
     }

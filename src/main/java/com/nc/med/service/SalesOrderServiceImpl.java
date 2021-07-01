@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -127,7 +128,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 					return new CustomerBalanceSheet(x.getKey(), totalPrice, amountPaid, dueAmount, billDate, dueDate);
 				}).collect(Collectors.toList());
 
-		customerBalanceSheets.sort((c1, c2) -> c1.getBillDate().compareTo(c2.getBillDate()));
+		Collections.sort(customerBalanceSheets);
 		return customerBalanceSheets;
 	}
 
@@ -284,7 +285,51 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 	}
 
 	@Override
-	public StockBook findStockBook() {
-		return null;
+	public Set<StockBook> findStockBook(String productName) {
+		Set<StockBook> monthlyBarCharts = new TreeSet<>();
+		LocalDateTime currentDate = LocalDateTime.now();
+		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(7);
+		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", lastSevenDayDate, currentDate);
+
+		// String productName = "10:26:26-MAHADHAN";
+		// int stock = productRepo.findByProductName(productName).getQty();
+		// int totalSoldQty = salesOrderRepo.findSumOfQtySold();
+		// int openingBalance =totalSoldQty + stock;
+
+		List<String> lastMonthDates = IntStream.rangeClosed(0, 30)
+				.mapToObj(x -> LocalDate.now().minus(x, ChronoUnit.DAYS).toString()).collect(Collectors.toList());
+
+		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDatesStock(lastSevenDayDate, currentDate,
+				productName);
+		List<StockBook> barChartModelList = new ArrayList<>();
+		for (int i = 0; i < salesOrderObj.length; i++) {
+			for (int j = 0; j < salesOrderObj[i].length - 1;) {
+				barChartModelList.add(
+						new StockBook(salesOrderObj[i][j].toString(), String.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString())));
+			}
+		}
+		LOGGER.info("barChartModelList {} ", barChartModelList);
+
+		lastMonthDates.forEach(day -> {
+			for (StockBook barChartModel : barChartModelList) {
+				if (lastMonthDates.contains(barChartModel.getDate())) {
+					monthlyBarCharts.add(barChartModel);
+				}
+			}
+			monthlyBarCharts.add(new StockBook(day, null, 0, 0, 0d));
+		});
+		LOGGER.info("monthly report: {}", monthlyBarCharts);
+
+		// currentWeek
+		LOGGER.info("barChartModelMonthData : {}", barChartModelList);
+
+		// Set<BarChartModel> weeklyBarCharts;
+		// Collections.sort(monthlyBarCharts);
+		// ReportBar reportBar = new ReportBar(weeklyBarCharts, monthlyBarCharts);
+
+		return monthlyBarCharts;
 	}
 }

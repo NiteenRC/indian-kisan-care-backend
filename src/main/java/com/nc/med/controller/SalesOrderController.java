@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nc.med.exception.CustomErrorTypeException;
@@ -111,10 +112,10 @@ public class SalesOrderController {
 	public ResponseEntity<?> fetchBarChart() throws ParseException {
 		return ResponseEntity.ok(orderService.findBarChartModels());
 	}
-	
-	@GetMapping("/barChart1")
-	public ResponseEntity<?> fetchBarChart1() throws ParseException {
-		return ResponseEntity.ok(orderService.findStockBook());
+
+	@GetMapping("/stock-book")
+	public ResponseEntity<?> fetchStockBook(@RequestParam String productName) throws ParseException {
+		return ResponseEntity.ok(orderService.findStockBook(productName));
 	}
 
 	@GetMapping("/product")

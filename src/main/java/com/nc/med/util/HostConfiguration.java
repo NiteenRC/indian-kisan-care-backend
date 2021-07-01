@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +19,6 @@ import com.nc.med.repo.RoleRepository;
 
 @Component
 public class HostConfiguration {
-
-	private static String mpCryptoPassword = "Niteen";
 
 	@Autowired
 	private RoleRepository roleRepository;
@@ -53,20 +50,6 @@ public class HostConfiguration {
 			roleRepository.deleteAll();
 			System.exit(0);
 		}
-	}
-
-	private static String encrypt(String text) {
-		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-		textEncryptor.setPassword(mpCryptoPassword);
-		String encryptedText = textEncryptor.encrypt(text);
-		return encryptedText;
-	}
-
-	private static String decrypt(String text) {
-		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-		textEncryptor.setPassword(mpCryptoPassword);
-		String decryptedText = textEncryptor.decrypt(text);
-		return decryptedText;
 	}
 
 	@PostConstruct

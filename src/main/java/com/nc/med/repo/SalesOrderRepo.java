@@ -25,6 +25,17 @@ public interface SalesOrderRepo extends JpaRepository<SalesOrder, Long> {
 	Object[][] getByCreatedDateBetweenDates(@Param("startDate") LocalDateTime startDate,
 			@Param("endDate") LocalDateTime endDate);
 
+	@Query(value = "select CAST(so.bill_date AS DATE), p.product_name, p.qty, sum(sod.qty_ordered), sum(so.total_profit) \r\n"
+			+ "from sales_order so \r\n"
+			+ "join SALES_ORDER_DETAIL sod on so.SALES_ORDERID=sod.SALES_ORDERID\r\n"
+			+ "join product p on p.id=sod.productid\r\n"
+			+ "where CAST(bill_date as date) between :startDate and :endDate\r\n"
+			+ "and p.product_name =:productName\r\n"
+			+ "group by cast(so.bill_date as date), p.product_name\r\n"
+			+ "order by  p.product_name, cast(so.bill_date as date) desc", nativeQuery = true)
+	Object[][] getByCreatedDateBetweenDatesStock(@Param("startDate") LocalDateTime startDate,
+			@Param("endDate") LocalDateTime endDate, @Param("productName") String productName);
+
 	// Writing JPQL using Spring Data Jpa @Query.
 	@Query("select s from SalesOrder s where s.status = ?1")
 	List<SalesOrder> getSalesOrder(String status);
@@ -46,5 +57,13 @@ public interface SalesOrderRepo extends JpaRepository<SalesOrder, Long> {
 
 	@Query(value = "SELECT sum(current_balance) FROM SALES_ORDER where customer_id = :#{#customer.id}  group by customer_id", nativeQuery = true)
 	int findCurrentSum(@Param("customer") Customer customer);
+	
+	
+	@Query(value = "select sum(sod.qty_ordered) \r\n"
+			+ "	from SALES_ORDER_DETAIL sod\r\n"
+			+ "	join product p on p.id=sod.productid\r\n"
+			+ "	where p.product_name = '10:26:26-MAHADHAN'\r\n"
+			+ "	group by p.product_name",nativeQuery = true)
+	int findSumOfQtySold();
 
 }

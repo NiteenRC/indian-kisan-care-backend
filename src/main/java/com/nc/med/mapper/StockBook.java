@@ -1,12 +1,23 @@
 package com.nc.med.mapper;
 
-public class StockBook {
+public class StockBook implements Comparable<StockBook>{
 	private String date;
+	private String productName;
 	private int openingStock;
 	private int closingStock;
-	private int soldStock;
+	private double soldStock;
 	private double openingBalance;
+	private double profit;
 	private double closingBalance;
+	
+	public StockBook(String date, String productName, double openingBalance, double soldStock, double profit) {
+		super();
+		this.date = date;
+		this.productName = productName;
+		this.soldStock = soldStock;
+		this.profit = profit;
+		this.openingBalance = openingBalance;
+	}
 	public String getDate() {
 		return date;
 	}
@@ -25,10 +36,10 @@ public class StockBook {
 	public void setClosingStock(int closingStock) {
 		this.closingStock = closingStock;
 	}
-	public int getSoldStock() {
+	public double getSoldStock() {
 		return soldStock;
 	}
-	public void setSoldStock(int soldStock) {
+	public void setSoldStock(double soldStock) {
 		this.soldStock = soldStock;
 	}
 	public double getOpeningBalance() {
@@ -42,5 +53,21 @@ public class StockBook {
 	}
 	public void setClosingBalance(double closingBalance) {
 		this.closingBalance = closingBalance;
+	}
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	public double getProfit() {
+		return profit;
+	}
+	public void setProfit(double profit) {
+		this.profit = profit;
+	}
+	@Override
+	public int compareTo(StockBook o) {
+		return o.date.compareTo(this.date);
 	}
 }

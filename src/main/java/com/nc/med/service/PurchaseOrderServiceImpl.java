@@ -1,7 +1,6 @@
 package com.nc.med.service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -88,20 +87,13 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 	@Override
 	public List<PurchaseOrder> findByDates(String startDate, String endDate) throws ParseException {
-		List<PurchaseOrder> orders = purchaseOrderRepo.findAll();
+		// List<PurchaseOrder> orders = purchaseOrderRepo.findAll();
 
-		try {
-			Date fromDate = new SimpleDateFormat("dd-MM-yyyy").parse(startDate);
-			Date toDate = new SimpleDateFormat("dd-MM-yyyy").parse(endDate);
-
-			// return orders.stream().filter(order -> order.getCreatedDate().getTime() >=
-			// fromDate.getTime()
-			// && order.getCreatedDate().getTime() <=
-			// toDate.getTime()).collect(Collectors.toList());
-			return Collections.emptyList();
-		} catch (ParseException e) {
-			throw new ParseException("Please enter valid date formats", 0);
-		}
+		// return orders.stream().filter(order -> order.getCreatedDate().getTime() >=
+		// fromDate.getTime()
+		// && order.getCreatedDate().getTime() <=
+		// toDate.getTime()).collect(Collectors.toList());
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -133,7 +125,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 					return new SupplierBalanceSheet(x.getKey(), totalPrice, amountPaid, dueAmount, billDate, dueDate);
 				}).collect(Collectors.toList());
 
-		supplierBalanceSheets.sort((c1, c2) -> c1.getBillDate().compareTo(c2.getBillDate()));
+		Collections.sort(supplierBalanceSheets);
 		return supplierBalanceSheets;
 	}
 }

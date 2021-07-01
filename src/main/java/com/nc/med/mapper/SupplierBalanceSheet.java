@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.nc.med.model.Supplier;
 
-public class SupplierBalanceSheet {
+public class SupplierBalanceSheet implements Comparable<SupplierBalanceSheet> {
 	private Supplier supplier;
 	private Double currentBalance;
 	private Double totalPrice;
@@ -68,5 +68,10 @@ public class SupplierBalanceSheet {
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+	}
+
+	@Override
+	public int compareTo(SupplierBalanceSheet o) {
+		return o.billDate.compareTo(this.billDate);
 	}
 }

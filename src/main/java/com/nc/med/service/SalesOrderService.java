@@ -8,6 +8,7 @@ import com.nc.med.model.SalesOrder;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Set;
 
 public interface SalesOrderService {
     SalesOrder saveOrder(SalesOrder order);
@@ -32,5 +33,5 @@ public interface SalesOrderService {
 
     List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch);
 
-	StockBook findStockBook();
+	Set<StockBook> findStockBook(String productName);
 }

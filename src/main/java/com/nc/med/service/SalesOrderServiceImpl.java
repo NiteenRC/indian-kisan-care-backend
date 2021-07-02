@@ -27,6 +27,7 @@ import com.nc.med.mapper.CustomerBalanceSheet;
 import com.nc.med.mapper.ReportBar;
 import com.nc.med.mapper.SalesOrderSearch;
 import com.nc.med.mapper.StockBook;
+import com.nc.med.mapper.StockBookSummary;
 import com.nc.med.model.Customer;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.repo.CustomerRepo;
@@ -137,7 +138,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 		Set<BarChartModel> weeklyBarCharts = new TreeSet<>();
 		Set<BarChartModel> monthlyBarCharts = new TreeSet<>();
 		LocalDateTime currentDate = LocalDateTime.now();
-		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(7);
+		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(30);
 		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", lastSevenDayDate, currentDate);
 
 		List<String> lastWeekDates = IntStream.rangeClosed(0, 6)
@@ -288,7 +289,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 	public Set<StockBook> findStockBook(String productName) {
 		Set<StockBook> monthlyBarCharts = new TreeSet<>();
 		LocalDateTime currentDate = LocalDateTime.now();
-		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(7);
+		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(30);
 		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", lastSevenDayDate, currentDate);
 
 		// String productName = "10:26:26-MAHADHAN";
@@ -331,5 +332,53 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 		// ReportBar reportBar = new ReportBar(weeklyBarCharts, monthlyBarCharts);
 
 		return monthlyBarCharts;
+	}
+
+	@Override
+	public StockBookSummary findStockBookAll() {
+		LocalDateTime currentDate = LocalDateTime.now();
+		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(30);
+		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", lastSevenDayDate, currentDate);
+
+		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDatesStockAll(lastSevenDayDate, currentDate);
+		List<StockBook> barChartModelList = new ArrayList<>();
+		for (int i = 0; i < salesOrderObj.length; i++) {
+			for (int j = 0; j < salesOrderObj[i].length - 1;) {
+				barChartModelList.add(
+						new StockBook(salesOrderObj[i][j].toString(), String.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString())));
+			}
+		}
+		double totalQtySold = barChartModelList.stream().mapToDouble(x -> x.getSoldStock()).sum();
+		double totalProfit = barChartModelList.stream().mapToDouble(x -> x.getProfit()).sum();
+
+		StockBookSummary bookSummary = new StockBookSummary(totalProfit, totalQtySold, barChartModelList);
+		LOGGER.info("barChartModelList {} ", barChartModelList);
+		return bookSummary;
+	}
+
+	@Override
+	public StockBookSummary findStockBookByDate(LocalDateTime startDate, LocalDateTime endDate) {
+		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", startDate, endDate);
+		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDatesStockAll(startDate, endDate);
+		List<StockBook> barChartModelList = new ArrayList<>();
+		for (int i = 0; i < salesOrderObj.length; i++) {
+			for (int j = 0; j < salesOrderObj[i].length - 1;) {
+				barChartModelList.add(
+						new StockBook(salesOrderObj[i][j].toString(), String.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString()),
+								Double.valueOf(salesOrderObj[i][++j].toString())));
+			}
+		}
+		double totalQtySold = barChartModelList.stream().mapToDouble(x -> x.getSoldStock()).sum();
+		double totalProfit = barChartModelList.stream().mapToDouble(x -> x.getProfit()).sum();
+
+		StockBookSummary bookSummary = new StockBookSummary(totalProfit, totalQtySold, barChartModelList);
+		LOGGER.info("barChartModelList {} ", barChartModelList);
+		return bookSummary;
+
 	}
 }

@@ -1,6 +1,9 @@
 package com.nc.med.controller;
 
 import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -115,7 +118,21 @@ public class SalesOrderController {
 
 	@GetMapping("/stock-book")
 	public ResponseEntity<?> fetchStockBook(@RequestParam String productName) throws ParseException {
-		return ResponseEntity.ok(orderService.findStockBook(productName));
+		if(productName.isEmpty()) {
+			return ResponseEntity.ok(orderService.findStockBookAll());	
+		} else {
+			return ResponseEntity.ok(orderService.findStockBook(productName));
+		}
+	}
+	
+	@GetMapping("/stock-book-by-date")
+	public ResponseEntity<?> fetchStockBookByDate(@RequestParam long startDate, @RequestParam long endDate) throws ParseException {
+		LocalDateTime start =
+			    Instant.ofEpochMilli(startDate).atZone(ZoneId.of("UTC")).toLocalDateTime();
+		LocalDateTime end =
+			    Instant.ofEpochMilli(endDate).atZone(ZoneId.of("UTC")).toLocalDateTime();
+		
+		return ResponseEntity.ok(orderService.findStockBookByDate(start, end));
 	}
 
 	@GetMapping("/product")

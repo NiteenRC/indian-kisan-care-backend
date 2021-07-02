@@ -51,7 +51,8 @@ public class InitializeData {
 	public void loadDataProduct() {
 		if (productRepo.findAll().isEmpty()) {
 			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
-					new ClassPathResource("/scripts/IKC_BACKUP_MASTER_2021_06_19.sql"));
+					//new ClassPathResource("/scripts/IKC_BACKUP_MASTER_2021_06_19.sql"));
+					new ClassPathResource("/scripts/IKC_BACKUP_TNX_2021_06_20.sql"));
 			resourceDatabasePopulator.execute(dataSource);
 		}
 	}

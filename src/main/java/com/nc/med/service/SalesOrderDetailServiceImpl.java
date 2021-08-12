@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Service
 public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
     public static final Logger LOGGER = LoggerFactory.getLogger(SalesOrderDetailServiceImpl.class);
-    double totalProfit = 0;
     @Autowired
     private SalesOrderDetailRepo orderDetailRepo;
     @Autowired

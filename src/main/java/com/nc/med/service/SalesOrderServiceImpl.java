@@ -313,7 +313,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 			}
 		}
 		LOGGER.info("barChartModelList {} ", barChartModelList);
-
 		lastMonthDates.forEach(day -> {
 			for (StockBook barChartModel : barChartModelList) {
 				if (lastMonthDates.contains(barChartModel.getDate())) {
@@ -362,8 +361,14 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 	@Override
 	public StockBookSummary findStockBookByDate(LocalDateTime startDate, LocalDateTime endDate) {
 		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", startDate, endDate);
+
+		if (startDate.equals(LocalDateTime.parse("1970-01-01T00:00"))) {
+			startDate = LocalDate.now().minusDays(1).atStartOfDay();
+			endDate = LocalDateTime.now();
+		}
 		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDatesStockAll(startDate, endDate);
 		List<StockBook> barChartModelList = new ArrayList<>();
+
 		for (int i = 0; i < salesOrderObj.length; i++) {
 			for (int j = 0; j < salesOrderObj[i].length - 1;) {
 				barChartModelList.add(
@@ -379,6 +384,5 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 		StockBookSummary bookSummary = new StockBookSummary(totalProfit, totalQtySold, barChartModelList);
 		LOGGER.info("barChartModelList {} ", barChartModelList);
 		return bookSummary;
-
 	}
 }

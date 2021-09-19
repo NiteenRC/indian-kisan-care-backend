@@ -1,6 +1,7 @@
 package com.nc.med.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +58,7 @@ public class SupplierController {
 		LOGGER.info("supplier " + supplier.getSupplierName());
 		String supplierName = supplier.getSupplierName().toUpperCase();
 		Supplier supplierObj = supplierService.findBySupplierName(supplierName);
-		if (supplierObj == null || supplierObj.getId() == supplier.getId()) {
+		if (supplierObj == null || Objects.equals(supplierObj.getId(), supplier.getId())) {
 			supplier.setSupplierName(supplierName);
 			return new ResponseEntity<>(supplierService.saveSupplier(supplier), HttpStatus.CREATED);
 		} else {

@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailService {
     public static final Logger LOGGER = LoggerFactory.getLogger(PurchaseOrderDetailServiceImpl.class);
@@ -22,46 +20,22 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
     private ProductRepo productRepo;
 
     @Override
-    public PurchaseOrderDetail savePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail) {
+    public void savePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail) {
         Product product = productRepo.getOne(purchaseOrderDetail.getProduct().getId());
 
-        double previousPrice = product.getPrice() * Double.valueOf(product.getQty());
+        double previousPrice = product.getPrice() * (double) product.getQty();
         double currentPrice = purchaseOrderDetail.getPrice() * purchaseOrderDetail.getQtyOrdered();
 
         double avaragePrice = (previousPrice + currentPrice)
-                / (Double.valueOf(product.getQty()) + purchaseOrderDetail.getQtyOrdered());
-          
+                / ((double) product.getQty() + purchaseOrderDetail.getQtyOrdered());
+
         //avaragePrice += avaragePrice * product.getGst() / 100;
         long avaragePriceRoundUp = Math.round(avaragePrice);
         product.setQty(product.getQty() + purchaseOrderDetail.getQtyOrdered());
         product.setPrice(avaragePriceRoundUp);
         productRepo.save(product);
         //purchaseOrderDetail.setPrice(avaragePrice);
-        return orderDetailRepo.save(purchaseOrderDetail);
+        orderDetailRepo.save(purchaseOrderDetail);
     }
 
-    @Override
-    public PurchaseOrderDetail findPurchaseOrderDetailByProductName(String productName) {
-        return null;// orderDetailRepo.findByProductName(productName);
-    }
-
-    @Override
-    public PurchaseOrderDetail findByPurchaseOrderDetailID(Integer purchaseOrderDetailID) {
-        return orderDetailRepo.findById(purchaseOrderDetailID).get();
-    }
-
-    @Override
-    public void deletePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetailID) {
-        orderDetailRepo.delete(purchaseOrderDetailID);
-    }
-
-    @Override
-    public List<PurchaseOrderDetail> findAllPurchaseOrderDetails() {
-        return orderDetailRepo.findAll();
-    }
-
-    @Override
-    public List<PurchaseOrderDetail> savePurchaseOrderDetail(List<PurchaseOrderDetail> purchaseOrderDetails) {
-        return orderDetailRepo.saveAll(purchaseOrderDetails);
-    }
 }

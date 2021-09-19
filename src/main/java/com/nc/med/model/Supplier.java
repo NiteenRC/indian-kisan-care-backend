@@ -5,7 +5,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 public class Supplier implements Serializable {
@@ -22,31 +21,13 @@ public class Supplier implements Serializable {
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
-    private Set<PurchaseOrder> purchaseOrders;
     private String gstIn;
-
-//	public Set<PurchaseOrder> getPurchaseOrders() {
-//		return purchaseOrders;
-//	}
-//
-//	public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
-//		this.purchaseOrders = purchaseOrders;
-//	}
 
     public Supplier() {
     }
 
     public Supplier(String supplierName) {
-    	this.supplierName = supplierName;
-    }
-    
-    public Supplier(Long id, String supplierName, Company company, Location location, String phoneNumber) {
-        this.id = id;
         this.supplierName = supplierName;
-        this.company = company;
-        this.location = location;
-        this.phoneNumber = phoneNumber;
     }
 
     public Date getCreatedDate() {
@@ -97,11 +78,11 @@ public class Supplier implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-	public String getGstIn() {
-		return gstIn;
-	}
+    public String getGstIn() {
+        return gstIn;
+    }
 
-	public void setGstIn(String gstIn) {
-		this.gstIn = gstIn;
-	}
+    public void setGstIn(String gstIn) {
+        this.gstIn = gstIn;
+    }
 }

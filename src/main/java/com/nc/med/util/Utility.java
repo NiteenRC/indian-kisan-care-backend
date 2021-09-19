@@ -12,7 +12,7 @@ public class Utility {
 
     private static final Logger log = LoggerFactory.getLogger(Utility.class);
 
-    private static SecureRandom random = new SecureRandom();
+    private static final SecureRandom random = new SecureRandom();
 
     public static JsonNode jsonToObject(String productData) {
         JsonNode map = null;

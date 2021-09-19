@@ -3,9 +3,9 @@ package com.nc.med.util;
 public enum OrderStatus {
     P("PLACED"), D("DELIVERED"), C("CANCELLED");
 
-    private String statusCode;
+    private final String statusCode;
 
-    private OrderStatus(String status) {
+    OrderStatus(String status) {
         statusCode = status;
     }
 

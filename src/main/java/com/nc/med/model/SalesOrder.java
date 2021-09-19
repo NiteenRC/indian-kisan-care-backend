@@ -3,6 +3,7 @@ package com.nc.med.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -161,5 +162,18 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 
 	public void setTotalProfit(double totalProfit) {
 		this.totalProfit = totalProfit;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		SalesOrder that = (SalesOrder) o;
+		return Objects.equals(billDate, that.billDate);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(billDate);
 	}
 }

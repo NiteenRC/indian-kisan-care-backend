@@ -3,7 +3,7 @@ package com.nc.med.exception;
 
 public class CustomErrorTypeException {
 
-    private String errorMessage;
+    private final String errorMessage;
 
     public CustomErrorTypeException(String errorMessage) {
         this.errorMessage = errorMessage;

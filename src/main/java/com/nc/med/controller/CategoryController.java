@@ -1,99 +1,90 @@
 package com.nc.med.controller;
 
-import java.util.List;
-
+import com.nc.med.exception.CustomErrorTypeException;
+import com.nc.med.model.Category;
+import com.nc.med.repo.ProductRepo;
+import com.nc.med.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.nc.med.exception.CustomErrorTypeException;
-import com.nc.med.model.Category;
-import com.nc.med.repo.ProductRepo;
-import com.nc.med.service.CategoryService;
+import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/category")
 @Validated
 public class CategoryController {
+    public static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
-	public static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+    @Autowired
+    public CategoryService categoryService;
 
-	@Autowired
-	public CategoryService categoryService;
+    @Autowired
+    public ProductRepo productRepo;
 
-	@Autowired
-	public ProductRepo productRepo;
+    @PostMapping
+    public ResponseEntity<?> addCategory(@RequestBody Category category) {
+        if (category == null || category.getCategoryName() == null) {
+            return new ResponseEntity<>(new CustomErrorTypeException("Category is not saved"), HttpStatus.NOT_FOUND);
+        }
+        String categoryName = category.getCategoryName().toUpperCase();
+        Category category1 = categoryService.findByCategoryName(categoryName);
+        if (category1 != null) {
+            return new ResponseEntity<>(new CustomErrorTypeException("Category already exist!!"), HttpStatus.CONFLICT);
+        }
+        category.setCategoryName(categoryName);
+        return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
+    }
 
-	@PostMapping
-	public ResponseEntity<?> addCategory(@RequestBody Category category) {
-		if (category == null || category.getCategoryName() == null) {
-			return new ResponseEntity<>(new CustomErrorTypeException("Category is not saved"), HttpStatus.NOT_FOUND);
-		}
-		String categoryName = category.getCategoryName().toUpperCase();
-		Category category1 = categoryService.findByCategoryName(categoryName);
-		if (category1 != null) {
-			return new ResponseEntity<>(new CustomErrorTypeException("Category already exist!!"), HttpStatus.CONFLICT);
-		}
-		category.setCategoryName(categoryName);
-		return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
-	}
+    @PutMapping
+    public ResponseEntity<?> updateCategory(@RequestBody Category category) {
+        LOGGER.info("category " + category.getCategoryName());
+        String categoryName = category.getCategoryName().toUpperCase();
+        Category categoryObj = categoryService.findByCategoryName(categoryName);
+        if (categoryObj == null || Objects.equals(categoryObj.getId(), category.getId())) {
+            category.setCategoryName(categoryName);
+            return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new CustomErrorTypeException("Category already exist!!"), HttpStatus.CONFLICT);
+        }
+    }
 
-	@PutMapping
-	public ResponseEntity<?> updateCategory(@RequestBody Category category) {
-		LOGGER.info("category " + category.getCategoryName());
-		String categoryName = category.getCategoryName().toUpperCase();
-		Category categoryObj = categoryService.findByCategoryName(categoryName);
-		if (categoryObj == null || categoryObj.getId() == category.getId()) {
-			category.setCategoryName(categoryName);
-			return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(new CustomErrorTypeException("Category already exist!!"), HttpStatus.CONFLICT);
-		}
-	}
+    @DeleteMapping("/{categoryID}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long categoryID) {
+        Category category = categoryService.findByCategoryID(categoryID);
+        if (category == null) {
+            return new ResponseEntity<>(
+                    new CustomErrorTypeException("Category with categoryID " + categoryID + " not found."),
+                    HttpStatus.NOT_FOUND);
+        }
+        if (!category.getProducts().isEmpty()) {
+            return new ResponseEntity<>(
+                    new CustomErrorTypeException("Category is associated with product. Please delete product before deleting category"),
+                    HttpStatus.CONFLICT);
+        }
+        categoryService.deleteCategory(category);
+        return new ResponseEntity<>(category, HttpStatus.OK);
+    }
 
-	@DeleteMapping("/{categoryID}")
-	public ResponseEntity<?> deleteCategory(@PathVariable Long categoryID) {
-		Category category = categoryService.findByCategoryID(categoryID);
-		if (category == null) {
-			return new ResponseEntity<>(
-					new CustomErrorTypeException("Category with categoryID " + categoryID + " not found."),
-					HttpStatus.NOT_FOUND);
-		}
-		if(!category.getProducts().isEmpty()) {
-			return new ResponseEntity<>(
-					new CustomErrorTypeException("Category is associated with product. Please delete product before deleting category"),
-					HttpStatus.CONFLICT);
-		}
-		categoryService.deleteCategory(category);
-		return new ResponseEntity<>(category, HttpStatus.OK);
-	}
+    @GetMapping
+    public ResponseEntity<List<Category>> findAllCategoryList() {
+        return new ResponseEntity<>(categoryService.fetchAllCategories(), HttpStatus.OK);
+    }
 
-	@GetMapping
-	public ResponseEntity<List<Category>> findAllCategoryList() {
-		return new ResponseEntity<>(categoryService.fetchAllCategories(), HttpStatus.OK);
-	}
+    @GetMapping("/{categoryID}")
+    public ResponseEntity<Category> findCategoryByID(@PathVariable Long categoryID) {
+        return new ResponseEntity<>(categoryService.findByCategoryID(categoryID), HttpStatus.OK);
+    }
 
-	@GetMapping("/{categoryID}")
-	public ResponseEntity<Category> findCategoryByID(@PathVariable Long categoryID) {
-		return new ResponseEntity<>(categoryService.findByCategoryID(categoryID), HttpStatus.OK);
-	}
+    @GetMapping("/categoryName")
+    public ResponseEntity<?> findCategoryByID(@RequestParam String categoryName) {
+        Category category = categoryService.findByCategoryNameContainIgnoreCase(categoryName);
+        return new ResponseEntity<>(category, HttpStatus.OK);
 
-	@GetMapping("/categoryName")
-	public ResponseEntity<?> findCategoryByID(@RequestParam String categoryName) {
-		Category category = categoryService.findByCategoryNameContainIgnoreCase(categoryName);
-		return new ResponseEntity<>(category, HttpStatus.OK);
-
-	}
+    }
 }

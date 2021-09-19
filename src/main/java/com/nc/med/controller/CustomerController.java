@@ -1,6 +1,7 @@
 package com.nc.med.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,7 @@ public class CustomerController {
 		String customerName = customer.getCustomerName().toUpperCase();
 
 		Customer categoryObj = customerService.findByCustomerName(customerName);
-		if (categoryObj == null || categoryObj.getId() == customer.getId()) {
+		if (categoryObj == null || Objects.equals(categoryObj.getId(), customer.getId())) {
 			customer.setCustomerName(customerName);
 			return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.OK);
 		} else {

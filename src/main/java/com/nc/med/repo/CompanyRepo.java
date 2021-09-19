@@ -7,11 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompanyRepo extends JpaRepository<Company, Long> {
     Company findByCompanyNameContainingIgnoreCase(String companyName);
-    // List<Company> findByCompanyName(String name); //same
-    // List<Company> findByCompanyNameIs(String name);//same
-    // List<Company> findByCompanyNameEquals(String name);//same
 
-	Company findByCompanyName(String companyName);
-
-    // boolean existsById(Integer id);//in-built method
+    Company findByCompanyName(String companyName);
 }

@@ -8,26 +8,27 @@ import com.nc.med.repo.SalesOrderDetailRepo;
 import com.nc.med.util.ValidationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
     public static final Logger LOGGER = LoggerFactory.getLogger(SalesOrderDetailServiceImpl.class);
-    @Autowired
-    private SalesOrderDetailRepo orderDetailRepo;
-    @Autowired
-    private ProductRepo productRepo;
-    @Autowired
-    private ValidationProperties validationProperties;
+    private final SalesOrderDetailRepo orderDetailRepo;
+    private final ProductRepo productRepo;
+    private final ValidationProperties validationProperties;
+
+    public SalesOrderDetailServiceImpl(SalesOrderDetailRepo orderDetailRepo, ProductRepo productRepo, ValidationProperties validationProperties) {
+        this.orderDetailRepo = orderDetailRepo;
+        this.productRepo = productRepo;
+        this.validationProperties = validationProperties;
+    }
 
     @Override
     public SalesOrderDetail saveSalesOrderDetail(SalesOrderDetail salesOrderDetail) throws Exception {
-    	Product product = productRepo.getOne(salesOrderDetail.getProduct().getId());
+        Product product = productRepo.getOne(salesOrderDetail.getProduct().getId());
         int productQty = product.getQty();
         int qtyOrdered = salesOrderDetail.getQtyOrdered();
 
@@ -38,14 +39,15 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
         double salesPrice = salesOrderDetail.getSalesPrice();
         double purchasePrice = product.getPrice();
         double profit = product.getProfit();
-        profit += Math.round((salesPrice - purchasePrice) * qtyOrdered);
+        long round = Math.round((salesPrice - purchasePrice) * qtyOrdered);
+        profit += round;
 
         product.setQty(productQty - qtyOrdered);
         //product.setCurrentPrice(salesPrice);
         product.setProfit(profit);
-        
+
         salesOrderDetail.setPurchasePrice(purchasePrice);
-        salesOrderDetail.setProfit(Math.round((salesPrice - purchasePrice) * qtyOrdered));
+        salesOrderDetail.setProfit(round);
 
         LOGGER.info("Profit for this {} is {} ", product.getProductName(), profit);
         productRepo.save(product);
@@ -59,34 +61,9 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
                     int sumOfQtyOrdered = x.getValue().stream().mapToInt(SalesOrderDetail::getQtyOrdered).sum();
                     double sumOfProfit = x.getValue().stream().mapToDouble(SalesOrderDetail::getProfit).sum();
                     return new ProductSaleSummary(x.getKey().getProductName(), sumOfQtyOrdered, sumOfProfit);
-                }).collect(Collectors.toList());
-        Collections.sort(productSaleSummaries);
+                }).sorted().collect(Collectors.toList());
         LOGGER.info("productSaleSummaries {} ", productSaleSummaries);
         return productSaleSummaries;
     }
 
-    @Override
-    public SalesOrderDetail findSalesOrderDetailByProductName(String productName) {
-        return null;// orderDetailRepo.findByProductName(productName);
-    }
-
-    @Override
-    public SalesOrderDetail findBySalesOrderDetailID(Integer salesOrderDetailID) {
-        return orderDetailRepo.findById(salesOrderDetailID).get();
-    }
-
-    @Override
-    public void deleteSalesOrderDetail(SalesOrderDetail salesOrderDetailID) {
-        orderDetailRepo.delete(salesOrderDetailID);
-    }
-
-    @Override
-    public List<SalesOrderDetail> findAllSalesOrderDetails() {
-        return orderDetailRepo.findAll();
-    }
-
-    @Override
-    public List<SalesOrderDetail> saveSalesOrderDetail(List<SalesOrderDetail> salesOrderDetails) {
-        return orderDetailRepo.saveAll(salesOrderDetails);
-    }
 }

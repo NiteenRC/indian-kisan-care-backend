@@ -1,388 +1,260 @@
 package com.nc.med.service;
 
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
+import com.nc.med.mapper.*;
+import com.nc.med.model.Customer;
+import com.nc.med.model.Product;
+import com.nc.med.model.SalesOrder;
+import com.nc.med.model.SalesOrderDetail;
+import com.nc.med.repo.CustomerRepo;
+import com.nc.med.repo.SalesOrderDetailRepo;
+import com.nc.med.repo.SalesOrderRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.nc.med.mapper.BarChartModel;
-import com.nc.med.mapper.CustomerBalanceSheet;
-import com.nc.med.mapper.ReportBar;
-import com.nc.med.mapper.SalesOrderSearch;
-import com.nc.med.mapper.StockBook;
-import com.nc.med.mapper.StockBookSummary;
-import com.nc.med.model.Customer;
-import com.nc.med.model.SalesOrder;
-import com.nc.med.repo.CustomerRepo;
-import com.nc.med.repo.SalesOrderRepo;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class SalesOrderServiceImpl implements SalesOrderService {
-	public static final Logger LOGGER = LoggerFactory.getLogger(SalesOrderServiceImpl.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(SalesOrderServiceImpl.class);
+    private final SalesOrderRepo salesOrderRepo;
+    private final CustomerRepo customerRepo;
+    private final ProductService productService;
+    private final SalesOrderDetailRepo orderDetailRepo;
 
-	@Autowired
-	private SalesOrderRepo salesOrderRepo;
+    public SalesOrderServiceImpl(SalesOrderRepo salesOrderRepo, CustomerRepo customerRepo, ProductService productService, SalesOrderDetailRepo orderDetailRepo) {
+        this.salesOrderRepo = salesOrderRepo;
+        this.customerRepo = customerRepo;
+        this.productService = productService;
+        this.orderDetailRepo = orderDetailRepo;
+    }
 
-	@Autowired
-	private CustomerRepo customerRepo;
+    @Override
+    public SalesOrder saveOrder(SalesOrder order) {
+        double sum = 0.0d;
+        int totalQty = order.getSalesOrderDetail().stream().mapToInt(SalesOrderDetail::getQtyOrdered).sum();
+        order.setTotalQty(totalQty);
 
-	@Override
-	public SalesOrder saveOrder(SalesOrder order) {
-		double sum = 0.0d;
-		int totalQty = order.getSalesOrderDetail().stream().mapToInt(x -> x.getQtyOrdered()).sum();
-		order.setTotalQty(totalQty);
+        Customer customer = order.getCustomer();
+        Customer customerObj = null;
 
-		Customer customer = order.getCustomer();
-		Customer customerObj = null;
+        if (Objects.equals(customer.getCustomerName(), "")) {
+            List<Customer> customers = customerRepo.findAll();
+            Long maxId = 1L;
+            if (!customers.isEmpty()) {
+                maxId = customerRepo.findAll().stream().max(Comparator.comparing(Customer::getId)).get().getId();
+            }
+            order.setCustomer(customerRepo.save(new Customer("UNKNOWN" + maxId)));
 
-		if (customer.getCustomerName() == "") {
-			List<Customer> customers = customerRepo.findAll();
-			Long maxId = 1L;
-			if (!customers.isEmpty()) {
-				maxId = customerRepo.findAll().stream().max(Comparator.comparing(Customer::getId)).get().getId();
-			}
-			order.setCustomer(customerRepo.save(new Customer("UNKNOWN" + maxId)));
+        } else {
+            String customerName = customer.getCustomerName().toUpperCase();
+            customerObj = customerRepo.findByCustomerName(customerName);
 
-		} else {
-			String customerName = customer.getCustomerName().toUpperCase();
-			customerObj = customerRepo.findByCustomerName(customerName);
+            if (customerObj == null) {
+                customerObj = customerRepo.save(new Customer(customerName));
+            }
+            order.setCustomer(customerObj);
 
-			if (customerObj == null) {
-				customerObj = customerRepo.save(new Customer(customerName));
-			}
-			order.setCustomer(customerObj);
+            try {
+                sum = order.getCurrentBalance();
+                sum += salesOrderRepo.findCurrentSum(customerObj);
+            } catch (Exception e) {
+                LOGGER.error(String.valueOf(e));
+            }
+        }
+        // purchaseOrderRepo.updateAddress(supplier, sum);
+        order.setPreviousBalance(sum);
+        return salesOrderRepo.save(order);
+    }
 
-			try {
-				sum = order.getCurrentBalance();
-				sum += ((double) salesOrderRepo.findCurrentSum(customerObj));
-			} catch (Exception e) {
-			}
-		}
-		// purchaseOrderRepo.updateAddress(supplier, sum);
-		order.setPreviousBalance(sum);
-		return salesOrderRepo.save(order);
-	}
+    @Override
+    public SalesOrder findByOrderID(Long orderID) {
+        return salesOrderRepo.findById(orderID).get();
+    }
 
-	@Override
-	public SalesOrder findOrderByProductName(String productName) {
-		return null;// salesOrderRepo.findByProductName(productName);
-	}
+    @Override
+    public void deleteOrder(SalesOrder order) {
+        for (SalesOrderDetail orderDetails : order.getSalesOrderDetail()) {
+            Product product = orderDetails.getProduct();
+            product.setQty(product.getQty() + orderDetails.getQtyOrdered());
+            product.setProfit(product.getProfit() - orderDetails.getProfit());
+            productService.saveProduct(product);
+            orderDetailRepo.delete(orderDetails);
+        }
 
-	@Override
-	public SalesOrder findByOrderID(Long orderID) {
-		return salesOrderRepo.findById(orderID).get();
-	}
+        double prev = order.getPreviousBalance();
+        double current = order.getCurrentBalance();
+        Long cusomerId = order.getCustomer().getId();
 
-	@Override
-	public void deleteOrder(SalesOrder orderID) {
-		salesOrderRepo.delete(orderID);
-	}
+        salesOrderRepo.delete(order);
 
-	@Override
-	public List<SalesOrder> findAllOrders() {
-		return salesOrderRepo.findAll(Sort.by("billDate").descending());
-	}
+        SalesOrder salesOrder = salesOrderRepo.findFirstByCustomerIdOrderBySalesOrderIDDesc(cusomerId);
 
-	@Override
-	public double findCustomerBalanceByCustomer(Long customerID) {
-		List<SalesOrder> salesOrders = salesOrderRepo
-				.findAmountBalanceByCustomer(customerRepo.findById(customerID).get());
+        if (salesOrder != null) {
+            // salesOrder.setPreviousBalance( prev + salesOrder.getPreviousBalance());
+            // salesOrder.setCurrentBalance( current + salesOrder.getCurrentBalance());
+            // salesOrderRepo.saveAndFlush(salesOrder);
+        }
+    }
 
-		return salesOrders.stream().mapToDouble(salesOrder -> salesOrder.getCurrentBalance()).sum();
-	}
+    @Override
+    public List<SalesOrder> findAllOrders() {
+        return salesOrderRepo.findAll(Sort.by("billDate").descending());
+    }
 
-	@Override
-	public double findAllCustomersBalance() {
-		return salesOrderRepo.findAll().stream().mapToDouble(salesOrder -> salesOrder.getCurrentBalance()).sum();
-	}
+    @Override
+    public double findCustomerBalanceByCustomer(Long customerID) {
+        List<SalesOrder> salesOrders = salesOrderRepo
+                .findAmountBalanceByCustomer(customerRepo.findById(customerID).get());
+        return salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+    }
 
-	@Override
-	public List<CustomerBalanceSheet> findCurrentBalanceByCustomers() {
-		List<CustomerBalanceSheet> customerBalanceSheets = salesOrderRepo.findAll().stream()
-				.collect(Collectors.groupingBy(SalesOrder::getCustomer)).entrySet().stream().map(x -> {
-					List<SalesOrder> salesOrders = x.getValue();
-					double totalPrice = salesOrders.stream().mapToDouble(SalesOrder::getTotalPrice).sum();
-					double amountPaid = salesOrders.stream().mapToDouble(SalesOrder::getAmountPaid).sum();
-					double dueAmount = salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+    @Override
+    public double findAllCustomersBalance() {
+        return salesOrderRepo.findAll().stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+    }
 
-					int size = salesOrders.size();
-					SalesOrder order = salesOrders.get(size - 1);
-					Date billDate = order.getBillDate();
-					Date dueDate = order.getDueDate();
-					return new CustomerBalanceSheet(x.getKey(), totalPrice, amountPaid, dueAmount, billDate, dueDate);
-				}).collect(Collectors.toList());
+    @Override
+    public List<CustomerBalanceSheet> findCurrentBalanceByCustomers() {
+        return salesOrderRepo.findAll().stream()
+                .collect(Collectors.groupingBy(SalesOrder::getCustomer)).entrySet().stream().map(x -> {
+                    List<SalesOrder> salesOrders = x.getValue();
+                    double totalPrice = salesOrders.stream().mapToDouble(SalesOrder::getTotalPrice).sum();
+                    double amountPaid = salesOrders.stream().mapToDouble(SalesOrder::getAmountPaid).sum();
+                    double dueAmount = salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
 
-		Collections.sort(customerBalanceSheets);
-		return customerBalanceSheets;
-	}
+                    int size = salesOrders.size();
+                    SalesOrder order = salesOrders.get(size - 1);
+                    Date billDate = order.getBillDate();
+                    Date dueDate = order.getDueDate();
+                    if (dueAmount > 0) {
+                        return new CustomerBalanceSheet(x.getKey(), totalPrice, amountPaid, dueAmount, billDate, dueDate);
+                    } else return null;
+                }).filter(Objects::nonNull).sorted().collect(Collectors.toList());
+    }
 
-	@Override
-	public ReportBar findBarChartModels() throws ParseException {
-		Set<BarChartModel> weeklyBarCharts = new TreeSet<>();
-		Set<BarChartModel> monthlyBarCharts = new TreeSet<>();
-		LocalDateTime currentDate = LocalDateTime.now();
-		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(30);
-		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", lastSevenDayDate, currentDate);
+    @Override
+    public List<BarChartModel> findBarChartModels() {
+        List<Object[]> salesOrderObj = salesOrderRepo.fetchDailyTransaction();
+        List<BarChartModel> barChartModelList = new ArrayList<>();
 
-		List<String> lastWeekDates = IntStream.rangeClosed(0, 6)
-				.mapToObj(x -> LocalDate.now().minus(x, ChronoUnit.DAYS).toString()).collect(Collectors.toList());
-		List<String> lastMonthDates = IntStream.rangeClosed(0, 30)
-				.mapToObj(x -> LocalDate.now().minus(x, ChronoUnit.DAYS).toString()).collect(Collectors.toList());
+        for (int j = 0; j < salesOrderObj.size(); j++) {
+            barChartModelList.add(new BarChartModel(salesOrderObj.get(j)[0].toString(),
+                    Double.valueOf(salesOrderObj.get(j)[1].toString()),
+                    (Double.parseDouble(salesOrderObj.get(j)[1].toString()) - Double.parseDouble(salesOrderObj.get(j)[2].toString())),
+                    Double.parseDouble(salesOrderObj.get(j)[3].toString())));
+        }
+        LOGGER.info("barChartModelList {} ", barChartModelList);
 
-		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDates(lastSevenDayDate, currentDate);
-		List<BarChartModel> barChartModelList = new ArrayList<>();
-		for (int i = 0; i < salesOrderObj.length; i++) {
-			for (int j = 0; j < salesOrderObj[i].length - 1;) {
-				barChartModelList.add(new BarChartModel(salesOrderObj[i][j].toString(),
-						Double.valueOf(salesOrderObj[i][++j].toString())));
-			}
-		}
-		LOGGER.info("barChartModelList {} ", barChartModelList);
+        return barChartModelList;
+    }
 
-		lastWeekDates.forEach(day -> {
-			barChartModelList.forEach(barChartModel -> {
-				if (lastWeekDates.contains(barChartModel.getCreatedDate())) {
-					weeklyBarCharts.add(barChartModel);
-				}
-			});
-			weeklyBarCharts.add(new BarChartModel(day, 0d));
-		});
-		LOGGER.info("weekly report: {}", weeklyBarCharts);
+    @Override
+    public List<SalesOrder> findAllByCustomer(Long customerID) {
+        LOGGER.info("filter by customer id: {}", customerID);
+        return salesOrderRepo.findAllByCustomer(customerRepo.findById(customerID).get());
+    }
 
-		lastMonthDates.forEach(day -> {
-			barChartModelList.forEach(barChartModel -> {
-				if (lastMonthDates.contains(barChartModel.getCreatedDate())) {
-					monthlyBarCharts.add(barChartModel);
-				}
-			});
-			monthlyBarCharts.add(new BarChartModel(day, 0d));
-		});
-		LOGGER.info("monthly report: {}", monthlyBarCharts);
+    @Override
+    public List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch) {
+        LOGGER.info("salesOrderSearch data to filter: {}", salesOrderSearch);
+        return salesOrderRepo.findByCustomerIdAndCreatedDateBetweenAndStatus(
+                (long) salesOrderSearch.getCustomerId(), salesOrderSearch.getStartDate(),
+                salesOrderSearch.getEndDate(), salesOrderSearch.getStatus());
+    }
 
-		// currentWeek
-		LOGGER.info("barChartModelMonthData : {}", barChartModelList);
+    @Override
+    public StockBookData findStockDataByDateAndProduct(String productName, LocalDate startDate, LocalDate endDate) {
+        List<StockData> stockData = new ArrayList<>();
+        int stock = 0;
 
-		// Collections.sort(monthlyBarCharts);
-		ReportBar reportBar = new ReportBar(weeklyBarCharts, monthlyBarCharts);
+        for (Product product : productService.findAllProduct()) {
+            List<Object[]> salesStockObj = salesOrderRepo.fetchSalesOrderStock(product.getId());
+            List<Object[]> purchaseStockObj = salesOrderRepo.fetchPurchaseOrderStock(product.getId());
+            Set<String> dates = new TreeSet<>();
+            Map<String, StockBookModel> salesStockMap = new TreeMap<>();
+            Map<String, StockBookModel> purchaseStockMap = new TreeMap<>();
 
-		return reportBar;
-	}
+            int i = 0, j = 0;
+            while (i < purchaseStockObj.size() || j < salesStockObj.size()) {
+                mapObjectToData(purchaseStockObj, dates, purchaseStockMap, i, false);
+                mapObjectToData(salesStockObj, dates, salesStockMap, j, true);
+                i++;
+                j++;
+            }
 
-	public ReportBar findBarChartModelsWeekly() throws ParseException {
-		Set<BarChartModel> barChartMonthData1 = new TreeSet<>();
-		Calendar calendar = Calendar.getInstance();
-		LocalDateTime fistDayCalendar = getStartOfDay(calendar.getTime());
-		LocalDateTime currentDayCalendar = getEndOfDay(calendar.getTime());
-		LOGGER.info("fistDayCalendar: {} and cusrrentDayCalendar: {}", fistDayCalendar, currentDayCalendar);
+            for (String date : dates) {
+                StockBook stockBook = null;
+                if (purchaseStockMap.get(date) != null) {
+                    stock += purchaseStockMap.get(date).getSoldStock();
+                }
 
-		// Java8
-		List<BarChartModel> barChartModels = salesOrderRepo.findAll().stream()
-				.filter(salesOrder -> (salesOrder.getCreatedDate().isAfter(fistDayCalendar)
-						&& salesOrder.getCreatedDate().isBefore(currentDayCalendar)))
-				.collect(Collectors.groupingBy(SalesOrder::getCreatedDate,
-						Collectors.summingDouble(SalesOrder::getTotalPrice)))
-				.entrySet().stream().map(x -> {
-					return new BarChartModel(x.getKey().toString(), x.getValue());
-				}).collect(Collectors.toList());
-		LOGGER.info("barChartModels: {}", barChartModels);
+                if (salesStockMap.get(date) != null) {
+                    int openingStock = stock;
+                    stock -= salesStockMap.get(date).getSoldStock();
+                    int qtySold = openingStock - stock;
+                    stockBook = new StockBook(salesStockMap.get(date).getProductName(), openingStock, qtySold, stock, salesStockMap.get(date).getPrice(), salesStockMap.get(date).getProfit());
+                    if (stock < 0) {
+                        stockBook = new StockBook(salesStockMap.get(date).getProductName(), 0, 0, 0, salesStockMap.get(date).getPrice(), salesStockMap.get(date).getProfit());
+                    }
 
-		// Spring data JPA
-		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDates(fistDayCalendar, currentDayCalendar);
-		List<BarChartModel> barChartModelList = new ArrayList<>();
-		for (int i = 0; i < salesOrderObj.length; i++) {
-			for (int j = 0; j < salesOrderObj[i].length - 1;) {
-				barChartModelList.add(new BarChartModel(salesOrderObj[i][j].toString(),
-						Double.valueOf(salesOrderObj[i][++j].toString())));
-			}
-		}
-		LOGGER.info("XXX {} ", barChartModelList);
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+                    LocalDate localDate = LocalDate.parse(date, formatter);
+                    stockData.add(new StockData(localDate, stockBook));
+                }
+            }
+            stock = 0;
+        }
+        return getStockBookData(productName, startDate, endDate, stockData);
+    }
 
-		List<String> currentWeekDays = IntStream.rangeClosed(0, 6)
-				.mapToObj(x -> LocalDate.now().minus(x, ChronoUnit.DAYS).toString()).collect(Collectors.toList());
+    private StockBookData getStockBookData(String productName, LocalDate startDate, LocalDate endDate, List<StockData> stockData) {
+        Stream<StockData> streamStockData = stockData.stream();
+        if (startDate != null && endDate != null) {
+            Stream<StockData> stream = stockData.stream()
+                    .filter(x -> (x.getDate().isAfter(startDate) && x.getDate().isBefore(endDate.plusDays(1))));
+            if (!productName.equalsIgnoreCase("null")) {
+                streamStockData = stream.filter(product -> product.getStockBook().getProductName().equals(productName));
+            } else {
+                streamStockData = stream.filter(x -> (x.getDate().isAfter(startDate) && x.getDate().isBefore(endDate.plusDays(1))));
+            }
+        } else if (!productName.equalsIgnoreCase("null")) {
+            streamStockData = streamStockData
+                    .filter(product -> product.getStockBook().getProductName().equals(productName));
+        }
+        List<StockData> stockDa = streamStockData.sorted().collect(Collectors.toList());
+        int totalSoldStock = stockDa.stream().mapToInt(x -> x.getStockBook().getSoldStock()).sum();
+        double totalPrice = stockDa.stream().mapToDouble(x -> x.getStockBook().getOpeningBalance() * x.getStockBook().getSoldStock()).sum();
+        double totalProfit = stockDa.stream().mapToDouble(x -> x.getStockBook().getClosingBalance()).sum();
+        return new StockBookData(stockDa, totalSoldStock, totalPrice, totalProfit);
+    }
 
-		Set<BarChartModel> weeklyBarCharts = new TreeSet<>();
-		List<String> currentMonthDays = IntStream.rangeClosed(0, 30)
-				.mapToObj(x -> LocalDate.now().minus(x, ChronoUnit.DAYS).toString()).collect(Collectors.toList());
-
-		Set<BarChartModel> monthlyBarCharts = new TreeSet<>();
-
-		currentWeekDays.forEach(day -> {
-			barChartModelList.forEach(barChartModel -> {
-				if (currentWeekDays.contains(barChartModel.getCreatedDate())) {
-					weeklyBarCharts.add(barChartModel);
-				}
-			});
-			weeklyBarCharts.add(new BarChartModel(day, 0d));
-		});
-		LOGGER.info("weekly report: {}", weeklyBarCharts);
-
-		currentMonthDays.forEach(day -> {
-			barChartModelList.forEach(barChartModel -> {
-				if (currentMonthDays.contains(barChartModel.getCreatedDate())) {
-					monthlyBarCharts.add(barChartModel);
-				}
-			});
-			monthlyBarCharts.add(new BarChartModel(day, 0d));
-		});
-		LOGGER.info("monthly report: {}", monthlyBarCharts);
-
-		// currentWeek
-		LOGGER.info("barChartModelMonthData : {}", barChartMonthData1);
-
-		ReportBar reportBar = new ReportBar(weeklyBarCharts, monthlyBarCharts);
-
-		return reportBar;
-	}
-
-	private LocalDateTime getStartOfDay(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		calendar.setTimeInMillis(0);
-		calendar.set(year, month, 1, 0, 0, 0);
-		return LocalDateTime.ofInstant(calendar.getTime().toInstant(), ZoneId.systemDefault());
-
-	}
-
-	private LocalDateTime getEndOfDay(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DATE);
-		calendar.setTimeInMillis(0);
-		calendar.set(year, month, day, 23, 59, 59);
-		return LocalDateTime.ofInstant(calendar.getTime().toInstant(), ZoneId.systemDefault());
-	}
-
-	@Override
-	public List<SalesOrder> findAllByCustomer(Long customerID) {
-		LOGGER.info("filter by customer id: {}", customerID);
-		return salesOrderRepo.findAllByCustomer(customerRepo.findById(customerID).get());
-	}
-
-	@Override
-	public List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch) {
-		LOGGER.info("salesOrderSearch data to filter: {}", salesOrderSearch);
-		return salesOrderRepo.findByCustomerIdAndCreatedDateBetweenAndStatus(
-				Long.valueOf(salesOrderSearch.getCustomerId()), salesOrderSearch.getStartDate(),
-				salesOrderSearch.getEndDate(), salesOrderSearch.getStatus());
-	}
-
-	@Override
-	public Set<StockBook> findStockBook(String productName) {
-		Set<StockBook> monthlyBarCharts = new TreeSet<>();
-		LocalDateTime currentDate = LocalDateTime.now();
-		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(30);
-		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", lastSevenDayDate, currentDate);
-
-		// String productName = "10:26:26-MAHADHAN";
-		// int stock = productRepo.findByProductName(productName).getQty();
-		// int totalSoldQty = salesOrderRepo.findSumOfQtySold();
-		// int openingBalance =totalSoldQty + stock;
-
-		List<String> lastMonthDates = IntStream.rangeClosed(0, 30)
-				.mapToObj(x -> LocalDate.now().minus(x, ChronoUnit.DAYS).toString()).collect(Collectors.toList());
-
-		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDatesStock(lastSevenDayDate, currentDate,
-				productName);
-		List<StockBook> barChartModelList = new ArrayList<>();
-		for (int i = 0; i < salesOrderObj.length; i++) {
-			for (int j = 0; j < salesOrderObj[i].length - 1;) {
-				barChartModelList.add(
-						new StockBook(salesOrderObj[i][j].toString(), String.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString())));
-			}
-		}
-		LOGGER.info("barChartModelList {} ", barChartModelList);
-		lastMonthDates.forEach(day -> {
-			for (StockBook barChartModel : barChartModelList) {
-				if (lastMonthDates.contains(barChartModel.getDate())) {
-					monthlyBarCharts.add(barChartModel);
-				}
-			}
-			monthlyBarCharts.add(new StockBook(day, null, 0, 0, 0d));
-		});
-		LOGGER.info("monthly report: {}", monthlyBarCharts);
-
-		// currentWeek
-		LOGGER.info("barChartModelMonthData : {}", barChartModelList);
-
-		// Set<BarChartModel> weeklyBarCharts;
-		// Collections.sort(monthlyBarCharts);
-		// ReportBar reportBar = new ReportBar(weeklyBarCharts, monthlyBarCharts);
-
-		return monthlyBarCharts;
-	}
-
-	@Override
-	public StockBookSummary findStockBookAll() {
-		LocalDateTime currentDate = LocalDateTime.now();
-		LocalDateTime lastSevenDayDate = LocalDateTime.now().minusDays(30);
-		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", lastSevenDayDate, currentDate);
-
-		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDatesStockAll(lastSevenDayDate, currentDate);
-		List<StockBook> barChartModelList = new ArrayList<>();
-		for (int i = 0; i < salesOrderObj.length; i++) {
-			for (int j = 0; j < salesOrderObj[i].length - 1;) {
-				barChartModelList.add(
-						new StockBook(salesOrderObj[i][j].toString(), String.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString())));
-			}
-		}
-		double totalQtySold = barChartModelList.stream().mapToDouble(x -> x.getSoldStock()).sum();
-		double totalProfit = barChartModelList.stream().mapToDouble(x -> x.getProfit()).sum();
-
-		StockBookSummary bookSummary = new StockBookSummary(totalProfit, totalQtySold, barChartModelList);
-		LOGGER.info("barChartModelList {} ", barChartModelList);
-		return bookSummary;
-	}
-
-	@Override
-	public StockBookSummary findStockBookByDate(LocalDateTime startDate, LocalDateTime endDate) {
-		LOGGER.info("lastSevenDayDate: {} and currentDate: {}", startDate, endDate);
-
-		if (startDate.equals(LocalDateTime.parse("1970-01-01T00:00"))) {
-			startDate = LocalDate.now().minusDays(1).atStartOfDay();
-			endDate = LocalDateTime.now();
-		}
-		Object[][] salesOrderObj = salesOrderRepo.getByCreatedDateBetweenDatesStockAll(startDate, endDate);
-		List<StockBook> barChartModelList = new ArrayList<>();
-
-		for (int i = 0; i < salesOrderObj.length; i++) {
-			for (int j = 0; j < salesOrderObj[i].length - 1;) {
-				barChartModelList.add(
-						new StockBook(salesOrderObj[i][j].toString(), String.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString()),
-								Double.valueOf(salesOrderObj[i][++j].toString())));
-			}
-		}
-		double totalQtySold = barChartModelList.stream().mapToDouble(x -> x.getSoldStock()).sum();
-		double totalProfit = barChartModelList.stream().mapToDouble(x -> x.getProfit()).sum();
-
-		StockBookSummary bookSummary = new StockBookSummary(totalProfit, totalQtySold, barChartModelList);
-		LOGGER.info("barChartModelList {} ", barChartModelList);
-		return bookSummary;
-	}
+    private void mapObjectToData(List<Object[]> purchaseStockObj, Set<String> dates, Map<String, StockBookModel> purchaseStockMap, int i, boolean sales) {
+        if (sales) {
+            try {
+                dates.add(purchaseStockObj.get(i)[0].toString());
+                purchaseStockMap.put(purchaseStockObj.get(i)[0].toString(),
+                        new StockBookModel(purchaseStockObj.get(i)[0].toString(),
+                                purchaseStockObj.get(i)[1].toString(),
+                                Integer.parseInt(purchaseStockObj.get(i)[2].toString()),
+                                Double.parseDouble(purchaseStockObj.get(i)[3].toString()),
+                                Double.parseDouble(purchaseStockObj.get(i)[4].toString())));
+            } catch (IndexOutOfBoundsException e) {
+            }
+        } else {
+            try {
+                dates.add(purchaseStockObj.get(i)[0].toString());
+                purchaseStockMap.put(purchaseStockObj.get(i)[0].toString(),
+                        new StockBookModel(purchaseStockObj.get(i)[0].toString(),
+                                purchaseStockObj.get(i)[1].toString(),
+                                Integer.parseInt(purchaseStockObj.get(i)[2].toString())));
+            } catch (IndexOutOfBoundsException e) {
+            }
+        }
+    }
 }

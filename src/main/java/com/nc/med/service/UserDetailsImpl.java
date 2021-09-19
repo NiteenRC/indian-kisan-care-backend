@@ -15,13 +15,13 @@ import java.util.stream.Collectors;
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private final Long id;
 
-	private String username;
+	private final String username;
 
-	private String email;
+	private final String email;
 
-	private String gstNo;
+	private final String gstNo;
 
 	private String panNo;
 
@@ -32,9 +32,9 @@ public class UserDetailsImpl implements UserDetails {
 	private BankAccount bankAccount;
 
 	@JsonIgnore
-	private String password;
+	private final String password;
 
-	private Collection<? extends GrantedAuthority> authorities;
+	private final Collection<? extends GrantedAuthority> authorities;
 
 	private byte[] image;
 

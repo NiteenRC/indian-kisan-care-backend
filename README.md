@@ -47,3 +47,6 @@ backup to '/Users/niteenchougula/Documents/back.zip'
 ipconfig/all
 ifconfig
 
+
+###start mysql in command
+mysql.server start

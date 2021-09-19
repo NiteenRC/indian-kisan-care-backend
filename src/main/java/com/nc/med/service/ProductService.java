@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<Product> saveProducts(List<Product> products);
-
     Product saveProduct(Product product);
 
     Product findByProductName(String productName);
@@ -23,10 +21,5 @@ public interface ProductService {
 
     List<Product> findAllProduct();
 
-    ResponseEntity<?> removeProductTemp(List<Product> products);
-
     List<Product> removeProductGetTemp();
-
-	Product findByProductNameIgnoreCase(String productName);
-
 }

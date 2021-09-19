@@ -23,7 +23,7 @@ public class HostConfiguration {
 	@Autowired
 	private RoleRepository roleRepository;
 
-	@PostConstruct
+	//@PostConstruct
 	public void hosting() throws UnknownHostException {
 		Predicate<String> p = ipAddr -> {
 			InetAddress localHost = null;
@@ -52,7 +52,7 @@ public class HostConfiguration {
 		}
 	}
 
-	@PostConstruct
+	//@PostConstruct
 	public static void hostCheck() {
 		InetAddress ip;
 		try {

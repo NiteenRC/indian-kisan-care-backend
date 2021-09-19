@@ -3,11 +3,31 @@ package com.nc.med.mapper;
 public class BarChartModel implements Comparable<BarChartModel> {
     private String createdDate;
     private Double totalPrice;
+    private Double dueAmount;
+    private Double totalProfit;
 
-    public BarChartModel(String createdDate, Double totalPrice) {
+    public BarChartModel(String createdDate, Double totalPrice, Double dueAmount, Double totalProfit) {
         super();
         this.createdDate = createdDate;
         this.totalPrice = totalPrice;
+        this.dueAmount = dueAmount;
+        this.totalProfit = totalProfit;
+    }
+
+    public void setTotalProfit(Double totalProfit) {
+        this.totalProfit = totalProfit;
+    }
+
+    public Double getTotalProfit() {
+        return totalProfit;
+    }
+
+    public void setDueAmount(Double dueAmount) {
+        this.dueAmount = dueAmount;
+    }
+
+    public Double getDueAmount() {
+        return dueAmount;
     }
 
     public String getCreatedDate() {
@@ -50,11 +70,8 @@ public class BarChartModel implements Comparable<BarChartModel> {
         } else if (!createdDate.equals(other.createdDate))
             return false;
         if (totalPrice == null) {
-            if (other.totalPrice != null)
-                return false;
-        } else if (!totalPrice.equals(other.totalPrice))
-            return false;
-        return true;
+            return other.totalPrice == null;
+        } else return totalPrice.equals(other.totalPrice);
     }
 
     @Override

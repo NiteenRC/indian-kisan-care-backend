@@ -1,6 +1,7 @@
 package com.nc.med.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class LocationController {
 		LOGGER.info("location " + location.getCityName());
 		String locationName = location.getCityName().toUpperCase();
 		Location locationObj = locationService.findByLocationName(locationName);
-		if (locationObj == null || locationObj.getId() == location.getId()) {
+		if (locationObj == null || Objects.equals(locationObj.getId(), location.getId())) {
 			location.setCityName(locationName);
 			return new ResponseEntity<>(locationService.saveLocation(location), HttpStatus.CREATED);
 		} else {

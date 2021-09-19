@@ -1,6 +1,7 @@
 package com.nc.med.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class CompanyController {
 		LOGGER.info("company " + company.getCompanyName());
 		String companyName = company.getCompanyName().toUpperCase();
 		Company companyObj = companyService.findByCompanyName(companyName);
-		if (companyObj == null || companyObj.getId() == company.getId()) {
+		if (companyObj == null || Objects.equals(companyObj.getId(), company.getId())) {
 			company.setCompanyName(companyName);
 			return new ResponseEntity<>(companyService.saveCompany(company), HttpStatus.CREATED);
 		} else {

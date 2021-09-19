@@ -1,17 +1,10 @@
 package com.nc.med.service;
 
-import com.nc.med.mapper.CustomerBalanceSheet;
-import com.nc.med.mapper.ReportBar;
-import com.nc.med.mapper.SalesOrderSearch;
-import com.nc.med.mapper.StockBook;
-import com.nc.med.mapper.StockBookSummary;
+import com.nc.med.mapper.*;
 import com.nc.med.model.SalesOrder;
 
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 public interface SalesOrderService {
     SalesOrder saveOrder(SalesOrder order);
@@ -19,8 +12,6 @@ public interface SalesOrderService {
     SalesOrder findByOrderID(Long orderID);
 
     void deleteOrder(SalesOrder orderID);
-
-    SalesOrder findOrderByProductName(String productName);
 
     List<SalesOrder> findAllOrders();
 
@@ -30,15 +21,11 @@ public interface SalesOrderService {
 
     List<CustomerBalanceSheet> findCurrentBalanceByCustomers();
 
-    ReportBar findBarChartModels() throws ParseException;
+    List<BarChartModel> findBarChartModels();
 
     List<SalesOrder> findAllByCustomer(Long customerID);
 
     List<SalesOrder> salesOrderDetailSearch(SalesOrderSearch salesOrderSearch);
 
-	Set<StockBook> findStockBook(String productName);
-
-	StockBookSummary findStockBookAll();
-
-	StockBookSummary findStockBookByDate(LocalDateTime startDate, LocalDateTime endDate);
+    StockBookData findStockDataByDateAndProduct(String productName, LocalDate startDate, LocalDate endDate);
 }

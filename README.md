@@ -50,3 +50,4 @@ ifconfig
 
 ###start mysql in command
 mysql.server start
+jXy67VZRAzD8pFjsyIjCBGDMHrdTSdzYmEJL3rhA

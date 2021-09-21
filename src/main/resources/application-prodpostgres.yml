@@ -1,7 +1,7 @@
 spring:
   # Database
   datasource:
-    driver-class-name: org.postgresql.Driver
+    #driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://ec2-44-198-151-32.compute-1.amazonaws.com:5432/d46qred6bk18hg
     username: ofxudxrveypiet
     password: dab3497a505ba904086d72e30aa037ce6028dad1e88177d2fad0eef549efc6dc

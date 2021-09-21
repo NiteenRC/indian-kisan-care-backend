@@ -95,19 +95,4 @@ public class ProductController {
     public ResponseEntity<?> getProductsForAllCategories() {
         return new ResponseEntity<>(productService.findAllProduct(), HttpStatus.OK);
     }
-
-    @PostMapping(PRODUCTS_ADD)
-    public ResponseEntity<?> addOrderList(@RequestBody List<Product> products) {
-        return new ResponseEntity<>(productService.addToStock(products), HttpStatus.OK);
-    }
-
-    @GetMapping(PRODUCTS_GET_TEMP)
-    public ResponseEntity<?> removeOrderGetListTemp() {
-        return new ResponseEntity<>(productService.removeProductGetTemp(), HttpStatus.OK);
-    }
-
-    @PostMapping(PRODUCTS_REMOVE)
-    public ResponseEntity<?> removeOrderList(@RequestBody List<Product> products) {
-        return productService.removeFromStock(products);
-    }
 }

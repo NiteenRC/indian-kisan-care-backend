@@ -8,18 +8,12 @@
 spring:
   profiles:
     active:
-      - mysql
+      - prodpostgres
     include:
       - mail
       #- log
       - jasper
       - validation
-
-# App Properties
-bezkoder:
-  app:
-    jwtSecret: bezKoderSecretKey
-    jwtExpirationMs: 86400000
 
 management:
   endpoints:

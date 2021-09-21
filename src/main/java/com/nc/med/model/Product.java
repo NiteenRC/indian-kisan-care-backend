@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -34,7 +33,6 @@ public class Product implements Serializable {
 	// @ManyToOne(fetch = FetchType.LAZY)
 	// @JoinColumn(name = "CATEGORY_ID")
 	// @JsonIgnore
-	@NotNull(message = "Name may not be null")
 	@ManyToOne(fetch = FetchType.LAZY)
 	// @JoinColumn(name = "CATEGORY_ID")
 	private Category category;

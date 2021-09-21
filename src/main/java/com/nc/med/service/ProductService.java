@@ -15,11 +15,5 @@ public interface ProductService {
 
     void deleteProduct(Product productID);
 
-    ResponseEntity<?> removeFromStock(List<Product> products);
-
-    Product addToStock(List<Product> products);
-
     List<Product> findAllProduct();
-
-    List<Product> removeProductGetTemp();
 }

@@ -50,4 +50,18 @@ ifconfig
 
 ###start mysql in command
 mysql.server start
-jXy67VZRAzD8pFjsyIjCBGDMHrdTSdzYmEJL3rhA
+GitHub token: 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
+docker run -e MYSQL_ROOT_PASSWORD=password mysql_image
+
+
+#### Postgres
+brew instal postgresql
+brew services list
+brew services start postgresql
+pqsl	postgres
+create role app_user with login password 'app_user';
+create database book_db;
+\du
+psql
+\list
+\q

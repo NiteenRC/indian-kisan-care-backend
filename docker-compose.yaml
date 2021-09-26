@@ -12,15 +12,15 @@ services:
     ports:
       - '3306:3306'
     restart: always
-  indian-kisan-care-backend:
-    image: indian-kisan-care-backend
+  smart-accounting-book-backend:
+    image: smart-accounting-book-backend
     build:
-      context: ./indian-kisan-care-backend
+      context: ./smart-accounting-book-backend
       dockerfile: Dockerfile
     ports:
       - '8080:8080'
     volumes:
-      - /data/indian-kisan-care-backend
+      - /data/smart-accounting-book-backend
     depends_on:
       ekar-mysql:
         condition: service_healthy

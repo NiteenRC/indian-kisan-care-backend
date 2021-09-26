@@ -9,7 +9,7 @@ function trap_ctrlc() {
 
 trap "trap_ctrlc" 2
 
-cd ./indian-kisan-care-backend &&
+cd ./smart-accounting-book-backend &&
  sudo mvn clean package -DskipTests &&
  cd .. &&
  sudo docker-compose build &&

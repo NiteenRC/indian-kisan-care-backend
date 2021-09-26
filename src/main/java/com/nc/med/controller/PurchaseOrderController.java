@@ -3,6 +3,7 @@ package com.nc.med.controller;
 import com.nc.med.exception.CustomErrorTypeException;
 import com.nc.med.mapper.BalancePayment;
 import com.nc.med.model.PurchaseOrder;
+import com.nc.med.model.SalesOrder;
 import com.nc.med.service.PurchaseOrderDetailService;
 import com.nc.med.service.PurchaseOrderService;
 import org.slf4j.Logger;
@@ -69,7 +70,7 @@ public class PurchaseOrderController {
     }
 
     @DeleteMapping("/{orderID}")
-    public ResponseEntity<?> deleteOrder(@PathVariable Long orderID) {
+    public ResponseEntity<?> deleteOrder(@PathVariable Long orderID) throws Exception {
         PurchaseOrder order = orderService.findByOrderID(orderID);
         if (order == null) {
             return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),

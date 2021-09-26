@@ -11,7 +11,7 @@ public interface PurchaseOrderService {
 
     PurchaseOrder findByOrderID(Long orderID);
 
-    void deleteOrder(PurchaseOrder order);
+    void deleteOrder(PurchaseOrder order) throws Exception;
 
     List<PurchaseOrder> findAllOrders();
 

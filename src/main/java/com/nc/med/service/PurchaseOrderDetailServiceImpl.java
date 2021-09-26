@@ -21,7 +21,7 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
 
     @Override
     public void savePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail) {
-        Product product = productRepo.getOne(purchaseOrderDetail.getProduct().getId());
+        Product product = productRepo.findById(purchaseOrderDetail.getProduct().getId()).get();
 
         double previousPrice = product.getPrice() * (double) product.getQty();
         double currentPrice = purchaseOrderDetail.getPrice() * purchaseOrderDetail.getQtyOrdered();

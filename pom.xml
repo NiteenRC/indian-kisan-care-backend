@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>indian-kisan-care-backend</artifactId>
+	<artifactId>smart-accounting-book-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>indian-kisan-care-backend</name>
-	<description>indian-kisan-care-backend project for Spring Boot</description>
+	<name>smart-accounting-book-backend</name>
+	<description>smart-accounting-book-backend project for Spring Boot</description>
 
 	<packaging>jar</packaging>
 
@@ -163,7 +163,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>indian-kisan-care-backend</finalName>
+		<finalName>smart-accounting-book-backend</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

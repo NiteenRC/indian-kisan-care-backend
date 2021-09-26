@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/company/**").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/indian-kisan-care-backend/**").permitAll()
+                .authorizeRequests().antMatchers("/smart-accounting-book-backend/**").permitAll()
                 .and()
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
                 .and()

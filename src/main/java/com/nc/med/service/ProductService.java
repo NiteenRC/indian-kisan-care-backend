@@ -9,6 +9,8 @@ public interface ProductService {
 
     Product saveProduct(Product product);
 
+    void saveAllProduct(List<Product> products);
+
     Product findByProductName(String productName);
 
     Product findByProductID(Long productID);

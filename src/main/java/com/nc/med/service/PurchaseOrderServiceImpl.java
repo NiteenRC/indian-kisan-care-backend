@@ -75,17 +75,28 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    public void deleteOrder(PurchaseOrder order) {
+    public void deleteOrder(PurchaseOrder order) throws Exception {
+        List<Product> products = new ArrayList<>();
+        List<PurchaseOrderDetail> purchaseOrderDetails = new ArrayList<>();
         for (PurchaseOrderDetail orderDetails : order.getPurchaseOrderDetail()) {
             Product product = orderDetails.getProduct();
-            product.setQty(product.getQty() - orderDetails.getQtyOrdered());
-            productService.saveProduct(product);
-            orderDetailRepo.delete(orderDetails);
+            double pp = product.getPrice();
+            double pq = product.getQty();
+            double op = orderDetails.getPrice();
+            double oq = orderDetails.getQtyOrdered();
 
-            //avg price changes
-            // sales order should not
-            //profit changes
+            if (pq >= oq) {
+                double avaragePriceRoundUp = Math.round((pp * pq - op * oq) / (pq - oq));
+                product.setQty((int) (pq - oq));
+                product.setPrice(avaragePriceRoundUp);
+                products.add(product);
+                purchaseOrderDetails.add(orderDetails);
+            } else {
+                throw new Exception("Could not able to delete this transactione");
+            }
         }
+        productService.saveAllProduct(products);
+        orderDetailRepo.deleteAll(purchaseOrderDetails);
         purchaseOrderRepo.delete(order);
     }
 

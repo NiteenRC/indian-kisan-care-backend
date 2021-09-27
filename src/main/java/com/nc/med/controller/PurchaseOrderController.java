@@ -3,6 +3,7 @@ package com.nc.med.controller;
 import com.nc.med.exception.CustomErrorTypeException;
 import com.nc.med.mapper.BalancePayment;
 import com.nc.med.model.PurchaseOrder;
+import com.nc.med.model.PurchaseOrderDetail;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.service.PurchaseOrderDetailService;
 import com.nc.med.service.PurchaseOrderService;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/purchaseOrder")
@@ -78,5 +80,28 @@ public class PurchaseOrderController {
         }
         orderService.deleteOrder(order);
         return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/details/{orderID}")
+    public ResponseEntity<?> deleteOrderDetails(@PathVariable Long orderID) throws Exception {
+        PurchaseOrderDetail order = orderDetailService.findById(orderID);
+        if (order == null) {
+            return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        List<PurchaseOrderDetail> purchaseOrder = orderService.deleteOrderDetails(order);
+        return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);
+    }
+
+    @GetMapping("/details/{orderID}")
+    public ResponseEntity<?> getOrderDetails(@PathVariable Long orderID) throws Exception {
+        if (orderID == null) {
+            return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),
+                    HttpStatus.NOT_FOUND);
+        }
+        PurchaseOrderDetail order = orderDetailService.findById(orderID);
+        PurchaseOrder purchaseOrder =orderService.findByOrderID(order.getPurchaseOrder().getPurchaseOrderID());
+        return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);
     }
 }

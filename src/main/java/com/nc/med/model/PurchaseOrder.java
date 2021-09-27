@@ -34,7 +34,7 @@ public class PurchaseOrder extends BaseEntity<String> implements Serializable {
 	private OrderStatus status;
 	@ManyToOne(cascade = CascadeType.MERGE)
 	private Supplier supplier;
-	@OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.EAGER)
 	private List<PurchaseOrderDetail> purchaseOrderDetail;
 	private double currentBalance;
 	private double previousBalance;

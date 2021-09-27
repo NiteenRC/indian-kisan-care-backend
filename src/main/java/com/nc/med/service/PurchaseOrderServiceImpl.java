@@ -101,6 +101,43 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
+    public List<PurchaseOrderDetail> deleteOrderDetails(PurchaseOrderDetail orderDetails) throws Exception {
+
+        Product product = orderDetails.getProduct();
+        double pp = product.getPrice();
+        double pq = product.getQty();
+        double op = orderDetails.getPrice();
+        double oq = orderDetails.getQtyOrdered();
+
+        if (pq >= oq) {
+            double avaragePriceRoundUp = Math.round((pp * pq - op * oq) / (pq - oq));
+            product.setQty((int) (pq - oq));
+            product.setPrice(avaragePriceRoundUp);
+            productService.saveProduct(product);
+            orderDetailRepo.delete(orderDetails);
+            List<PurchaseOrderDetail> purchaseOrderDetailList = orderDetailRepo.findByPurchaseOrder(orderDetails.getPurchaseOrder());
+            if (purchaseOrderDetailList.isEmpty()) {
+                purchaseOrderRepo.delete(orderDetails.getPurchaseOrder());
+                return Collections.emptyList();
+            } else {
+                PurchaseOrder purchaseOrder = purchaseOrderRepo.findById(orderDetails.getPurchaseOrder().getPurchaseOrderID()).get();
+                int qty = purchaseOrder.getTotalQty() - orderDetails.getQtyOrdered();
+                double orderedPriceQty = orderDetails.getPrice() * orderDetails.getQtyOrdered();
+                double purchasePrice = purchaseOrder.getTotalPrice();
+                double amt = purchaseOrder.getAmountPaid() - orderedPriceQty;
+                purchaseOrder.setTotalQty(qty);
+                purchaseOrder.setTotalPrice(purchasePrice - orderedPriceQty);
+                purchaseOrder.setAmountPaid(amt);
+                purchaseOrder.setPurchaseOrderDetail(purchaseOrderDetailList);
+                PurchaseOrder purchaseOrder1 = purchaseOrderRepo.save(purchaseOrder);
+                return purchaseOrder1.getPurchaseOrderDetail();
+            }
+        } else {
+            throw new Exception("Could not able to delete this transactione");
+        }
+    }
+
+    @Override
     public List<PurchaseOrder> findAllOrders() {
         return purchaseOrderRepo.findAll(Sort.by("billDate").descending());
     }

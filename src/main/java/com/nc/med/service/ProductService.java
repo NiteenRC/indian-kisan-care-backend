@@ -9,7 +9,7 @@ public interface ProductService {
 
     Product saveProduct(Product product);
 
-    void saveAllProduct(List<Product> products);
+    List<Product> saveAllProduct(List<Product> products);
 
     Product findByProductName(String productName);
 

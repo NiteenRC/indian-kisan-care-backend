@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void saveAllProduct(List<Product> products) {
-        products.forEach(product -> productRepo.save(product));
+    public List<Product> saveAllProduct(List<Product> products) {
+        return productRepo.saveAll(products);
     }
 }

@@ -38,4 +38,14 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
         orderDetailRepo.save(purchaseOrderDetail);
     }
 
+    @Override
+    public void deletePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail) {
+        orderDetailRepo.delete(purchaseOrderDetail);
+    }
+
+    @Override
+    public PurchaseOrderDetail findById(long id) {
+        return orderDetailRepo.findById(id).get();
+    }
+
 }

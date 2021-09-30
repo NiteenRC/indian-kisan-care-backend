@@ -4,7 +4,6 @@ import com.nc.med.exception.CustomErrorTypeException;
 import com.nc.med.mapper.BalancePayment;
 import com.nc.med.model.PurchaseOrder;
 import com.nc.med.model.PurchaseOrderDetail;
-import com.nc.med.model.SalesOrder;
 import com.nc.med.service.PurchaseOrderDetailService;
 import com.nc.med.service.PurchaseOrderService;
 import org.slf4j.Logger;
@@ -101,7 +100,7 @@ public class PurchaseOrderController {
                     HttpStatus.NOT_FOUND);
         }
         PurchaseOrderDetail order = orderDetailService.findById(orderID);
-        PurchaseOrder purchaseOrder =orderService.findByOrderID(order.getPurchaseOrder().getPurchaseOrderID());
+        PurchaseOrder purchaseOrder = orderService.findByOrderID(order.getPurchaseOrder().getPurchaseOrderID());
         return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);
     }
 }

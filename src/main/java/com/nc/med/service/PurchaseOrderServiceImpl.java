@@ -39,18 +39,17 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         order.setTotalQty(totalQty);
 
         Supplier supplier = order.getSupplier();
-        Supplier supplierObj = null;
 
         if (Objects.equals(supplier.getSupplierName(), "")) {
             List<Supplier> suppliers = supplierRepo.findAll();
             Long maxId = 1L;
             if (!suppliers.isEmpty()) {
-                maxId += suppliers.stream().max(Comparator.comparing(Supplier::getId)).get().getId();
+                maxId += suppliers.stream().max(Comparator.comparing(Supplier::getId)).orElse(null).getId();
             }
             order.setSupplier(supplierRepo.save(new Supplier("UNKNOWN" + maxId)));
         } else {
             String supplierName = supplier.getSupplierName().toUpperCase();
-            supplierObj = supplierRepo.findBySupplierName(supplierName);
+            Supplier supplierObj = supplierRepo.findBySupplierName(supplierName);
 
             if (supplierObj == null) {
                 supplierObj = supplierRepo.save(new Supplier(supplierName));
@@ -71,13 +70,26 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public PurchaseOrder findByOrderID(Long orderID) {
-        return purchaseOrderRepo.findById(orderID).get();
+        return purchaseOrderRepo.findById(orderID).orElse(null);
     }
 
     @Override
     public void deleteOrder(PurchaseOrder order) throws Exception {
         List<Product> products = new ArrayList<>();
         List<PurchaseOrderDetail> purchaseOrderDetails = new ArrayList<>();
+
+        /*
+        Delete all purchase order belongs to supplier
+        double dueAmount = findSupplierBalanceBySupplier(order.getSupplier().getId());
+
+        if (order.getTotalPrice() == 0) {
+            if (dueAmount == 0) {
+                purchaseOrderRepo.softDeleteBySupplier(order.getSupplier());
+            } else {
+                throw new Exception("Please pay all due amount before deleting supplier order");
+            }
+        }*/
+
         for (PurchaseOrderDetail orderDetails : order.getPurchaseOrderDetail()) {
             Product product = orderDetails.getProduct();
             double pp = product.getPrice();
@@ -86,23 +98,25 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             double oq = orderDetails.getQtyOrdered();
 
             if (pq >= oq) {
-                double avaragePriceRoundUp = Math.round((pp * pq - op * oq) / (pq - oq));
+                double avgPrice = (pp * pq - op * oq) / (pq - oq);
+                double averagePurchasePrice = Math.round(avgPrice);
                 product.setQty((int) (pq - oq));
-                product.setPrice(avaragePriceRoundUp);
+                product.setPrice(averagePurchasePrice);
                 products.add(product);
                 purchaseOrderDetails.add(orderDetails);
             } else {
-                throw new Exception("Could not able to delete this transactione");
+                throw new Exception("Could not able to delete this transactions");
             }
         }
-        productService.saveAllProduct(products);
+        if (productService.saveAllProduct(products).isEmpty()) {
+            throw new Exception("Could not updated product price and qty");
+        }
         orderDetailRepo.deleteAll(purchaseOrderDetails);
         purchaseOrderRepo.delete(order);
     }
 
     @Override
     public List<PurchaseOrderDetail> deleteOrderDetails(PurchaseOrderDetail orderDetails) throws Exception {
-
         Product product = orderDetails.getProduct();
         double pp = product.getPrice();
         double pq = product.getQty();
@@ -110,9 +124,10 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         double oq = orderDetails.getQtyOrdered();
 
         if (pq >= oq) {
-            double avaragePriceRoundUp = Math.round((pp * pq - op * oq) / (pq - oq));
+            double avgPrice = (pp * pq - op * oq) / (pq - oq);
+            double averagePurchasePrice = Math.round(avgPrice);
             product.setQty((int) (pq - oq));
-            product.setPrice(avaragePriceRoundUp);
+            product.setPrice(averagePurchasePrice);
             productService.saveProduct(product);
             orderDetailRepo.delete(orderDetails);
             List<PurchaseOrderDetail> purchaseOrderDetailList = orderDetailRepo.findByPurchaseOrder(orderDetails.getPurchaseOrder());
@@ -120,20 +135,20 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
                 purchaseOrderRepo.delete(orderDetails.getPurchaseOrder());
                 return Collections.emptyList();
             } else {
-                PurchaseOrder purchaseOrder = purchaseOrderRepo.findById(orderDetails.getPurchaseOrder().getPurchaseOrderID()).get();
-                int qty = purchaseOrder.getTotalQty() - orderDetails.getQtyOrdered();
-                double orderedPriceQty = orderDetails.getPrice() * orderDetails.getQtyOrdered();
+                PurchaseOrder purchaseOrder = purchaseOrderRepo.findById(orderDetails.getPurchaseOrder().getPurchaseOrderID()).orElse(null);
+                assert purchaseOrder != null;
+                int totalQty = purchaseOrder.getTotalQty() - orderDetails.getQtyOrdered();
+                double orderedTotalPrice = orderDetails.getPrice() * orderDetails.getQtyOrdered();
                 double purchasePrice = purchaseOrder.getTotalPrice();
-                double amt = purchaseOrder.getAmountPaid() - orderedPriceQty;
-                purchaseOrder.setTotalQty(qty);
-                purchaseOrder.setTotalPrice(purchasePrice - orderedPriceQty);
-                purchaseOrder.setAmountPaid(amt);
+                double totalAmount = purchaseOrder.getAmountPaid() - orderedTotalPrice;
+                purchaseOrder.setTotalQty(totalQty);
+                purchaseOrder.setTotalPrice(purchasePrice - orderedTotalPrice);
+                purchaseOrder.setAmountPaid(totalAmount);
                 purchaseOrder.setPurchaseOrderDetail(purchaseOrderDetailList);
-                PurchaseOrder purchaseOrder1 = purchaseOrderRepo.save(purchaseOrder);
-                return purchaseOrder1.getPurchaseOrderDetail();
+                return purchaseOrderRepo.save(purchaseOrder).getPurchaseOrderDetail();
             }
         } else {
-            throw new Exception("Could not able to delete this transactione");
+            throw new Exception("Could not able to delete this transactions");
         }
     }
 
@@ -145,7 +160,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
     public double findSupplierBalanceBySupplier(Long supplierID) {
         List<PurchaseOrder> purchaseOrders = purchaseOrderRepo
-                .findAmountBalanceBySupplier(supplierRepo.findById(supplierID).get());
+                .findAmountBalanceBySupplier(supplierRepo.findById(supplierID).orElse(null));
         return purchaseOrders.stream().mapToDouble(PurchaseOrder::getCurrentBalance).sum();
     }
 
@@ -176,7 +191,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
     public PurchaseOrder getPurchaseOrder(BalancePayment balancePayment) {
         PurchaseOrder order = new PurchaseOrder();
-        order.setSupplier(supplierRepo.findById(balancePayment.getId()).get());
+        order.setSupplier(supplierRepo.findById(balancePayment.getId()).orElse(null));
         order.setAmountPaid(balancePayment.getPayAmount());
         order.setCurrentBalance(-balancePayment.getPayAmount());
         order.setPurchaseOrderDetail(Collections.emptyList());

@@ -26,7 +26,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier findBySupplierID(Long supplierID) {
-        return supplierRepo.findById(supplierID).get();
+        return supplierRepo.findById(supplierID).orElse(null);
     }
 
     @Override
@@ -42,10 +42,5 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier findBySupplierNameContainingIgnoreCase(String supplierName) {
         return supplierRepo.findBySupplierNameContainingIgnoreCase(supplierName);
-    }
-
-    @Override
-    public Supplier findSupplierById(Long id) {
-        return supplierRepo.findById(id).get();
     }
 }

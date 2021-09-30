@@ -27,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer findByCustomerID(Long customerID) {
-		return customerRepo.findById(customerID).get();
+		return customerRepo.findById(customerID).orElse(null);
 	}
 
 	@Override
@@ -47,6 +47,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer findCustomerById(Long id) {
-		return customerRepo.findById(id).get();
+		return customerRepo.findById(id).orElse(null);
 	}
 }

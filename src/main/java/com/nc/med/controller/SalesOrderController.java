@@ -3,6 +3,7 @@ package com.nc.med.controller;
 import com.nc.med.exception.CustomErrorTypeException;
 import com.nc.med.mapper.BalancePayment;
 import com.nc.med.mapper.SalesOrderSearch;
+import com.nc.med.model.PurchaseOrderDetail;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.model.SalesOrderDetail;
 import com.nc.med.repo.CustomerRepo;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/salesOrder")
@@ -66,7 +68,7 @@ public class SalesOrderController {
     @PutMapping
     public ResponseEntity<?> updateOrderList(@RequestBody BalancePayment balancePayment) {
         SalesOrder order = new SalesOrder();
-        order.setCustomer(customerRepo.findById(balancePayment.getId()).get());
+        order.setCustomer(customerRepo.findById(balancePayment.getId()).orElse(null));
         order.setAmountPaid(balancePayment.getPayAmount());
         order.setCurrentBalance(-balancePayment.getPayAmount());
         order.setSalesOrderDetail(Collections.emptyList());
@@ -140,5 +142,28 @@ public class SalesOrderController {
         }
         orderService.deleteOrder(order);
         return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/details/{orderID}")
+    public ResponseEntity<?> deleteOrderDetails(@PathVariable Long orderID) throws Exception {
+        SalesOrderDetail order = orderDetailService.findById(orderID);
+        if (order == null) {
+            return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        List<SalesOrderDetail> salesOrderDetails = orderService.deleteOrderDetails(order);
+        return new ResponseEntity<>(salesOrderDetails, HttpStatus.OK);
+    }
+
+    @GetMapping("/details/{orderID}")
+    public ResponseEntity<?> getOrderDetails(@PathVariable Long orderID) throws Exception {
+        if (orderID == null) {
+            return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),
+                    HttpStatus.NOT_FOUND);
+        }
+        SalesOrderDetail order = orderDetailService.findById(orderID);
+        SalesOrder salesOrder = orderService.findByOrderID(order.getSalesOrder().getSalesOrderID());
+        return new ResponseEntity<>(salesOrder, HttpStatus.OK);
     }
 }

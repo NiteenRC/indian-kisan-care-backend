@@ -10,4 +10,5 @@ public interface SalesOrderDetailService {
 
     List<ProductSaleSummary> salesOrderDetailProductWise();
 
+    SalesOrderDetail findById(Long orderID);
 }

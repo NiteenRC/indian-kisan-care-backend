@@ -66,4 +66,9 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
         return productSaleSummaries;
     }
 
+    @Override
+    public SalesOrderDetail findById(Long orderID) {
+        return orderDetailRepo.findById(orderID).orElse(null);
+    }
+
 }

@@ -16,7 +16,5 @@ public interface SupplierService {
 
     List<Supplier> fetchAllCategories();
 
-    Supplier findSupplierById(Long id);
-
-	Supplier findBySupplierNameContainingIgnoreCase(String supplierName);
+    Supplier findBySupplierNameContainingIgnoreCase(String supplierName);
 }

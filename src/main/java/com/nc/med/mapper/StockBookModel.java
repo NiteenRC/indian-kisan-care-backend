@@ -11,7 +11,6 @@ public class StockBookModel implements Comparable<StockBookModel> {
         this.date = date;
         this.productName = productName;
         this.soldStock = soldStock;
-        this.price = price;
     }
 
     public StockBookModel(String date, String productName, Integer soldStock, double price, double profit) {

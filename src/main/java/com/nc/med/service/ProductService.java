@@ -1,7 +1,6 @@
 package com.nc.med.service;
 
 import com.nc.med.model.Product;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

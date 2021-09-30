@@ -1,152 +1,150 @@
 package com.nc.med.model;
 
+import com.nc.med.mapper.OrderStatus;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.nc.med.mapper.OrderStatus;
-
 @Entity
+//@Where(clause = "is_active=false")
 public class PurchaseOrder extends BaseEntity<String> implements Serializable {
-	private static final long serialVersionUID = -1000119078147252957L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long purchaseOrderID;
-	@Column(name = "totalPrice", nullable = false)
-	private double totalPrice;
-	private double amountPaid;
-	private int totalQty;
-	@Enumerated(EnumType.STRING)
-	private OrderStatus status;
-	@ManyToOne(cascade = CascadeType.MERGE)
-	private Supplier supplier;
-	@OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.EAGER)
-	private List<PurchaseOrderDetail> purchaseOrderDetail;
-	private double currentBalance;
-	private double previousBalance;
-	private String vehicleNo;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dueDate;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date billDate;
-	public Date getBillDate() {
-		return billDate;
-	}
+    private static final long serialVersionUID = -1000119078147252957L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long purchaseOrderID;
+    @Column(name = "totalPrice", nullable = false)
+    private double totalPrice;
+    private double amountPaid;
+    private int totalQty;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private Supplier supplier;
+    @OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.EAGER)
+    private List<PurchaseOrderDetail> purchaseOrderDetail;
+    private double currentBalance;
+    private double previousBalance;
+    private String vehicleNo;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dueDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date billDate;
+    private String comment;
 
-	public void setBillDate(Date billDate) {
-		this.billDate = billDate;
-	}
+    /*
+    @Column(name = "is_active")
+    private Boolean isActivate = Boolean.FALSE;
+    public boolean isActivate() {
+        return isActivate;
+    }
 
-	private String comment;
+    public void setActivate(Boolean activate) {
+        isActivate = activate;
+    }*/
 
-	public String getVehicleNo() {
-		return vehicleNo;
-	}
+    public Date getBillDate() {
+        return billDate;
+    }
 
-	public void setVehicleNo(String vehicleNo) {
-		this.vehicleNo = vehicleNo;
-	}
+    public void setBillDate(Date billDate) {
+        this.billDate = billDate;
+    }
 
-	public String getComment() {
-		return comment;
-	}
+    public String getVehicleNo() {
+        return vehicleNo;
+    }
 
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+    public void setVehicleNo(String vehicleNo) {
+        this.vehicleNo = vehicleNo;
+    }
 
-	public Date getDueDate() {
-		return dueDate;
-	}
+    public String getComment() {
+        return comment;
+    }
 
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
-	}
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-	public double getCurrentBalance() {
-		return currentBalance;
-	}
+    public Date getDueDate() {
+        return dueDate;
+    }
 
-	public void setCurrentBalance(double currentBalance) {
-		this.currentBalance = currentBalance;
-	}
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
 
-	public double getPreviousBalance() {
-		return previousBalance;
-	}
+    public double getCurrentBalance() {
+        return currentBalance;
+    }
 
-	public void setPreviousBalance(double previousBalance) {
-		this.previousBalance = previousBalance;
-	}
+    public void setCurrentBalance(double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
 
-	public double getAmountPaid() {
-		return amountPaid;
-	}
+    public double getPreviousBalance() {
+        return previousBalance;
+    }
 
-	public void setAmountPaid(double amountPaid) {
-		this.amountPaid = amountPaid;
-	}
+    public void setPreviousBalance(double previousBalance) {
+        this.previousBalance = previousBalance;
+    }
 
-	public Long getPurchaseOrderID() {
-		return purchaseOrderID;
-	}
+    public double getAmountPaid() {
+        return amountPaid;
+    }
 
-	public void setPurchaseOrderID(Long purchaseOrderID) {
-		this.purchaseOrderID = purchaseOrderID;
-	}
+    public void setAmountPaid(double amountPaid) {
+        this.amountPaid = amountPaid;
+    }
 
-	public double getTotalPrice() {
-		return totalPrice;
-	}
+    public Long getPurchaseOrderID() {
+        return purchaseOrderID;
+    }
 
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
+    public void setPurchaseOrderID(Long purchaseOrderID) {
+        this.purchaseOrderID = purchaseOrderID;
+    }
 
-	public int getTotalQty() {
-		return totalQty;
-	}
+    public double getTotalPrice() {
+        return totalPrice;
+    }
 
-	public void setTotalQty(int totalQty) {
-		this.totalQty = totalQty;
-	}
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
-	public OrderStatus getStatus() {
-		return status;
-	}
+    public int getTotalQty() {
+        return totalQty;
+    }
 
-	public void setStatus(OrderStatus status) {
-		this.status = status;
-	}
+    public void setTotalQty(int totalQty) {
+        this.totalQty = totalQty;
+    }
 
-	public Supplier getSupplier() {
-		return supplier;
-	}
+    public OrderStatus getStatus() {
+        return status;
+    }
 
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
-	}
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 
-	public List<PurchaseOrderDetail> getPurchaseOrderDetail() {
-		return purchaseOrderDetail;
-	}
+    public Supplier getSupplier() {
+        return supplier;
+    }
 
-	public void setPurchaseOrderDetail(List<PurchaseOrderDetail> purchaseOrderDetail) {
-		this.purchaseOrderDetail = purchaseOrderDetail;
-	}
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    public List<PurchaseOrderDetail> getPurchaseOrderDetail() {
+        return purchaseOrderDetail;
+    }
+
+    public void setPurchaseOrderDetail(List<PurchaseOrderDetail> purchaseOrderDetail) {
+        this.purchaseOrderDetail = purchaseOrderDetail;
+    }
 
 }

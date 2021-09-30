@@ -77,7 +77,7 @@ public class AuthController {
 
         try {
             byte[] bytes = image.getBytes();
-            User user = userOpt.get();
+            User user = userOpt.orElse(null);
             user.setImage(bytes);
             userRepository.save(user);
         } catch (IOException e) {

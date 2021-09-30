@@ -41,19 +41,18 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         order.setTotalQty(totalQty);
 
         Customer customer = order.getCustomer();
-        Customer customerObj = null;
 
         if (Objects.equals(customer.getCustomerName(), "")) {
             List<Customer> customers = customerRepo.findAll();
             Long maxId = 1L;
             if (!customers.isEmpty()) {
-                maxId = customerRepo.findAll().stream().max(Comparator.comparing(Customer::getId)).get().getId();
+                maxId = customerRepo.findAll().stream().max(Comparator.comparing(Customer::getId)).orElse(null).getId();
             }
             order.setCustomer(customerRepo.save(new Customer("UNKNOWN" + maxId)));
 
         } else {
             String customerName = customer.getCustomerName().toUpperCase();
-            customerObj = customerRepo.findByCustomerName(customerName);
+            Customer customerObj = customerRepo.findByCustomerName(customerName);
 
             if (customerObj == null) {
                 customerObj = customerRepo.save(new Customer(customerName));
@@ -74,7 +73,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Override
     public SalesOrder findByOrderID(Long orderID) {
-        return salesOrderRepo.findById(orderID).get();
+        return salesOrderRepo.findById(orderID).orElse(null);
     }
 
     @Override
@@ -110,7 +109,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Override
     public double findCustomerBalanceByCustomer(Long customerID) {
         List<SalesOrder> salesOrders = salesOrderRepo
-                .findAmountBalanceByCustomer(customerRepo.findById(customerID).get());
+                .findAmountBalanceByCustomer(customerRepo.findById(customerID).orElse(null));
         return salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
     }
 
@@ -143,11 +142,11 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         List<Object[]> salesOrderObj = salesOrderRepo.fetchDailyTransaction();
         List<BarChartModel> barChartModelList = new ArrayList<>();
 
-        for (int j = 0; j < salesOrderObj.size(); j++) {
-            barChartModelList.add(new BarChartModel(salesOrderObj.get(j)[0].toString(),
-                    Double.valueOf(salesOrderObj.get(j)[1].toString()),
-                    (Double.parseDouble(salesOrderObj.get(j)[1].toString()) - Double.parseDouble(salesOrderObj.get(j)[2].toString())),
-                    Double.parseDouble(salesOrderObj.get(j)[3].toString())));
+        for (Object[] objects : salesOrderObj) {
+            barChartModelList.add(new BarChartModel(objects[0].toString(),
+                    Double.valueOf(objects[1].toString()),
+                    (Double.parseDouble(objects[1].toString()) - Double.parseDouble(objects[2].toString())),
+                    Double.parseDouble(objects[3].toString())));
         }
         LOGGER.info("barChartModelList {} ", barChartModelList);
 
@@ -157,7 +156,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Override
     public List<SalesOrder> findAllByCustomer(Long customerID) {
         LOGGER.info("filter by customer id: {}", customerID);
-        return salesOrderRepo.findAllByCustomer(customerRepo.findById(customerID).get());
+        return salesOrderRepo.findAllByCustomer(customerRepo.findById(customerID).orElse(null));
     }
 
     @Override
@@ -189,7 +188,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             }
 
             for (String date : dates) {
-                StockBook stockBook = null;
                 if (purchaseStockMap.get(date) != null) {
                     stock += purchaseStockMap.get(date).getSoldStock();
                 }
@@ -198,7 +196,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     int openingStock = stock;
                     stock -= salesStockMap.get(date).getSoldStock();
                     int qtySold = openingStock - stock;
-                    stockBook = new StockBook(salesStockMap.get(date).getProductName(), openingStock, qtySold, stock, salesStockMap.get(date).getPrice(), salesStockMap.get(date).getProfit());
+                    StockBook stockBook = new StockBook(salesStockMap.get(date).getProductName(), openingStock, qtySold, stock, salesStockMap.get(date).getPrice(), salesStockMap.get(date).getProfit());
                     if (stock < 0) {
                         stockBook = new StockBook(salesStockMap.get(date).getProductName(), 0, 0, 0, salesStockMap.get(date).getPrice(), salesStockMap.get(date).getProfit());
                     }
@@ -211,6 +209,37 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             stock = 0;
         }
         return getStockBookData(productName, startDate, endDate, stockData);
+    }
+
+    @Override
+    public List<SalesOrderDetail> deleteOrderDetails(SalesOrderDetail orderDetails) {
+        Product product = orderDetails.getProduct();
+        product.setQty(product.getQty() + orderDetails.getQtyOrdered());
+        product.setProfit(product.getProfit() - orderDetails.getProfit());
+        productService.saveProduct(product);
+        orderDetailRepo.delete(orderDetails);
+
+        List<SalesOrderDetail> salesOrderDetailList = orderDetailRepo.findBySalesOrder(orderDetails.getSalesOrder());
+        if (salesOrderDetailList.isEmpty()) {
+            salesOrderRepo.delete(orderDetails.getSalesOrder());
+            return Collections.emptyList();
+        } else {
+            SalesOrder salesOrder = salesOrderRepo.findById(orderDetails.getSalesOrder().getSalesOrderID()).orElse(null);
+            assert salesOrder != null;
+            int totalQty = salesOrder.getTotalQty() - orderDetails.getQtyOrdered();
+            double orderedTotalPrice = orderDetails.getSalesPrice() * orderDetails.getQtyOrdered();
+            double salesPrice = salesOrder.getTotalPrice();
+            double totalAmount = salesOrder.getAmountPaid() - orderedTotalPrice;
+            double profitPerProduct = (orderDetails.getSalesPrice() - orderDetails.getPurchasePrice()) * orderDetails.getQtyOrdered();
+            double totalProfit = salesOrder.getTotalProfit() - profitPerProduct;
+
+            salesOrder.setTotalProfit(totalProfit);
+            salesOrder.setTotalQty(totalQty);
+            salesOrder.setTotalPrice(salesPrice - orderedTotalPrice);
+            salesOrder.setAmountPaid(totalAmount);
+            salesOrder.setSalesOrderDetail(salesOrderDetailList);
+            return salesOrderRepo.save(salesOrder).getSalesOrderDetail();
+        }
     }
 
     private StockBookData getStockBookData(String productName, LocalDate startDate, LocalDate endDate, List<StockData> stockData) {

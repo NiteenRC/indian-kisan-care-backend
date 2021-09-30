@@ -6,23 +6,24 @@ import com.nc.med.repo.ProductRepo;
 import com.nc.med.repo.PurchaseOrderDetailRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailService {
     public static final Logger LOGGER = LoggerFactory.getLogger(PurchaseOrderDetailServiceImpl.class);
+    private final PurchaseOrderDetailRepo orderDetailRepo;
+    private final ProductRepo productRepo;
 
-    @Autowired
-    private PurchaseOrderDetailRepo orderDetailRepo;
-
-    @Autowired
-    private ProductRepo productRepo;
+    public PurchaseOrderDetailServiceImpl(PurchaseOrderDetailRepo orderDetailRepo, ProductRepo productRepo) {
+        this.orderDetailRepo = orderDetailRepo;
+        this.productRepo = productRepo;
+    }
 
     @Override
     public void savePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail) {
-        Product product = productRepo.findById(purchaseOrderDetail.getProduct().getId()).get();
+        Product product = productRepo.findById(purchaseOrderDetail.getProduct().getId()).orElse(null);
 
+        assert product != null;
         double previousPrice = product.getPrice() * (double) product.getQty();
         double currentPrice = purchaseOrderDetail.getPrice() * purchaseOrderDetail.getQtyOrdered();
 
@@ -30,9 +31,9 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
                 / ((double) product.getQty() + purchaseOrderDetail.getQtyOrdered());
 
         //avaragePrice += avaragePrice * product.getGst() / 100;
-        long avaragePriceRoundUp = Math.round(avaragePrice);
+        long averagePurchasePrice = Math.round(avaragePrice);
         product.setQty(product.getQty() + purchaseOrderDetail.getQtyOrdered());
-        product.setPrice(avaragePriceRoundUp);
+        product.setPrice(averagePurchasePrice);
         productRepo.save(product);
         //purchaseOrderDetail.setPrice(avaragePrice);
         orderDetailRepo.save(purchaseOrderDetail);
@@ -45,7 +46,7 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
 
     @Override
     public PurchaseOrderDetail findById(long id) {
-        return orderDetailRepo.findById(id).get();
+        return orderDetailRepo.findById(id).orElse(null);
     }
 
 }

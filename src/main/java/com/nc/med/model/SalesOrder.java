@@ -37,7 +37,7 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 	private OrderStatus status;
 	@ManyToOne(cascade=CascadeType.MERGE)
 	private Customer customer;
-	@OneToMany(mappedBy = "salesOrder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "salesOrder", fetch = FetchType.EAGER)
 	private List<SalesOrderDetail> salesOrderDetail;
 	private String vehicleNo;
 	@Temporal(TemporalType.TIMESTAMP)

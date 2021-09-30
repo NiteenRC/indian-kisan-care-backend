@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SalesOrderDetailRepo extends JpaRepository<SalesOrderDetail, Integer> {
+public interface SalesOrderDetailRepo extends JpaRepository<SalesOrderDetail, Long> {
     List<SalesOrderDetail> findBySalesOrder(SalesOrder salesOrder);
 }

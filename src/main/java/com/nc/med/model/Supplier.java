@@ -26,8 +26,9 @@ public class Supplier implements Serializable {
     public Supplier() {
     }
 
-    public Supplier(String supplierName) {
+    public Supplier(String supplierName, String phoneNumber) {
         this.supplierName = supplierName;
+        this.phoneNumber = phoneNumber;
     }
 
     public Date getCreatedDate() {

@@ -22,31 +22,20 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
     @Override
     public void savePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail) {
         Product product = productRepo.findById(purchaseOrderDetail.getProduct().getId()).orElse(null);
-
         assert product != null;
         double previousPrice = product.getPrice() * (double) product.getQty();
         double currentPrice = purchaseOrderDetail.getPrice() * purchaseOrderDetail.getQtyOrdered();
-
-        double avaragePrice = (previousPrice + currentPrice)
+        double averagePrice = (previousPrice + currentPrice)
                 / ((double) product.getQty() + purchaseOrderDetail.getQtyOrdered());
-
-        //avaragePrice += avaragePrice * product.getGst() / 100;
-        long averagePurchasePrice = Math.round(avaragePrice);
+        long averagePurchasePrice = Math.round(averagePrice);
         product.setQty(product.getQty() + purchaseOrderDetail.getQtyOrdered());
         product.setPrice(averagePurchasePrice);
         productRepo.save(product);
-        //purchaseOrderDetail.setPrice(avaragePrice);
         orderDetailRepo.save(purchaseOrderDetail);
-    }
-
-    @Override
-    public void deletePurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail) {
-        orderDetailRepo.delete(purchaseOrderDetail);
     }
 
     @Override
     public PurchaseOrderDetail findById(long id) {
         return orderDetailRepo.findById(id).orElse(null);
     }
-
 }

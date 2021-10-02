@@ -46,17 +46,19 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             List<Customer> customers = customerRepo.findAll();
             Long maxId = 1L;
             if (!customers.isEmpty()) {
-                maxId = customerRepo.findAll().stream().max(Comparator.comparing(Customer::getId)).orElse(null).getId();
+                maxId = Objects.requireNonNull(customerRepo.findAll().stream().max(Comparator.comparing(Customer::getId)).orElse(null)).getId();
             }
-            order.setCustomer(customerRepo.save(new Customer("UNKNOWN" + maxId)));
+            order.setCustomer(customerRepo.save(new Customer("UNKNOWN" + maxId, order.getCustomer().getPhoneNumber())));
 
         } else {
             String customerName = customer.getCustomerName().toUpperCase();
             Customer customerObj = customerRepo.findByCustomerName(customerName);
 
             if (customerObj == null) {
-                customerObj = customerRepo.save(new Customer(customerName));
+                customerObj = customerRepo.save(new Customer(customerName, order.getCustomer().getPhoneNumber()));
             }
+            customerObj.setPhoneNumber(order.getCustomer().getPhoneNumber());
+            customerRepo.save(customerObj);
             order.setCustomer(customerObj);
 
             try {
@@ -85,20 +87,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             productService.saveProduct(product);
             orderDetailRepo.delete(orderDetails);
         }
-
-        double prev = order.getPreviousBalance();
-        double current = order.getCurrentBalance();
-        Long cusomerId = order.getCustomer().getId();
-
         salesOrderRepo.delete(order);
-
-        SalesOrder salesOrder = salesOrderRepo.findFirstByCustomerIdOrderBySalesOrderIDDesc(cusomerId);
-
-        if (salesOrder != null) {
-            // salesOrder.setPreviousBalance( prev + salesOrder.getPreviousBalance());
-            // salesOrder.setCurrentBalance( current + salesOrder.getCurrentBalance());
-            // salesOrderRepo.saveAndFlush(salesOrder);
-        }
     }
 
     @Override
@@ -108,9 +97,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Override
     public double findCustomerBalanceByCustomer(Long customerID) {
-        List<SalesOrder> salesOrders = salesOrderRepo
-                .findAmountBalanceByCustomer(customerRepo.findById(customerID).orElse(null));
-        return salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+        return salesOrderRepo.findAmountBalanceByCustomer(customerRepo.findById(customerID)
+                .orElse(null)).stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
     }
 
     @Override

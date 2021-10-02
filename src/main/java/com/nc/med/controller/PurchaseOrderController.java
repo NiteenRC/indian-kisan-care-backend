@@ -94,7 +94,7 @@ public class PurchaseOrderController {
     }
 
     @GetMapping("/details/{orderID}")
-    public ResponseEntity<?> getOrderDetails(@PathVariable Long orderID) throws Exception {
+    public ResponseEntity<?> getOrderDetails(@PathVariable Long orderID) {
         if (orderID == null) {
             return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),
                     HttpStatus.NOT_FOUND);

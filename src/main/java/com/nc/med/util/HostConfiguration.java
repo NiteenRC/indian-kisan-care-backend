@@ -79,9 +79,7 @@ public class HostConfiguration {
 			if (!isValid) {
 				// System.exit(0);
 			}
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (SocketException e) {
+		} catch (UnknownHostException | SocketException e) {
 			e.printStackTrace();
 		}
 	}

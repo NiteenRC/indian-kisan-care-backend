@@ -34,18 +34,13 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepo.delete(categoryID);
     }
 
-	@Override
+    @Override
     public Category findByCategoryNameContainIgnoreCase(String categoryName) {
         return categoryRepo.findByCategoryNameContainingIgnoreCase(categoryName);
     }
-    
+
     @Override
     public Category findByCategoryName(String categoryName) {
         return categoryRepo.findByCategoryName(categoryName);
-    }
-
-    @Override
-    public Category findCategoryById(Long id) {
-        return categoryRepo.findById(id).orElse(null);
     }
 }

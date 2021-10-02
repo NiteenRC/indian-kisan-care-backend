@@ -16,7 +16,5 @@ public interface CustomerService {
 
     List<Customer> fetchAllCategories();
 
-    Customer findCustomerById(Long id);
-
-	Customer findByCustomerNameContainingIgnoreCase(String customerName);
+    Customer findByCustomerNameContainingIgnoreCase(String customerName);
 }

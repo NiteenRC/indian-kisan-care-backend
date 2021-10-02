@@ -34,18 +34,8 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepo.delete(companyID);
     }
 
-	@Override
-    public Company findByCompanyNameContainingIgnoreCase(String companyName) {
-        return companyRepo.findByCompanyName(companyName);
-    }
-    
     @Override
     public Company findByCompanyName(String companyName) {
         return companyRepo.findByCompanyNameContainingIgnoreCase(companyName);
-    }
-
-    @Override
-    public Company findCompanyById(Long id) {
-        return companyRepo.findById(id).orElse(null);
     }
 }

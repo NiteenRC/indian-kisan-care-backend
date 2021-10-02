@@ -38,14 +38,4 @@ public class LocationServiceImpl implements LocationService {
     public Location findByLocationName(String cityName) {
         return categoryRepo.findByCityName(cityName);
     }
-    
-    @Override
-    public Location findByLocationNameContainingIgnoreCase(String cityName) {
-        return categoryRepo.findByCityNameContainingIgnoreCase(cityName);
-    }
-
-    @Override
-    public Location findLocationById(Long id) {
-        return categoryRepo.findById(id).orElse(null);
-    }
 }

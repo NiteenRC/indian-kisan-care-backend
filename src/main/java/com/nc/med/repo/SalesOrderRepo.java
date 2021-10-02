@@ -24,9 +24,6 @@ public interface SalesOrderRepo extends JpaRepository<SalesOrder, Long> {
     @Query(value = "SELECT sum(current_balance) FROM SALES_ORDER where customer_id = :#{#customer.id}  group by customer_id", nativeQuery = true)
     int findCurrentSum(@Param("customer") Customer customer);
 
-
-    SalesOrder findFirstByCustomerIdOrderBySalesOrderIDDesc(Long customer);
-
     @Query(value = "select CAST(so.bill_date AS DATE), p.product_name, sum(sod.qty_ordered), sum(sod.sales_price), sum(sod.profit)\n" +
             "from sales_order so, sales_order_detail sod, product p\n" +
             "where so.sales_orderid = sod.sales_orderid and p.id = sod.productid\n" +

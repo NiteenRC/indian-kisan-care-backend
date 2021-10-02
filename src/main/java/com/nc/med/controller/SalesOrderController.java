@@ -3,7 +3,6 @@ package com.nc.med.controller;
 import com.nc.med.exception.CustomErrorTypeException;
 import com.nc.med.mapper.BalancePayment;
 import com.nc.med.mapper.SalesOrderSearch;
-import com.nc.med.model.PurchaseOrderDetail;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.model.SalesOrderDetail;
 import com.nc.med.repo.CustomerRepo;
@@ -145,7 +144,7 @@ public class SalesOrderController {
     }
 
     @DeleteMapping("/details/{orderID}")
-    public ResponseEntity<?> deleteOrderDetails(@PathVariable Long orderID) throws Exception {
+    public ResponseEntity<?> deleteOrderDetails(@PathVariable Long orderID) {
         SalesOrderDetail order = orderDetailService.findById(orderID);
         if (order == null) {
             return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),
@@ -157,7 +156,7 @@ public class SalesOrderController {
     }
 
     @GetMapping("/details/{orderID}")
-    public ResponseEntity<?> getOrderDetails(@PathVariable Long orderID) throws Exception {
+    public ResponseEntity<?> getOrderDetails(@PathVariable Long orderID) {
         if (orderID == null) {
             return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."),
                     HttpStatus.NOT_FOUND);

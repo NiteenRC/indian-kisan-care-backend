@@ -7,7 +7,6 @@ import com.nc.med.service.CategoryService;
 import com.nc.med.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,10 +19,13 @@ import java.util.Objects;
 @Validated
 public class ProductController {
     private final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private CategoryService categoryService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
+
+    public ProductController(ProductService productService, CategoryService categoryService) {
+        this.productService = productService;
+        this.categoryService = categoryService;
+    }
 
     @PostMapping
     public ResponseEntity<?> saveProducts(@RequestBody Product product) {

@@ -46,14 +46,16 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             if (!suppliers.isEmpty()) {
                 maxId += suppliers.stream().max(Comparator.comparing(Supplier::getId)).orElse(null).getId();
             }
-            order.setSupplier(supplierRepo.save(new Supplier("UNKNOWN" + maxId)));
+            order.setSupplier(supplierRepo.save(new Supplier("UNKNOWN_" + maxId, order.getSupplier().getPhoneNumber())));
         } else {
             String supplierName = supplier.getSupplierName().toUpperCase();
             Supplier supplierObj = supplierRepo.findBySupplierName(supplierName);
 
             if (supplierObj == null) {
-                supplierObj = supplierRepo.save(new Supplier(supplierName));
+                supplierObj = supplierRepo.save(new Supplier(supplierName, order.getSupplier().getPhoneNumber()));
             }
+            supplierObj.setPhoneNumber(order.getSupplier().getPhoneNumber());
+            supplierRepo.save(supplierObj);
             order.setSupplier(supplierObj);
 
             try {

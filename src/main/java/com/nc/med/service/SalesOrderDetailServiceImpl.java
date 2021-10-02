@@ -28,7 +28,8 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
 
     @Override
     public SalesOrderDetail saveSalesOrderDetail(SalesOrderDetail salesOrderDetail) throws Exception {
-        Product product = productRepo.getOne(salesOrderDetail.getProduct().getId());
+        Product product = productRepo.findById(salesOrderDetail.getProduct().getId()).orElse(null);
+        assert product != null;
         int productQty = product.getQty();
         int qtyOrdered = salesOrderDetail.getQtyOrdered();
 

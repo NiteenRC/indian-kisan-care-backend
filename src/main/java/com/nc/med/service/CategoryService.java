@@ -16,7 +16,5 @@ public interface CategoryService {
 
     List<Category> fetchAllCategories();
 
-    Category findCategoryById(Long id);
-
-	Category findByCategoryNameContainIgnoreCase(String categoryName);
+    Category findByCategoryNameContainIgnoreCase(String categoryName);
 }

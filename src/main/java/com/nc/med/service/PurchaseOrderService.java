@@ -1,6 +1,7 @@
 package com.nc.med.service;
 
 import com.nc.med.mapper.BalancePayment;
+import com.nc.med.mapper.SupplierBalance;
 import com.nc.med.mapper.SupplierBalanceSheet;
 import com.nc.med.model.PurchaseOrder;
 import com.nc.med.model.PurchaseOrderDetail;
@@ -18,7 +19,7 @@ public interface PurchaseOrderService {
 
     List<PurchaseOrder> findAllOrders();
 
-    double findSupplierBalanceBySupplier(Long supplierID);
+    SupplierBalance findSupplierBalanceBySupplier(Long supplierID);
 
     double findAllSuppliersBalance();
 

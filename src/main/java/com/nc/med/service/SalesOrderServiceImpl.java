@@ -96,9 +96,11 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
 
     @Override
-    public double findCustomerBalanceByCustomer(Long customerID) {
-        return salesOrderRepo.findAmountBalanceByCustomer(customerRepo.findById(customerID)
-                .orElse(null)).stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+    public CustomerBalance findCustomerBalanceByCustomer(Long customerID) {
+        Customer customer = customerRepo.findById(customerID).orElse(null);
+        double balance = salesOrderRepo.findAmountBalanceByCustomer(customer)
+                .stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+        return new CustomerBalance(customer, balance);
     }
 
     @Override
@@ -134,9 +136,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         List<BarChartModel> finalBarChartModelList = new ArrayList<>();
 
         for (Object[] objects : salesOrderObj) {
+            double dueAmount = (Double.parseDouble(objects[1].toString()) - Double.parseDouble(objects[2].toString()));
+            if (dueAmount < 0) {
+                dueAmount = 0;
+            }
             barChartModelList.add(new BarChartModel(objects[0].toString(),
                     Double.valueOf(objects[1].toString()),
-                    (Double.parseDouble(objects[1].toString()) - Double.parseDouble(objects[2].toString())),
+                    dueAmount,
                     Double.parseDouble(objects[3].toString())));
         }
 
@@ -145,9 +151,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     Double.valueOf(objects[1].toString())));
         }
 
-        for(BarChartModel barChartModel : barChartModelList){
-            for(BarChartModel barChartModel1: barChartDueCollectionModelList) {
-                if (barChartModel.getCreatedDate().equals(barChartModel1.getCreatedDate())){
+        for (BarChartModel barChartModel : barChartModelList) {
+            for (BarChartModel barChartModel1 : barChartDueCollectionModelList) {
+                if (barChartModel.getCreatedDate().equals(barChartModel1.getCreatedDate())) {
                     barChartModel.setDueCollection(Math.abs(barChartModel1.getDueCollection()));
                     break;
                 }

@@ -1,6 +1,7 @@
 package com.nc.med.service;
 
 import com.nc.med.mapper.BalancePayment;
+import com.nc.med.mapper.SupplierBalance;
 import com.nc.med.mapper.SupplierBalanceSheet;
 import com.nc.med.model.Product;
 import com.nc.med.model.PurchaseOrder;
@@ -160,10 +161,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    public double findSupplierBalanceBySupplier(Long supplierID) {
-        List<PurchaseOrder> purchaseOrders = purchaseOrderRepo
-                .findAmountBalanceBySupplier(supplierRepo.findById(supplierID).orElse(null));
-        return purchaseOrders.stream().mapToDouble(PurchaseOrder::getCurrentBalance).sum();
+    public SupplierBalance findSupplierBalanceBySupplier(Long supplierID) {
+        Supplier supplier = supplierRepo.findById(supplierID).orElse(null);
+        double balance = purchaseOrderRepo.findAmountBalanceBySupplier(supplier)
+                .stream().mapToDouble(PurchaseOrder::getCurrentBalance).sum();
+        return new SupplierBalance(supplier, balance);
     }
 
     @Override

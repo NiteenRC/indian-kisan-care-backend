@@ -1,9 +1,6 @@
 package com.nc.med.service;
 
-import com.nc.med.mapper.BarChartModel;
-import com.nc.med.mapper.CustomerBalanceSheet;
-import com.nc.med.mapper.SalesOrderSearch;
-import com.nc.med.mapper.StockBookData;
+import com.nc.med.mapper.*;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.model.SalesOrderDetail;
 
@@ -19,7 +16,7 @@ public interface SalesOrderService {
 
     List<SalesOrder> findAllOrders();
 
-    double findCustomerBalanceByCustomer(Long customerID);
+    CustomerBalance findCustomerBalanceByCustomer(Long customerID);
 
     double findAllCustomersBalance();
 

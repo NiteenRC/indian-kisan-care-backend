@@ -128,7 +128,10 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Override
     public List<BarChartModel> findBarChartModels() {
         List<Object[]> salesOrderObj = salesOrderRepo.fetchDailyTransaction();
+        List<Object[]> salesOrderObjDueCollection = salesOrderRepo.fetchDueDailyTransaction();
         List<BarChartModel> barChartModelList = new ArrayList<>();
+        List<BarChartModel> barChartDueCollectionModelList = new ArrayList<>();
+        List<BarChartModel> finalBarChartModelList = new ArrayList<>();
 
         for (Object[] objects : salesOrderObj) {
             barChartModelList.add(new BarChartModel(objects[0].toString(),
@@ -136,8 +139,22 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     (Double.parseDouble(objects[1].toString()) - Double.parseDouble(objects[2].toString())),
                     Double.parseDouble(objects[3].toString())));
         }
-        LOGGER.info("barChartModelList {} ", barChartModelList);
 
+        for (Object[] objects : salesOrderObjDueCollection) {
+            barChartDueCollectionModelList.add(new BarChartModel(objects[0].toString(),
+                    Double.valueOf(objects[1].toString())));
+        }
+
+        for(BarChartModel barChartModel : barChartModelList){
+            for(BarChartModel barChartModel1: barChartDueCollectionModelList) {
+                if (barChartModel.getCreatedDate().equals(barChartModel1.getCreatedDate())){
+                    barChartModel.setDueCollection(Math.abs(barChartModel1.getDueCollection()));
+                    break;
+                }
+            }
+            //finalBarChartModelList.add(barChartModel);
+        }
+        LOGGER.info("barChartModelList {} ", finalBarChartModelList);
         return barChartModelList;
     }
 

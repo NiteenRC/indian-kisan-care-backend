@@ -5,6 +5,7 @@ public class BarChartModel implements Comparable<BarChartModel> {
     private Double totalPrice;
     private Double dueAmount;
     private Double totalProfit;
+    private Double dueCollection;
 
     public BarChartModel(String createdDate, Double totalPrice, Double dueAmount, Double totalProfit) {
         super();
@@ -12,6 +13,30 @@ public class BarChartModel implements Comparable<BarChartModel> {
         this.totalPrice = totalPrice;
         this.dueAmount = dueAmount;
         this.totalProfit = totalProfit;
+    }
+
+    public BarChartModel(String createdDate, Double totalPrice, Double dueAmount, Double totalProfit, Double dueCollection) {
+        super();
+        this.createdDate = createdDate;
+        this.totalPrice = totalPrice;
+        this.dueAmount = dueAmount;
+        this.totalProfit = totalProfit;
+        this.dueCollection = dueCollection;
+    }
+
+    public BarChartModel(String createdDate, Double dueCollection) {
+        super();
+        this.createdDate = createdDate;
+        this.dueCollection = dueCollection;
+    }
+
+
+    public void setDueCollection(Double dueCollection) {
+        this.dueCollection = dueCollection;
+    }
+
+    public Double getDueCollection() {
+        return dueCollection;
     }
 
     public void setTotalProfit(Double totalProfit) {

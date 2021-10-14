@@ -61,15 +61,10 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             customerRepo.save(customerObj);
             order.setCustomer(customerObj);
 
-            try {
-                sum = order.getCurrentBalance();
-                sum += salesOrderRepo.findCurrentSum(customerObj);
-            } catch (Exception e) {
-                LOGGER.error(String.valueOf(e));
-            }
+           
         }
         // purchaseOrderRepo.updateAddress(supplier, sum);
-        order.setPreviousBalance(sum);
+        //order.setPreviousBalance(sum);
         return salesOrderRepo.save(order);
     }
 

@@ -2,7 +2,7 @@ spring:
   datasource:
     driverClassName: org.h2.Driver
     #url: jdbc:h2:mem:test_mem1015;DB_CLOSE_DELAY=-1
-    url: jdbc:h2:file:./build/h2db/db/smart_accounting_book_db_100?createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:file:./build/h2db/db/smart_accounting_book_db_106?createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
   jpa:
     hibernate:
       ddl-auto: update

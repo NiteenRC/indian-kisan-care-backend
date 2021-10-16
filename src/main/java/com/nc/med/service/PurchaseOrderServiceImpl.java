@@ -198,6 +198,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         order.setSupplier(supplierRepo.findById(balancePayment.getId()).orElse(null));
         order.setAmountPaid(balancePayment.getPayAmount());
         order.setCurrentBalance(-balancePayment.getPayAmount());
+		order.setPreviousBalance(balancePayment.getCurrentBalance() - balancePayment.getPayAmount());
         order.setPurchaseOrderDetail(Collections.emptyList());
         order.setBillDate(new Date());
         return order;

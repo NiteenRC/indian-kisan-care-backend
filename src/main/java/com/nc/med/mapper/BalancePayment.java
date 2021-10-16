@@ -3,6 +3,7 @@ package com.nc.med.mapper;
 public class BalancePayment {
 	private Long id;
 	private Double payAmount;
+	private double currentBalance;
 	private OrderStatus status;
 
 	public Long getId() {
@@ -11,6 +12,14 @@ public class BalancePayment {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public void setCurrentBalance(double currentBalance) {
+		this.currentBalance = currentBalance;
+	}
+	
+	public double getCurrentBalance() {
+		return currentBalance;
 	}
 
 	public Double getPayAmount() {

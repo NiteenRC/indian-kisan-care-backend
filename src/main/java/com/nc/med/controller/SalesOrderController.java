@@ -69,7 +69,8 @@ public class SalesOrderController {
         SalesOrder order = new SalesOrder();
         order.setCustomer(customerRepo.findById(balancePayment.getId()).orElse(null));
         order.setAmountPaid(balancePayment.getPayAmount());
-        order.setCurrentBalance(-balancePayment.getPayAmount());
+		order.setCurrentBalance(-balancePayment.getPayAmount());
+		order.setPreviousBalance(balancePayment.getCurrentBalance() - balancePayment.getPayAmount());
         order.setSalesOrderDetail(Collections.emptyList());
         order.setBillDate(new Date());
         order.setStatus(balancePayment.getStatus());

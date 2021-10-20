@@ -1,6 +1,11 @@
 package com.nc.med;
 
-import com.nc.med.service.AuditorAwareImpl;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -16,17 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.nc.med.service.AuditorAwareImpl;
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 
 @SpringBootApplication
 @EnableScheduling
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @RestController
+@EnableEncryptableProperties
 public class AppLauncher extends SpringBootServletInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(AppLauncher.class);
+    
+    //@Value("${spring.datasource.username}")
+    //private String userName;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         SpringApplication.run(AppLauncher.class);
@@ -43,17 +50,21 @@ public class AppLauncher extends SpringBootServletInitializer {
         return processComplete == 0;
     }
 
-    @Scheduled(fixedRate = 60 * 60 * 1000)
-    public void schedule() throws IOException, InterruptedException {
-        System.out.println("Backup Started at " + new Date());
-        Date backupDate = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
-        String dbNameList = "smart_001";
-        String saveFileName = format.format(backupDate) + "_smart_accounting_book_backup.sql";
-        String filePath = System.getProperty("user.home") + "/Documents/";
-        String savePath = filePath + File.separator + saveFileName;
-        backup("root", "Root@123", "smart_001", savePath);
-    }
+	@Scheduled(fixedRate = 60 * 60 * 1000)
+	public void schedule() throws IOException, InterruptedException {
+		try {
+			LOGGER.info("Backup Started at " + new Date());
+			Date backupDate = new Date();
+			SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+			String dbNameList = "smart_001";
+			String saveFileName = format.format(backupDate) + "_smart_accounting_book_backup.sql";
+			String filePath = System.getProperty("user.home") + "/Documents/";
+			String savePath = filePath + File.separator + saveFileName;
+			backup("root", "Root@123", dbNameList, savePath);
+		} catch (Exception e) {
+			LOGGER.error("Unable to take backup of mysql");
+		}
+	}
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

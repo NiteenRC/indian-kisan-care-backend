@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.nc.med.repo.RoleRepository;
@@ -43,6 +44,8 @@ public class HostConfiguration {
 	}
 
 	@PostConstruct
+	@Scheduled(cron="0 0 0 1 1/1 *")//every month 1st day
+	//@Scheduled(cron="*/10 * * * * *" )//every second
 	public void expire() {
 		Calendar expireDate = Calendar.getInstance();
 		expireDate.set(2022, 7, 31);

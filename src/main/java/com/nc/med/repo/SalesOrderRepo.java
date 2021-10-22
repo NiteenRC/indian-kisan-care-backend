@@ -15,11 +15,14 @@ public interface SalesOrderRepo extends JpaRepository<SalesOrder, Long> {
 
     List<SalesOrder> findAllByCustomer(Customer customer);
 
-    @Query(value = "select CAST(bill_date AS DATE), sum(total_price), sum(amount_paid), sum(total_profit) from sales_order WHERE CURRENT_BALANCE > 0 GROUP BY CAST(bill_date AS DATE) order by CAST(bill_date AS DATE) desc", nativeQuery = true)
+    @Query(value = "select CAST(bill_date AS DATE), sum(total_price), sum(amount_paid), sum(total_profit) from sales_order GROUP BY CAST(bill_date AS DATE) order by CAST(bill_date AS DATE) desc", nativeQuery = true)
     List<Object[]> fetchDailyTransaction();
 
     @Query(value = "select CAST(bill_date AS DATE), sum(current_balance) from sales_order where current_balance < 0 GROUP BY CAST(bill_date AS DATE)", nativeQuery = true)
     List<Object[]> fetchDueDailyTransaction();
+    
+    @Query(value = "select CAST(bill_date AS DATE), sum(current_balance) from sales_order where current_balance > 0 GROUP BY CAST(bill_date AS DATE)", nativeQuery = true)
+    List<Object[]> fetchDueGivenDailyTransaction();
 
     List<SalesOrder> findByCustomerIdAndCreatedDateBetweenAndStatus(Long customerId, LocalDateTime startDate,
                                                                     LocalDateTime endDate, OrderStatus orderStatus);

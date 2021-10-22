@@ -3,11 +3,11 @@ package com.nc.med.mapper;
 public class BarChartModel implements Comparable<BarChartModel> {
     private String createdDate;
     private Double totalPrice;
-    private Double dueAmount;
+    private int dueAmount;
     private double totalProfit;
     private double dueCollection;
 
-    public BarChartModel(String createdDate, Double totalPrice, double dueAmount, double totalProfit) {
+    public BarChartModel(String createdDate, Double totalPrice, int dueAmount, double totalProfit) {
         super();
         this.createdDate = createdDate;
         this.totalPrice = totalPrice;
@@ -15,7 +15,7 @@ public class BarChartModel implements Comparable<BarChartModel> {
         this.totalProfit = totalProfit;
     }
 
-    public BarChartModel(String createdDate, Double totalPrice, Double dueAmount, double totalProfit, double dueCollection) {
+    public BarChartModel(String createdDate, Double totalPrice, int dueAmount, double totalProfit, double dueCollection) {
         super();
         this.createdDate = createdDate;
         this.totalPrice = totalPrice;
@@ -28,6 +28,12 @@ public class BarChartModel implements Comparable<BarChartModel> {
         super();
         this.createdDate = createdDate;
         this.dueCollection = dueCollection;
+    }
+    
+    public BarChartModel(String createdDate, int dueAmount) {
+        super();
+        this.createdDate = createdDate;
+        this.dueAmount = dueAmount;
     }
 
 
@@ -47,11 +53,11 @@ public class BarChartModel implements Comparable<BarChartModel> {
         return totalProfit;
     }
 
-    public void setDueAmount(Double dueAmount) {
+    public void setDueAmount(int dueAmount) {
         this.dueAmount = dueAmount;
     }
 
-    public Double getDueAmount() {
+    public int getDueAmount() {
         return dueAmount;
     }
 

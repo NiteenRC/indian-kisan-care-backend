@@ -141,41 +141,53 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
 
     @Override
-    public List<BarChartModel> findBarChartModels() {
-        List<Object[]> salesOrderObj = salesOrderRepo.fetchDailyTransaction();
-        List<Object[]> salesOrderObjDueCollection = salesOrderRepo.fetchDueDailyTransaction();
-        List<BarChartModel> barChartModelList = new ArrayList<>();
-        List<BarChartModel> barChartDueCollectionModelList = new ArrayList<>();
-        List<BarChartModel> finalBarChartModelList = new ArrayList<>();
+	public List<BarChartModel> findBarChartModels() {
+		List<Object[]> salesOrderObj = salesOrderRepo.fetchDailyTransaction();
+		List<Object[]> salesOrderObjDueCollection = salesOrderRepo.fetchDueDailyTransaction();
+		List<Object[]> salesOrderObjDueGivenCollection = salesOrderRepo.fetchDueGivenDailyTransaction();
+		List<BarChartModel> barChartModelList = new ArrayList<>();
+		List<BarChartModel> barChartDueCollectionModelList = new ArrayList<>();
+		List<BarChartModel> barChartDueGivenCollectionModelList = new ArrayList<>();
+		List<BarChartModel> finalBarChartModelList = new ArrayList<>();
 
-        for (Object[] objects : salesOrderObj) {
-            double dueAmount = (Double.parseDouble(objects[1].toString()) - Double.parseDouble(objects[2].toString()));
-            if (dueAmount < 0) {
-                dueAmount = 0;
-            }
-            barChartModelList.add(new BarChartModel(objects[0].toString(),
-                    Double.valueOf(objects[1].toString()),
-                    dueAmount,
-                    Double.parseDouble(objects[3].toString())));
-        }
+		for (Object[] objects : salesOrderObj) {
+			int dueAmount = (int) (Double.parseDouble(objects[1].toString()) - Double.parseDouble(objects[2].toString()));
+			if (dueAmount < 0) {
+				dueAmount = 0;
+			}
+			barChartModelList.add(new BarChartModel(objects[0].toString(), Double.valueOf(objects[1].toString()),
+					dueAmount, Double.parseDouble(objects[3].toString())));
+		}
 
-        for (Object[] objects : salesOrderObjDueCollection) {
-            barChartDueCollectionModelList.add(new BarChartModel(objects[0].toString(),
-                    Double.valueOf(objects[1].toString())));
-        }
+		for (Object[] objects : salesOrderObjDueCollection) {
+			barChartDueCollectionModelList
+					.add(new BarChartModel(objects[0].toString(), Double.valueOf(objects[1].toString())));
+		}
 
-        for (BarChartModel barChartModel : barChartModelList) {
-            for (BarChartModel barChartModel1 : barChartDueCollectionModelList) {
-                if (barChartModel.getCreatedDate().equals(barChartModel1.getCreatedDate())) {
-                    barChartModel.setDueCollection(Math.abs(barChartModel1.getDueCollection()));
-                    break;
-                }
-            }
-            //finalBarChartModelList.add(barChartModel);
-        }
-        LOGGER.info("barChartModelList {} ", finalBarChartModelList);
-        return barChartModelList;
-    }
+		for (Object[] objects : salesOrderObjDueGivenCollection) {
+			barChartDueGivenCollectionModelList
+					.add(new BarChartModel(objects[0].toString(), (int)Double.parseDouble(objects[1].toString())));
+		}
+
+		for (BarChartModel barChartModel : barChartModelList) {
+			for (BarChartModel barChartModel1 : barChartDueCollectionModelList) {
+				if (barChartModel.getCreatedDate().equals(barChartModel1.getCreatedDate())) {
+					barChartModel.setDueCollection(Math.abs(barChartModel1.getDueCollection()));
+					break;
+				}
+			}
+
+			for (BarChartModel barChartModel1 : barChartDueGivenCollectionModelList) {
+				if (barChartModel.getCreatedDate().equals(barChartModel1.getCreatedDate())) {
+					barChartModel.setDueAmount(Math.abs(barChartModel1.getDueAmount()));
+					break;
+				}
+			}
+			finalBarChartModelList.add(barChartModel);
+		}
+		LOGGER.info("barChartModelList {} ", finalBarChartModelList);
+		return finalBarChartModelList;
+	}
 
     @Override
     public List<SalesOrder> findAllByCustomer(Long customerID) {

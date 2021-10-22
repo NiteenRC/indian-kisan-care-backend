@@ -37,17 +37,8 @@ public class InitializeData {
 		}
 	}
 	
-	//@EventListener(ApplicationReadyEvent.class)
-	public void loadDataUnknown() {
-		if (customerRepo.findAll().isEmpty()) {
-			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
-					new ClassPathResource("/scripts/unknown_schema.sql"));
-			resourceDatabasePopulator.execute(dataSource);
-		}
-	}
-	
 
-	@EventListener(ApplicationReadyEvent.class)
+	//@EventListener(ApplicationReadyEvent.class)
 	public void loadDataProduct() {
 		if (productRepo.findAll().isEmpty()) {
 			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
@@ -57,7 +48,7 @@ public class InitializeData {
 		}
 	}
 
-	//@EventListener(ApplicationReadyEvent.class)
+	@EventListener(ApplicationReadyEvent.class)
 	public void loadDataUser() {
 		if (userRepository.findAll().isEmpty()) {
 			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",

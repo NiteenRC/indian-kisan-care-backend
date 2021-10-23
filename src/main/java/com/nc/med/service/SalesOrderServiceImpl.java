@@ -54,7 +54,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Override
     public SalesOrder saveOrder(SalesOrder order) {
-        double sum = 0.0d;
         int totalQty = order.getSalesOrderDetail().stream().mapToInt(SalesOrderDetail::getQtyOrdered).sum();
         order.setTotalQty(totalQty);
 

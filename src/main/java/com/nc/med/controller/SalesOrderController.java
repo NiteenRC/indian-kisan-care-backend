@@ -6,6 +6,7 @@ import com.nc.med.mapper.SalesOrderSearch;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.model.SalesOrderDetail;
 import com.nc.med.repo.CustomerRepo;
+import com.nc.med.repo.SalesOrderRepo;
 import com.nc.med.service.SalesOrderDetailService;
 import com.nc.med.service.SalesOrderService;
 import com.nc.med.util.ValidationProperties;
@@ -32,12 +33,14 @@ public class SalesOrderController {
     private final SalesOrderDetailService orderDetailService;
     private final ValidationProperties validationProperties;
     private final CustomerRepo customerRepo;
+    private final SalesOrderRepo salesOrderRepo;
 
-    public SalesOrderController(SalesOrderService orderService, SalesOrderDetailService orderDetailService, ValidationProperties validationProperties, CustomerRepo customerRepo) {
+    public SalesOrderController(SalesOrderService orderService, SalesOrderDetailService orderDetailService, ValidationProperties validationProperties, CustomerRepo customerRepo, SalesOrderRepo salesOrderRepo) {
         this.orderService = orderService;
         this.orderDetailService = orderDetailService;
         this.validationProperties = validationProperties;
         this.customerRepo = customerRepo;
+        this.salesOrderRepo = salesOrderRepo;
     }
 
     @PostMapping
@@ -59,8 +62,8 @@ public class SalesOrderController {
                 return ResponseEntity.ok(new CustomErrorTypeException(validationProperties.getStock()));
             }
         }
-        salesOrder.setTotalProfit(totalProfit);
-        salesOrderRes = orderService.saveOrder(salesOrder);
+        salesOrderRes.setTotalProfit(totalProfit);
+        salesOrderRes = salesOrderRepo.save(salesOrderRes);
         return ResponseEntity.ok(salesOrderRes);
     }
 

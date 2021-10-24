@@ -77,11 +77,20 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             customerObj.setPhoneNumber(order.getCustomer().getPhoneNumber());
             customerRepo.save(customerObj);
             order.setCustomer(customerObj);
-
-           
+        }
+        
+        double due = order.getPreviousBalance() - order.getCurrentBalance() - order.getAmountPaid();
+        if(due <= 0) {
+        	due = due+order.getTotalPrice();
+        	order.setPreviousBalance(due);
+        	order.setCurrentBalance(due);
+        } else {
+        	due = due+order.getTotalPrice();
+        	order.setPreviousBalance(due);
+        	order.setCurrentBalance(order.getTotalPrice());
         }
         // purchaseOrderRepo.updateAddress(supplier, sum);
-        //order.setPreviousBalance(sum);
+        //order.setCurrentBalance(order.getPreviousBalance()-order.getCurrentBalance());
         return salesOrderRepo.save(order);
     }
 
@@ -110,8 +119,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Override
     public CustomerBalance findCustomerBalanceByCustomer(Long customerID) {
         Customer customer = customerRepo.findById(customerID).orElse(null);
-        double balance = salesOrderRepo.findAmountBalanceByCustomer(customer)
-                .stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+        double balance = salesOrderRepo.findDueAmount(customer);
         return new CustomerBalance(customer, balance);
     }
 
@@ -127,8 +135,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     List<SalesOrder> salesOrders = x.getValue();
                     double totalPrice = salesOrders.stream().mapToDouble(SalesOrder::getTotalPrice).sum();
                     double amountPaid = salesOrders.stream().mapToDouble(SalesOrder::getAmountPaid).sum();
-                    double dueAmount = salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
-
+                    //double dueAmount = salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+                    double dueAmount = salesOrderRepo.findDueAmount(x.getKey());
+                    
                     int size = salesOrders.size();
                     SalesOrder order = salesOrders.get(size - 1);
                     Date billDate = order.getBillDate();

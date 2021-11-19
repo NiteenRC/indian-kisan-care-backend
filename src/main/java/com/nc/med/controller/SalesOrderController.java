@@ -77,6 +77,7 @@ public class SalesOrderController {
         order.setSalesOrderDetail(Collections.emptyList());
         order.setBillDate(new Date());
         order.setStatus(balancePayment.getStatus());
+        order.setCurrentDue(orderService.findCustomerBalanceByCustomer(order.getCustomer().getId()).getBalance());
         SalesOrder salesOrderRes = orderService.saveOrder(order);
         return ResponseEntity.ok(salesOrderRes);
     }

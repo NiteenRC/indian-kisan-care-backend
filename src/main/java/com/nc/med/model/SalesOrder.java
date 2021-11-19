@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.nc.med.mapper.DeliverStatus;
 import com.nc.med.mapper.OrderStatus;
 
 @Entity
@@ -35,6 +36,8 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 	private int totalQty;
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
+	@Enumerated(EnumType.STRING)
+	private DeliverStatus deliverStatus;
 	@ManyToOne(cascade=CascadeType.MERGE)
 	private Customer customer;
 	@OneToMany(mappedBy = "salesOrder", fetch = FetchType.EAGER)
@@ -46,7 +49,16 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date billDate;
 	private double totalProfit;
+	private double currentDue;
 	
+	public DeliverStatus getDeliverStatus() {
+		return deliverStatus;
+	}
+
+	public void setDeliverStatus(DeliverStatus deliverStatus) {
+		this.deliverStatus = deliverStatus;
+	}
+
 	public Date getBillDate() {
 		return billDate;
 	}
@@ -175,5 +187,13 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
 	@Override
 	public int hashCode() {
 		return Objects.hash(billDate);
+	}
+
+	public double getCurrentDue() {
+		return currentDue;
+	}
+
+	public void setCurrentDue(double currentDue) {
+		this.currentDue = currentDue;
 	}
 }

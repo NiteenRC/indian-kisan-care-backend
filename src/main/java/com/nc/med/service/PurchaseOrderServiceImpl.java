@@ -43,11 +43,17 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
         if (Objects.equals(supplier.getSupplierName(), "")) {
             List<Supplier> suppliers = supplierRepo.findAll();
-            Long maxId = 1L;
+            long maxId = 1L;
             if (!suppliers.isEmpty()) {
-                maxId += suppliers.stream().max(Comparator.comparing(Supplier::getId)).orElse(null).getId();
+                Optional<Supplier> supplierOptional = Objects
+                        .requireNonNull(suppliers.stream().filter(x -> x.getSupplierName().contains("UNKNOWN_")))
+                        .max(Comparator.comparing(Supplier::getId));
+                if (supplierOptional.isPresent()) {
+                    maxId += Long.parseLong(supplierOptional.get().getSupplierName().split("_")[1]);
+                }
             }
-            order.setSupplier(supplierRepo.save(new Supplier("UNKNOWN_" + maxId, order.getSupplier().getPhoneNumber())));
+            order.setSupplier(
+                    supplierRepo.save(new Supplier("UNKNOWN_" + maxId, order.getSupplier().getPhoneNumber())));
         } else {
             String supplierName = supplier.getSupplierName().toUpperCase();
             Supplier supplierObj = supplierRepo.findBySupplierName(supplierName);
@@ -198,7 +204,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         order.setSupplier(supplierRepo.findById(balancePayment.getId()).orElse(null));
         order.setAmountPaid(balancePayment.getPayAmount());
         order.setCurrentBalance(-balancePayment.getPayAmount());
-		order.setPreviousBalance(balancePayment.getCurrentBalance() - balancePayment.getPayAmount());
+        order.setPreviousBalance(balancePayment.getCurrentBalance() - balancePayment.getPayAmount());
         order.setPurchaseOrderDetail(Collections.emptyList());
         order.setBillDate(new Date());
         return order;

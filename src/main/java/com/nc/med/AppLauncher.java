@@ -8,6 +8,7 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -32,13 +33,18 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 public class AppLauncher extends SpringBootServletInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(AppLauncher.class);
     
-    //@Value("${spring.datasource.username}")
-    //private String userName;
+    @Value("${spring.datasource.username}")
+    private String userName;
+    
+    @Value("${spring.datasource.password}")
+    private String password;
+    
+    @Value("${root.dir.path}")
+    private String rootDirPath;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         SpringApplication.run(AppLauncher.class);
     }
-
 
     public static boolean backup(String dbUsername, String dbPassword, String dbName, String outputFile)
             throws IOException, InterruptedException {
@@ -58,9 +64,8 @@ public class AppLauncher extends SpringBootServletInitializer {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
 			String dbNameList = "smart_001";
 			String saveFileName = format.format(backupDate) + "_smart_accounting_book_backup.sql";
-			String filePath = System.getProperty("user.home") + "/Documents/";
-			String savePath = filePath + File.separator + saveFileName;
-			backup("root", "Root@123", dbNameList, savePath);
+			String savePath = rootDirPath + File.separator + saveFileName;
+			backup(userName, password, dbNameList, savePath);
 		} catch (Exception e) {
 			LOGGER.error("Unable to take backup of mysql");
 		}

@@ -1,7 +1,11 @@
+import com.nc.med.mapper.CustomerBalance;
 import com.nc.med.mapper.OrderStatus;
+import com.nc.med.mapper.SupplierBalance;
 import com.nc.med.model.PurchaseOrder;
 import com.nc.med.model.PurchaseOrderDetail;
+import com.nc.med.model.Supplier;
 import com.nc.med.repo.PurchaseOrderRepo;
+import com.nc.med.repo.SupplierRepo;
 import com.nc.med.service.PurchaseOrderService;
 import com.nc.med.service.PurchaseOrderServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -18,33 +22,49 @@ import java.util.List;
 
 @SpringBootTest(classes = PurchaseOrderService.class)
 public class PurchaseOrderServiceTest {
-    @Mock
-    private PurchaseOrderRepo purchaseOrderRepo;
+	@Mock
+	private PurchaseOrderRepo purchaseOrderRepo;
 
-    @InjectMocks
-    private PurchaseOrderServiceImpl purchaseOrderService;
+	@Mock
+	private SupplierRepo supplierRepo;
 
-    private final List<PurchaseOrder> purchaseOrderList = new ArrayList<>();
+	@InjectMocks
+	private PurchaseOrderServiceImpl purchaseOrderService;
 
-    @BeforeEach
-    public void init() {
-        PurchaseOrder purchaseOrder = new PurchaseOrder();
-        purchaseOrder.setPurchaseOrderID(1L);
-        purchaseOrder.setTotalPrice(1000);
-        purchaseOrder.setAmountPaid(900);
-        purchaseOrder.setTotalQty(10);
-        purchaseOrder.setStatus(OrderStatus.PARTIAL);
+	private final List<PurchaseOrder> purchaseOrderList = new ArrayList<>();
 
-        PurchaseOrderDetail purchaseOrderDetail = new PurchaseOrderDetail();
-        purchaseOrderDetail.setPurchaseOrderDetailID(3L);
-        //purchaseOrderDetail.setProduct();
-        //purchaseOrder.setPurchaseOrderDetail(purchaseOrderDetail);
-        purchaseOrderList.add(purchaseOrder);
-        Mockito.when(purchaseOrderRepo.findAll(Sort.by("billDate").descending())).thenReturn(purchaseOrderList);
-    }
+	@BeforeEach
+	public void init() {
+		PurchaseOrder purchaseOrder = new PurchaseOrder();
+		purchaseOrder.setPurchaseOrderID(1L);
+		purchaseOrder.setTotalPrice(1000);
+		purchaseOrder.setAmountPaid(900);
+		purchaseOrder.setTotalQty(10);
+		purchaseOrder.setStatus(OrderStatus.PARTIAL);
+		purchaseOrder.setCurrentBalance(50);
+		Supplier supplier = new Supplier();
+		supplier.setId(1L);
+		purchaseOrder.setSupplier(supplier);
 
-    @Test
-    public void findAllTest() {
-        Assertions.assertEquals(purchaseOrderList, purchaseOrderService.findAllOrders());
-    }
+		PurchaseOrderDetail purchaseOrderDetail = new PurchaseOrderDetail();
+		purchaseOrderDetail.setPurchaseOrderDetailID(3L);
+		// purchaseOrderDetail.setProduct();
+		// purchaseOrder.setPurchaseOrderDetail(purchaseOrderDetail);
+		purchaseOrderList.add(purchaseOrder);
+		Mockito.when(purchaseOrderRepo.findAll(Sort.by("billDate").descending())).thenReturn(purchaseOrderList);
+	}
+
+	@Test
+	public void findAllTest() {
+		Assertions.assertEquals(purchaseOrderList, purchaseOrderService.findAllOrders());
+	}
+
+	@Test
+	public void findCustomerBalanceByCustomerTest() {
+		Supplier supplier = supplierRepo.findById(1L).orElse(null);
+		Mockito.when(purchaseOrderRepo.findAmountBalanceBySupplier(supplier)).thenReturn(purchaseOrderList);
+
+		SupplierBalance supplierBalance = purchaseOrderService.findSupplierBalanceBySupplier(1L);
+		Assertions.assertEquals(50, supplierBalance.getBalance());
+	}
 }

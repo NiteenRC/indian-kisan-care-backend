@@ -1,6 +1,7 @@
 package com.nc.med.service;
 
 import com.nc.med.mapper.*;
+import com.nc.med.model.DailySummary;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.model.SalesOrderDetail;
 
@@ -22,7 +23,7 @@ public interface SalesOrderService {
 
     List<CustomerBalanceSheet> findCurrentBalanceByCustomers();
 
-    List<BarChartModel> findBarChartModels();
+    List<DailySummary> findBarChartModels();
 
     List<SalesOrder> findAllByCustomer(Long customerID);
 

@@ -27,7 +27,7 @@ brew services stop mysql
 
 **LINK & RUN APPLCATION:**
 docker run -t --name spring-app-jpa-container --link mysql-docker-container:mysql -p 8080:8080 niteenjava/smart-accounting-book
-
+docker run -t --name spring-app-jpa-container -p 8080:8080 niteenjava/smart-accounting-book
 
 **USEFUL DOCKER COMMANDS:**
 docker images;

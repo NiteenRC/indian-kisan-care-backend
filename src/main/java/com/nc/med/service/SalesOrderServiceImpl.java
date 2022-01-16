@@ -121,13 +121,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 todays_collections = todays_collections + paid;
             }
         }
-
+        
         List<DailySummary> dailySummaries = dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(),
                 order.getCustomer());
-        
-        if(order.getCustomer() != null) {
-        	System.out.println("aas");
-        }
 
         if (dailySummaries.isEmpty()) {
             dailySummary = new DailySummary(order.getBillDate(), order.getTotalPrice(), order.getTotalProfit(),
@@ -145,6 +141,22 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         }
         dailySummaryRepository.save(dailySummary);
         return salesOrderRepo.save(order);
+    }
+    
+    @Override
+    public void saveProfitInDailySummary(SalesOrder order, Customer customer, double profit) {
+    	List<DailySummary> dailySummaries = dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(),
+                order.getCustomer());
+    	
+    	DailySummary dailySummary = new DailySummary();
+        if (dailySummaries.isEmpty()) {
+            dailySummary.setProfit(profit);
+        } else {
+            dailySummary = dailySummaries.get(0);
+            profit += dailySummary.getProfit();
+            dailySummary.setProfit(profit);
+        }
+        dailySummaryRepository.save(dailySummary);
     }
 
     @Override

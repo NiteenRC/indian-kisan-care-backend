@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -54,6 +55,16 @@ public class ProductController {
                     HttpStatus.CONFLICT);
         }
 
+    }
+
+    @PutMapping("/updatePrice")
+    public ResponseEntity<?> updateProducts(@RequestBody List<Product> products) {
+        products.forEach(product -> {
+            Product productObj = productService.findByProductID(product.getId());
+            productObj.setCurrentPrice(product.getPrice());
+            productService.saveProduct(productObj);
+        });
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/{categoryID}")

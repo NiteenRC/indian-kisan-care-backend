@@ -1,6 +1,7 @@
 package com.nc.med.service;
 
 import com.nc.med.mapper.*;
+import com.nc.med.model.Customer;
 import com.nc.med.model.DailySummary;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.model.SalesOrderDetail;
@@ -32,4 +33,6 @@ public interface SalesOrderService {
     StockBookData findStockDataByDateAndProduct(String productName, LocalDate startDate, LocalDate endDate);
 
     List<SalesOrderDetail> deleteOrderDetails(SalesOrderDetail orderDetail);
+
+	void saveProfitInDailySummary(SalesOrder order, Customer customer, double profit);
 }

@@ -148,6 +148,15 @@ public class SalesOrderController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
+    @GetMapping("/{orderID}")
+    public ResponseEntity<?> getOrder(@PathVariable Long orderID) {
+        SalesOrder order = orderService.findByOrderID(orderID);
+        if (order == null) {
+            return new ResponseEntity<>(new CustomErrorTypeException("orderID: " + orderID + " not found."), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
     @DeleteMapping("/details/{orderID}")
     public ResponseEntity<?> deleteOrderDetails(@PathVariable Long orderID) {
         SalesOrderDetail order = orderDetailService.findById(orderID);

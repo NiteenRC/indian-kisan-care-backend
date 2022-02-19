@@ -6,7 +6,6 @@ import com.nc.med.repo.ProductRepo;
 import com.nc.med.service.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,12 +19,13 @@ import java.util.Objects;
 @Validated
 public class CategoryController {
     public static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+    public final CategoryService categoryService;
+    public final ProductRepo productRepo;
 
-    @Autowired
-    public CategoryService categoryService;
-
-    @Autowired
-    public ProductRepo productRepo;
+    public CategoryController(CategoryService categoryService, ProductRepo productRepo) {
+        this.categoryService = categoryService;
+        this.productRepo = productRepo;
+    }
 
     @PostMapping
     public ResponseEntity<?> addCategory(@RequestBody Category category) {

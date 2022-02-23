@@ -59,7 +59,7 @@ public class SalesOrderServiceTest {
 		Date billDate = null;
 		try {
 			billDate = dmyFormat.parse(StringFormatDate);
-		} catch (ParseException e) {
+		} catch (ParseException ignored) {
 		}
 
 		SalesOrder salesOrder = new SalesOrder();
@@ -70,17 +70,17 @@ public class SalesOrderServiceTest {
 		salesOrder.setStatus(OrderStatus.PARTIAL);
 		salesOrder.setCurrentBalance(50);
 		salesOrder.setBillDate(billDate);
-		Customer customer = new Customer("AAA", "98323453245");
+		Customer customer = Customer.builder().customerName("AAA").phoneNumber("98323453245").build();
 		salesOrder.setCustomer(customer);
 
-		Category category = new Category("Fertilizer");
-		Product product = new Product(new Date(), 100, "", "", 0, category);
+		Category category = Category.builder().categoryName("Fertilizer").build();
+		Product product = Product.builder().createdDate(new Date()).price(100).productDesc("").productName("").qty(0).category(category).build();
 
 		SalesOrderDetail salesOrderDetail = new SalesOrderDetail();
 		salesOrderDetail.setSalesOrderDetailID(3L);
 		salesOrderDetail.setProduct(product);
 		salesOrderDetail.setQtyOrdered(10);
-		salesOrder.setSalesOrderDetail(Arrays.asList(salesOrderDetail));
+		salesOrder.setSalesOrderDetail(Collections.singletonList(salesOrderDetail));
 		salesOrderList.add(salesOrder);
 		// Mockito.when(salesOrderRepo.findAll(Sort.by("billDate").descending())).thenReturn(SalesOrderList);
 		return salesOrderList;
@@ -94,11 +94,11 @@ public class SalesOrderServiceTest {
 
 	@Test
 	public void findCustomerBalanceByCustomerTest() {
-		Customer Customer = customerRepo.findById(1L).orElse(null);
-		Customer customer2 = new Customer("AA", "12342");
+		Customer customer = customerRepo.findById(1L).orElse(null);
+		Customer customer2 = Customer.builder().customerName("AA").phoneNumber("12342").build();
 		Optional<Customer> optional = Optional.of(customer2);
 		Mockito.when(customerRepo.findById(1L)).thenReturn(optional);
-		Mockito.when(salesOrderRepo.findAmountBalanceByCustomer(Customer)).thenReturn(getSalesOrder());
+		Mockito.when(salesOrderRepo.findAmountBalanceByCustomer(customer)).thenReturn(getSalesOrder());
 
 		CustomerBalance CustomerBalance = salesOrderService.findCustomerBalanceByCustomer(1L);
 		// Assertions.assertEquals(50, CustomerBalance.getBalance());
@@ -130,7 +130,7 @@ public class SalesOrderServiceTest {
 	public void saveOrderNoCustomerTest() throws ParseException {
 		SalesOrder order = getSalesOrder().get(0);
 		order.setCurrentDue(100L);
-		Customer customer = new Customer("", "");
+		Customer customer = Customer.builder().customerName("").phoneNumber("").build();
 		order.setCustomer(customer);
 		List<DailySummary> dailySummaries = Collections.emptyList();
 
@@ -145,9 +145,9 @@ public class SalesOrderServiceTest {
 	public void saveOrderNoCustomer1Test() throws ParseException {
 		SalesOrder order = getSalesOrder().get(0);
 		order.setCurrentDue(100L);
-		Customer customer = new Customer("", "");
+		Customer customer = Customer.builder().customerName("").phoneNumber("").build();
 		order.setCustomer(customer);
-		Customer customer1 = new Customer("AAA", "234242");
+		Customer customer1 = Customer.builder().customerName("AAA").phoneNumber("98323453245").build();
 		customer.setId(2L);
 		Mockito.when(customerRepo.findAll()).thenReturn(Arrays.asList(customer1));
 		List<DailySummary> dailySummaries = Collections.emptyList();

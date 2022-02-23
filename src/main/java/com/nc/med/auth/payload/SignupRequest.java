@@ -1,5 +1,10 @@
 package com.nc.med.auth.payload;
 
+import com.nc.med.model.BankAccount;
+import com.nc.med.model.User;
+
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.util.Set;
 
 public class SignupRequest {
@@ -7,6 +12,24 @@ public class SignupRequest {
     private String email;
     private Set<String> role;
     private String password;
+    private BankAccount bankAccount;
+    private User user;
+
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getUsername() {
         return username;

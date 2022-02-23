@@ -61,7 +61,7 @@ public class InitializeData {
 	public void loadDataProducts() {
 		if (userRepository.findAll().isEmpty()) {
 			ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
-					new ClassPathResource("/scripts/products_schema.sql"));
+					new ClassPathResource("/scripts/roles_schema.sql"));
 			resourceDatabasePopulator.execute(dataSource);
 		}
 	}

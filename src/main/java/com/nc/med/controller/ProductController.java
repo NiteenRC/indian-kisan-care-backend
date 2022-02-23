@@ -5,11 +5,10 @@ import com.nc.med.model.Category;
 import com.nc.med.model.Product;
 import com.nc.med.service.CategoryService;
 import com.nc.med.service.ProductService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,16 +16,11 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/product")
-@Validated
+@AllArgsConstructor
+@Slf4j
 public class ProductController {
-    private final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
     private final ProductService productService;
     private final CategoryService categoryService;
-
-    public ProductController(ProductService productService, CategoryService categoryService) {
-        this.productService = productService;
-        this.categoryService = categoryService;
-    }
 
     @PostMapping
     public ResponseEntity<?> saveProducts(@RequestBody Product product) {
@@ -73,7 +67,7 @@ public class ProductController {
         product.setCategory(category);
         Product productName = productService.findByProductName(product.getProductName());
         if (productName != null) {
-            LOGGER.info("Product already exist!!");
+            log.info("Product already exist!!");
             return new ResponseEntity<>(new CustomErrorTypeException("Product already exist!!"),
                     HttpStatus.NOT_FOUND);
         }

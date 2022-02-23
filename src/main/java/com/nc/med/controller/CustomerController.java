@@ -3,6 +3,7 @@ package com.nc.med.controller;
 import java.util.List;
 import java.util.Objects;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,9 @@ import com.nc.med.service.CustomerService;
 @RestController
 @RequestMapping("/customer")
 @Validated
+@AllArgsConstructor
 public class CustomerController {
-
 	public static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
-
-	@Autowired
 	public CustomerService customerService;
 
 	@PostMapping
@@ -46,11 +45,6 @@ public class CustomerController {
 					HttpStatus.NOT_FOUND);
 		}
 		customer.setCustomerName(customerName);
-		return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.CREATED);
-	}
-
-	@PostMapping("/sales")
-	public ResponseEntity<?> addCustomerSales(@RequestBody Customer customer) {
 		return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.CREATED);
 	}
 

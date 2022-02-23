@@ -54,13 +54,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 }
             }
             order.setCustomer(
-                    customerRepo.save(new Customer("UNKNOWN_" + maxId, order.getCustomer().getPhoneNumber())));
+                    customerRepo.save(Customer.builder().customerName("UNKNOWN_" + maxId).phoneNumber(order.getCustomer().getPhoneNumber()).build()));
         } else {
             String customerName = customer.getCustomerName().toUpperCase();
             Customer customerObj = customerRepo.findByCustomerName(customerName);
 
             if (customerObj == null) {
-                customerObj = customerRepo.save(new Customer(customerName, order.getCustomer().getPhoneNumber()));
+                customerObj = customerRepo.save(Customer.builder().customerName(customerName).phoneNumber(order.getCustomer().getPhoneNumber()).build());
             }
             customerObj.setPhoneNumber(order.getCustomer().getPhoneNumber());
             customerRepo.save(customerObj);
@@ -121,7 +121,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 todays_collections = todays_collections + paid;
             }
         }
-        
+
         List<DailySummary> dailySummaries = dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(),
                 order.getCustomer());
 
@@ -142,13 +142,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         dailySummaryRepository.save(dailySummary);
         return salesOrderRepo.save(order);
     }
-    
+
     @Override
     public void saveProfitInDailySummary(SalesOrder order, Customer customer, double profit) {
-    	List<DailySummary> dailySummaries = dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(),
+        List<DailySummary> dailySummaries = dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(),
                 order.getCustomer());
-    	
-    	DailySummary dailySummary = new DailySummary();
+
+        DailySummary dailySummary = new DailySummary();
         if (dailySummaries.isEmpty()) {
             dailySummary.setProfit(profit);
         } else {

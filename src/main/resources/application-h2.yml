@@ -1,13 +1,8 @@
-
-root:
-  dir: 
-    path: ${user.home}/Documents/smart-accounting-book
-
 spring:
   datasource:
     driverClassName: org.h2.Driver
-    #url: jdbc:h2:mem:test_mem1015;DB_CLOSE_DELAY=-1
-    url: jdbc:h2:file:${root.dir.path}/smart_accounting_book_db_266?createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:test_mem1015;DB_CLOSE_DELAY=-1
+    #url: jdbc:h2:file:${root.dir.path}/smart_accounting_book_db_266?createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
     username: ENC(5kHwGk94fmuTxPlxV6hzNQ==)
     password:
   jpa:

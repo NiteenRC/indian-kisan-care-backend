@@ -6,9 +6,11 @@ import com.nc.med.auth.payload.LoginRequest;
 import com.nc.med.auth.payload.MessageResponse;
 import com.nc.med.auth.payload.SignupRequest;
 import com.nc.med.exception.CustomErrorTypeException;
+import com.nc.med.model.BankAccount;
 import com.nc.med.model.ERole;
 import com.nc.med.model.Role;
 import com.nc.med.model.User;
+import com.nc.med.repo.BankAccountRepo;
 import com.nc.med.repo.RoleRepository;
 import com.nc.med.repo.UserRepository;
 import com.nc.med.service.UserDetailsImpl;
@@ -25,10 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,6 +47,9 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    private BankAccountRepo bankAccountRepo;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -132,6 +134,11 @@ public class AuthController {
         }
 
         user.setRoles(roles);
+        user.setBankAccount(bankAccountRepo.save(signUpRequest.getBankAccount()));
+        user.setPanNo(signUpRequest.getUser().getPanNo().toUpperCase(Locale.ROOT));
+        user.setPhoneNumber(signUpRequest.getUser().getPhoneNumber());
+        user.setGstNo(signUpRequest.getUser().getGstNo().toUpperCase(Locale.ROOT));
+        user.setBrandName(signUpRequest.getUser().getBrandName().toUpperCase(Locale.ROOT));
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

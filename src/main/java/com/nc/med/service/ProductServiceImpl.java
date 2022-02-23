@@ -4,20 +4,17 @@ import com.nc.med.model.Category;
 import com.nc.med.model.Product;
 import com.nc.med.repo.CategoryRepo;
 import com.nc.med.repo.ProductRepo;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepo productRepo;
     private final CategoryRepo categoryRepo;
-
-    public ProductServiceImpl(ProductRepo productRepo, CategoryRepo categoryRepo) {
-        this.productRepo = productRepo;
-        this.categoryRepo = categoryRepo;
-    }
 
     @Override
     public void deleteProduct(Product productID) {
@@ -41,11 +38,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(Product product) {
-        String CategoryName = product.getCategory().getCategoryName();
-        Category category = categoryRepo.findByCategoryName(CategoryName);
+        String categoryName = product.getCategory().getCategoryName();
+        Category category = categoryRepo.findByCategoryName(categoryName);
 
         if (category == null) {
-            category = categoryRepo.save(new Category(CategoryName));
+            category = categoryRepo.save(Category.builder().categoryName(categoryName).build());
             product.setCategory(category);
         }
         return productRepo.save(product);

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SupplierServiceImpl implements SupplierService {
@@ -21,7 +22,9 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public List<Supplier> fetchAllCategories() {
-        return supplierRepo.findAll(Sort.by("supplierName"));
+        return supplierRepo.findAll(Sort.by("supplierName")).stream()
+                .filter(x -> !x.getSupplierName().startsWith("UNKNOWN"))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -38,7 +41,7 @@ public class SupplierServiceImpl implements SupplierService {
     public Supplier findBySupplierName(String supplierName) {
         return supplierRepo.findBySupplierName(supplierName);
     }
-    
+
     @Override
     public Supplier findBySupplierNameContainingIgnoreCase(String supplierName) {
         return supplierRepo.findBySupplierNameContainingIgnoreCase(supplierName);

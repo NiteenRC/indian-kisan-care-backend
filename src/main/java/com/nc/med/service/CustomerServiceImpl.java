@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -21,7 +22,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> fetchAllCategories() {
-        return customerRepo.findAll(Sort.by("customerName"));
+        return customerRepo.findAll(Sort.by("customerName")).stream()
+                .filter(x -> !x.getCustomerName().startsWith("UNKNOWN"))
+                .collect(Collectors.toList());
     }
 
     @Override

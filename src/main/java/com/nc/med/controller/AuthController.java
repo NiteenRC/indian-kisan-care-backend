@@ -5,17 +5,13 @@ import com.nc.med.auth.payload.JwtResponse;
 import com.nc.med.auth.payload.LoginRequest;
 import com.nc.med.auth.payload.MessageResponse;
 import com.nc.med.auth.payload.SignupRequest;
-import com.nc.med.exception.CustomErrorTypeException;
-import com.nc.med.model.BankAccount;
 import com.nc.med.model.ERole;
 import com.nc.med.model.Role;
 import com.nc.med.model.User;
-import com.nc.med.repo.BankAccountRepo;
 import com.nc.med.repo.RoleRepository;
 import com.nc.med.repo.UserRepository;
 import com.nc.med.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,11 +19,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,13 +47,23 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @Autowired
-    private BankAccountRepo bankAccountRepo;
-
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = null;
+        if (userRepository.findAll().isEmpty()) {
+            User user = new User(loginRequest.getUsername().toLowerCase(), "super@admin",
+                    encoder.encode(loginRequest.getPassword()), "image".getBytes());
 
-        Authentication authentication = authenticationManager.authenticate(
+            Role adminRole = roleRepository.findByName(ERole.ROLE_SUPER_ADMIN)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            Set<Role> roles = new HashSet<>();
+            roles.add(adminRole);
+
+            user.setRoles(roles);
+            userRepository.save(user);
+        }
+
+        authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername().toLowerCase(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -65,28 +74,7 @@ public class AuthController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-                userDetails.getEmail(), userDetails.getGstNo(), userDetails.getPanNo(), userDetails.getPhoneNumber(),
-                userDetails.getBrandName(), userDetails.getBankAccount(), roles, userDetails.getImage()));
-    }
-
-    @PostMapping("/signup1")
-    public ResponseEntity<?> registerUser(@RequestParam MultipartFile image, @RequestParam String userName) {
-        Optional<User> userOpt = userRepository.findByUsername(userName);
-
-        if (!userOpt.isPresent()) {
-            return new ResponseEntity(new CustomErrorTypeException("User is not found"), HttpStatus.NOT_FOUND);
-        }
-
-        try {
-            byte[] bytes = image.getBytes();
-            User user = userOpt.orElse(null);
-            user.setImage(bytes);
-            userRepository.save(user);
-        } catch (IOException e) {
-            return new ResponseEntity(new CustomErrorTypeException("File is failed to save" + e),
-                    HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+                userDetails.getEmail(), userDetails.getBankAccount(), roles, userDetails.getImage()));
     }
 
     @PostMapping("/signup")
@@ -117,13 +105,11 @@ public class AuthController {
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
-
                         break;
                     case "mod":
                         Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
-
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -134,13 +120,7 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-        user.setBankAccount(bankAccountRepo.save(signUpRequest.getBankAccount()));
-        user.setPanNo(signUpRequest.getUser().getPanNo().toUpperCase(Locale.ROOT));
-        user.setPhoneNumber(signUpRequest.getUser().getPhoneNumber());
-        user.setGstNo(signUpRequest.getUser().getGstNo().toUpperCase(Locale.ROOT));
-        user.setBrandName(signUpRequest.getUser().getBrandName().toUpperCase(Locale.ROOT));
         userRepository.save(user);
-
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 }

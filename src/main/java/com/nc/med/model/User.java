@@ -31,10 +31,6 @@ public class User {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-	private String gstNo;
-	private String panNo;
-	private String phoneNumber;
-	private String brandName;
 	// private boolean isBankDetailsReq;
 	@OneToOne
 	private BankAccount bankAccount;
@@ -48,30 +44,6 @@ public class User {
 	
 	public byte[] getImage() {
 		return image;
-	}
-
-	public String getGstNo() {
-		return gstNo;
-	}
-
-	public void setGstNo(String gstNo) {
-		this.gstNo = gstNo;
-	}
-
-	public String getPanNo() {
-		return panNo;
-	}
-
-	public void setPanNo(String panNo) {
-		this.panNo = panNo;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
 	}
 
 	public BankAccount getBankAccount() {
@@ -130,13 +102,5 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
-	}
-
-	public String getBrandName() {
-		return brandName;
-	}
-
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
 	}
 }

@@ -13,150 +13,104 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final Long id;
+    private final Long id;
 
-	private final String username;
+    private final String username;
 
-	private final String email;
+    private final String email;
+    @JsonIgnore
+    private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
+    private BankAccount bankAccount;
+    private byte[] image;
 
-	private final String gstNo;
+    public UserDetailsImpl(Long id, String username, String email, String password,
+                           BankAccount bankAccount, Collection<? extends GrantedAuthority> authorities, byte[] image) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.authorities = authorities;
+        this.bankAccount = bankAccount;
+        this.image = image;
+    }
 
-	private String panNo;
+    public static UserDetailsImpl build(User user) {
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
-	private String phoneNumber;
+        return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getBankAccount(),
+                authorities, user.getImage());
+    }
 
-	private String brandName;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
 
-	private BankAccount bankAccount;
+    public Long getId() {
+        return id;
+    }
 
-	@JsonIgnore
-	private final String password;
+    public String getEmail() {
+        return email;
+    }
 
-	private final Collection<? extends GrantedAuthority> authorities;
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-	private byte[] image;
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
-	public UserDetailsImpl(Long id, String username, String email, String password, String gstNo, String panNo,
-			String phoneNumber, String brandName, BankAccount bankAccount,
-			Collection<? extends GrantedAuthority> authorities, byte [] image) {
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.authorities = authorities;
-		this.gstNo = gstNo;
-		this.phoneNumber = phoneNumber;
-		this.brandName = brandName;
-		this.bankAccount = bankAccount;
-		this.panNo = panNo;
-		this.image = image;
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	public static UserDetailsImpl build(User user) {
-		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),
-				user.getGstNo(), user.getPanNo(), user.getPhoneNumber(), user.getBrandName(), user.getBankAccount(),
-				authorities, user.getImage());
-	}
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        UserDetailsImpl user = (UserDetailsImpl) o;
+        return Objects.equals(id, user.id);
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
 
-	@Override
-	public String getUsername() {
-		return username;
-	}
+    public byte[] getImage() {
+        return image;
+    }
 
-	public String getGstNo() {
-		return gstNo;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		UserDetailsImpl user = (UserDetailsImpl) o;
-		return Objects.equals(id, user.id);
-	}
-
-	public String getPanNo() {
-		return panNo;
-	}
-
-	public void setPanNo(String panNo) {
-		this.panNo = panNo;
-	}
-
-	public BankAccount getBankAccount() {
-		return bankAccount;
-	}
-
-	public void setBankAccount(BankAccount bankAccount) {
-		this.bankAccount = bankAccount;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getBrandName() {
-		return brandName;
-	}
-
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
-	}
-
-	public byte[] getImage() {
-		return image;
-	}
-	
-	public void setImage(byte [] image) {
-		this.image = image;
-	}
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 }

@@ -2,17 +2,16 @@ package com.nc.med.service;
 
 import com.nc.med.model.Location;
 import com.nc.med.repo.LocationRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class LocationServiceImpl implements LocationService {
-
-    @Autowired
-    LocationRepo categoryRepo;
+    private final LocationRepo categoryRepo;
 
     @Override
     public Location saveLocation(Location category) {

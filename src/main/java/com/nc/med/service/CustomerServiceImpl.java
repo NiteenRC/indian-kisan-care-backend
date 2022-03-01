@@ -2,7 +2,7 @@ package com.nc.med.service;
 
 import com.nc.med.model.Customer;
 import com.nc.med.repo.CustomerRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
-
-    @Autowired
-    CustomerRepo customerRepo;
+    private final CustomerRepo customerRepo;
 
     @Override
     public Customer saveCustomer(Customer customer) {

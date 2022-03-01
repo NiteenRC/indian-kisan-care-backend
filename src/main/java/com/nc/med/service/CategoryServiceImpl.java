@@ -2,17 +2,16 @@ package com.nc.med.service;
 
 import com.nc.med.model.Category;
 import com.nc.med.repo.CategoryRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-
-    @Autowired
-    CategoryRepo categoryRepo;
+    private final CategoryRepo categoryRepo;
 
     @Override
     public Category saveCategory(Category category) {

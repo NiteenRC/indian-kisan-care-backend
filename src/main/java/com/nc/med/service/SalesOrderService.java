@@ -1,6 +1,9 @@
 package com.nc.med.service;
 
-import com.nc.med.mapper.*;
+import com.nc.med.mapper.CustomerBalance;
+import com.nc.med.mapper.CustomerBalanceSheet;
+import com.nc.med.mapper.SalesOrderSearch;
+import com.nc.med.mapper.StockBookData;
 import com.nc.med.model.Customer;
 import com.nc.med.model.DailySummary;
 import com.nc.med.model.SalesOrder;
@@ -34,5 +37,5 @@ public interface SalesOrderService {
 
     List<SalesOrderDetail> deleteOrderDetails(SalesOrderDetail orderDetail);
 
-	void saveProfitInDailySummary(SalesOrder order, Customer customer, double profit);
+    void saveProfitInDailySummary(SalesOrder order, Customer customer, double profit);
 }

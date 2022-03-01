@@ -12,8 +12,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
 
-     # naming:
-     #   physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      # naming:
+      #   physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   h2:
     console:
       enabled: true

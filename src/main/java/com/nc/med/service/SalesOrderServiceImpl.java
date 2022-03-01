@@ -200,8 +200,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     List<SalesOrder> salesOrders = x.getValue();
                     double totalPrice = salesOrders.stream().mapToDouble(SalesOrder::getTotalPrice).sum();
                     double amountPaid = salesOrders.stream().mapToDouble(SalesOrder::getAmountPaid).sum();
-                    // double dueAmount =
-                    // salesOrders.stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
                     double dueAmount = salesOrderRepo.findDueAmount(x.getKey());
 
                     int size = salesOrders.size();

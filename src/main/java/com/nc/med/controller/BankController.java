@@ -22,7 +22,8 @@ public class BankController {
         try {
             bankAccount.setId(1L);
             bankAccountRepo.save(bankAccount);
-            userRepository.findAll().forEach(user -> {
+            userRepository.findAll().stream()
+                    .filter(x -> x.getBankAccount() == null).forEach(user -> {
                 User user1 = userRepository.getById(user.getId());
                 user1.setBankAccount(bankAccount);
                 userRepository.save(user1);

@@ -1,199 +1,186 @@
 package com.nc.med.model;
 
+import com.nc.med.mapper.DeliverStatus;
+import com.nc.med.mapper.OrderStatus;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.nc.med.mapper.DeliverStatus;
-import com.nc.med.mapper.OrderStatus;
-
 @Entity
 public class SalesOrder extends BaseEntity<String> implements Serializable, Comparable<SalesOrder> {
-	private static final long serialVersionUID = -1000219078147252957L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long salesOrderID;
-	@Column(name = "totalPrice", nullable = false)
-	private double totalPrice;
-	private double amountPaid;
-	private double currentBalance;
-	private double previousBalance;
-	private int totalQty;
-	@Enumerated(EnumType.STRING)
-	private OrderStatus status;
-	@Enumerated(EnumType.STRING)
-	private DeliverStatus deliverStatus;
-	@ManyToOne(cascade=CascadeType.MERGE)
-	private Customer customer;
-	@OneToMany(mappedBy = "salesOrder", fetch = FetchType.EAGER)
-	private List<SalesOrderDetail> salesOrderDetail;
-	private String vehicleNo;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dueDate;
-	private String comment;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date billDate;
-	private double totalProfit;
-	private double currentDue;
-	
-	public DeliverStatus getDeliverStatus() {
-		return deliverStatus;
-	}
+    private static final long serialVersionUID = -1000219078147252957L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long salesOrderID;
+    @Column(name = "totalPrice", nullable = false)
+    private double totalPrice;
+    private double amountPaid;
+    private double currentBalance;
+    private double previousBalance;
+    private int totalQty;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+    @Enumerated(EnumType.STRING)
+    private DeliverStatus deliverStatus;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private Customer customer;
+    @OneToMany(mappedBy = "salesOrder", fetch = FetchType.EAGER)
+    private List<SalesOrderDetail> salesOrderDetail;
+    private String vehicleNo;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dueDate;
+    private String comment;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date billDate;
+    private double totalProfit;
+    private double currentDue;
 
-	public void setDeliverStatus(DeliverStatus deliverStatus) {
-		this.deliverStatus = deliverStatus;
-	}
+    public DeliverStatus getDeliverStatus() {
+        return deliverStatus;
+    }
 
-	public Date getBillDate() {
-		return billDate;
-	}
+    public void setDeliverStatus(DeliverStatus deliverStatus) {
+        this.deliverStatus = deliverStatus;
+    }
 
-	public void setBillDate(Date billDate) {
-		this.billDate = billDate;
-	}
+    public Date getBillDate() {
+        return billDate;
+    }
 
-	public String getComment() {
-		return comment;
-	}
+    public void setBillDate(Date billDate) {
+        this.billDate = billDate;
+    }
 
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+    public String getComment() {
+        return comment;
+    }
 
-	public Date getDueDate() {
-		return dueDate;
-	}
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
-	}
+    public Date getDueDate() {
+        return dueDate;
+    }
 
-	public double getCurrentBalance() {
-		return currentBalance;
-	}
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
 
-	public void setCurrentBalance(double currentBalance) {
-		this.currentBalance = currentBalance;
-	}
+    public double getCurrentBalance() {
+        return currentBalance;
+    }
 
-	public double getPreviousBalance() {
-		return previousBalance;
-	}
+    public void setCurrentBalance(double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
 
-	public void setPreviousBalance(double previousBalance) {
-		this.previousBalance = previousBalance;
-	}
+    public double getPreviousBalance() {
+        return previousBalance;
+    }
 
-	public double getAmountPaid() {
-		return amountPaid;
-	}
+    public void setPreviousBalance(double previousBalance) {
+        this.previousBalance = previousBalance;
+    }
 
-	public void setAmountPaid(double amountPaid) {
-		this.amountPaid = amountPaid;
-	}
+    public double getAmountPaid() {
+        return amountPaid;
+    }
 
-	public Long getSalesOrderID() {
-		return salesOrderID;
-	}
+    public void setAmountPaid(double amountPaid) {
+        this.amountPaid = amountPaid;
+    }
 
-	public void setSalesOrderID(Long salesOrderID) {
-		this.salesOrderID = salesOrderID;
-	}
+    public Long getSalesOrderID() {
+        return salesOrderID;
+    }
 
-	public double getTotalPrice() {
-		return totalPrice;
-	}
+    public void setSalesOrderID(Long salesOrderID) {
+        this.salesOrderID = salesOrderID;
+    }
 
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
+    public double getTotalPrice() {
+        return totalPrice;
+    }
 
-	public int getTotalQty() {
-		return totalQty;
-	}
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
-	public void setTotalQty(int totalQty) {
-		this.totalQty = totalQty;
-	}
+    public int getTotalQty() {
+        return totalQty;
+    }
 
-	public OrderStatus getStatus() {
-		return status;
-	}
+    public void setTotalQty(int totalQty) {
+        this.totalQty = totalQty;
+    }
 
-	public void setStatus(OrderStatus status) {
-		this.status = status;
-	}
+    public OrderStatus getStatus() {
+        return status;
+    }
 
-	public Customer getCustomer() {
-		return customer;
-	}
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
+    public Customer getCustomer() {
+        return customer;
+    }
 
-	public List<SalesOrderDetail> getSalesOrderDetail() {
-		return salesOrderDetail;
-	}
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
-	public void setSalesOrderDetail(List<SalesOrderDetail> salesOrderDetail) {
-		this.salesOrderDetail = salesOrderDetail;
-	}
+    public List<SalesOrderDetail> getSalesOrderDetail() {
+        return salesOrderDetail;
+    }
 
-	public String getVehicleNo() {
-		return vehicleNo;
-	}
+    public void setSalesOrderDetail(List<SalesOrderDetail> salesOrderDetail) {
+        this.salesOrderDetail = salesOrderDetail;
+    }
 
-	public void setVehicleNo(String vehicleNo) {
-		this.vehicleNo = vehicleNo;
-	}
+    public String getVehicleNo() {
+        return vehicleNo;
+    }
 
-	@Override
-	public int compareTo(SalesOrder o) {
-		return o.getBillDate().compareTo(this.getBillDate());
-	}
+    public void setVehicleNo(String vehicleNo) {
+        this.vehicleNo = vehicleNo;
+    }
 
-	public double getTotalProfit() {
-		return totalProfit;
-	}
+    @Override
+    public int compareTo(SalesOrder o) {
+        return o.getBillDate().compareTo(this.getBillDate());
+    }
 
-	public void setTotalProfit(double totalProfit) {
-		this.totalProfit = totalProfit;
-	}
+    public double getTotalProfit() {
+        return totalProfit;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		SalesOrder that = (SalesOrder) o;
-		return Objects.equals(billDate, that.billDate);
-	}
+    public void setTotalProfit(double totalProfit) {
+        this.totalProfit = totalProfit;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(billDate);
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SalesOrder that = (SalesOrder) o;
+        return Objects.equals(billDate, that.billDate);
+    }
 
-	public double getCurrentDue() {
-		return currentDue;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(billDate);
+    }
 
-	public void setCurrentDue(double currentDue) {
-		this.currentDue = currentDue;
-	}
+    public double getCurrentDue() {
+        return currentDue;
+    }
+
+    public void setCurrentDue(double currentDue) {
+        this.currentDue = currentDue;
+    }
 }

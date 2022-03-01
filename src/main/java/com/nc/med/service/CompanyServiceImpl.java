@@ -2,17 +2,16 @@ package com.nc.med.service;
 
 import com.nc.med.model.Company;
 import com.nc.med.repo.CompanyRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
-
-    @Autowired
-    private CompanyRepo companyRepo;
+    private final CompanyRepo companyRepo;
 
     @Override
     public Company saveCompany(Company company) {

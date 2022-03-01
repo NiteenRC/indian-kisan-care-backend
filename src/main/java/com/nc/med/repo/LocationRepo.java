@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface LocationRepo extends JpaRepository<Location, Long> {
     Location findByCityNameContainingIgnoreCase(String cityName);
 
-	Location findByCityName(String cityName);
+    Location findByCityName(String cityName);
 }

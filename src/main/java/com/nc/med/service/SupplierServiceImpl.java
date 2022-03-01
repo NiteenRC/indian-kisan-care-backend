@@ -2,7 +2,7 @@ package com.nc.med.service;
 
 import com.nc.med.model.Supplier;
 import com.nc.med.repo.SupplierRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class SupplierServiceImpl implements SupplierService {
-
-    @Autowired
-    private SupplierRepo supplierRepo;
+    private final SupplierRepo supplierRepo;
 
     @Override
     public Supplier saveSupplier(Supplier supplier) {

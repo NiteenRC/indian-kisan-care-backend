@@ -1,13 +1,13 @@
 package com.nc.med.model;
 
 import com.nc.med.mapper.OrderStatus;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-//@Where(clause = "is_active=false")
 public class PurchaseOrder extends BaseEntity<String> implements Serializable {
     private static final long serialVersionUID = -1000119078147252957L;
     @Id
@@ -31,17 +31,6 @@ public class PurchaseOrder extends BaseEntity<String> implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date billDate;
     private String comment;
-
-    /*
-    @Column(name = "is_active")
-    private Boolean isActivate = Boolean.FALSE;
-    public boolean isActivate() {
-        return isActivate;
-    }
-
-    public void setActivate(Boolean activate) {
-        isActivate = activate;
-    }*/
 
     public Date getBillDate() {
         return billDate;

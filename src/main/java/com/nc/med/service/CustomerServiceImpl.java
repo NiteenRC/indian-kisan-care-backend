@@ -1,21 +1,32 @@
 package com.nc.med.service;
 
 import com.nc.med.model.Customer;
+import com.nc.med.model.Location;
 import com.nc.med.repo.CustomerRepo;
+import com.nc.med.repo.LocationRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepo customerRepo;
+    private final LocationRepo locationRepo;
 
     @Override
     public Customer saveCustomer(Customer customer) {
+        String locationName = customer.getLocation().getCityName();
+        Location location = locationRepo.findByCityName(locationName);
+
+        if (location == null) {
+            location = locationRepo.save(Location.builder().cityName(locationName.toUpperCase(Locale.ROOT)).build());
+            customer.setLocation(location);
+        }
         return customerRepo.save(customer);
     }
 

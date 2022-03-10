@@ -318,14 +318,14 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             Stream<StockData> stream = stockData.stream()
                     .filter(x -> (x.getDate().isAfter(startDate) && x.getDate().isBefore(endDate.plusDays(1))));
             if (!productName.equalsIgnoreCase("null")) {
-                streamStockData = stream.filter(product -> product.getStockBook().getProductName().equals(productName));
+                streamStockData = stream.filter(product -> product.getStockBook().getProductName().equalsIgnoreCase(productName));
             } else {
                 streamStockData = stream
                         .filter(x -> (x.getDate().isAfter(startDate) && x.getDate().isBefore(endDate.plusDays(1))));
             }
         } else if (!productName.equalsIgnoreCase("null")) {
             streamStockData = streamStockData
-                    .filter(product -> product.getStockBook().getProductName().equals(productName));
+                    .filter(product -> product.getStockBook().getProductName().equalsIgnoreCase(productName));
         }
         List<StockData> stockDa = streamStockData.sorted().collect(Collectors.toList());
         int totalSoldStock = stockDa.stream().mapToInt(x -> x.getStockBook().getSoldStock()).sum();

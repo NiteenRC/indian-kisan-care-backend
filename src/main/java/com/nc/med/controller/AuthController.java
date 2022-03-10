@@ -8,6 +8,7 @@ import com.nc.med.auth.payload.SignupRequest;
 import com.nc.med.model.ERole;
 import com.nc.med.model.Role;
 import com.nc.med.model.User;
+import com.nc.med.repo.BankAccountRepo;
 import com.nc.med.repo.RoleRepository;
 import com.nc.med.repo.UserRepository;
 import com.nc.med.service.UserDetailsImpl;
@@ -38,19 +39,20 @@ public class AuthController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
+    private final BankAccountRepo bankAccountRepo;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = null;
         if (userRepository.findAll().isEmpty()) {
-            User user = new User(loginRequest.getUsername().toLowerCase(), "super@admin",
+            User user = new User(loginRequest.getUsername().toLowerCase(),
                     encoder.encode(loginRequest.getPassword()), "image".getBytes());
 
             Role adminRole = roleRepository.findByName(ERole.ROLE_SUPER_ADMIN)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             Set<Role> roles = new HashSet<>();
             roles.add(adminRole);
-
+            user.setBankAccount(bankAccountRepo.getById(1L));
             user.setRoles(roles);
             userRepository.save(user);
         }
@@ -66,7 +68,7 @@ public class AuthController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-                userDetails.getEmail(), userDetails.getBankAccount(), roles, userDetails.getImage()));
+                 userDetails.getBankAccount(), roles, userDetails.getImage()));
     }
 
     @PostMapping("/signup")
@@ -75,12 +77,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-        }
-
         // Create new user's account
-        User user = new User(signUpRequest.getUsername().toLowerCase(), signUpRequest.getEmail(),
+        User user = new User(signUpRequest.getUsername().toLowerCase(),
                 encoder.encode(signUpRequest.getPassword()), "image".getBytes());
 
         Set<String> strRoles = signUpRequest.getRole();
@@ -110,7 +108,7 @@ public class AuthController {
                 }
             });
         }
-
+        user.setBankAccount(bankAccountRepo.getById(1L));
         user.setRoles(roles);
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

@@ -2,12 +2,19 @@ package com.nc.med.controller;
 
 import com.nc.med.auth.payload.MessageResponse;
 import com.nc.med.model.BankAccount;
-import com.nc.med.model.User;
+import com.nc.med.model.Image;
 import com.nc.med.repo.BankAccountRepo;
-import com.nc.med.repo.UserRepository;
+import com.nc.med.repo.ImageRepository;
+import com.nc.med.util.ImageUtility;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/bank")
@@ -15,22 +22,43 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class BankController {
     private final BankAccountRepo bankAccountRepo;
-    private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
     @PostMapping
     public ResponseEntity<?> registerBank(@RequestBody BankAccount bankAccount) {
         try {
             bankAccount.setId(1L);
             bankAccountRepo.save(bankAccount);
-            userRepository.findAll().stream()
-                    .filter(x -> x.getBankAccount() == null).forEach(user -> {
-                User user1 = userRepository.getById(user.getId());
-                user1.setBankAccount(bankAccount);
-                userRepository.save(user1);
-            });
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return ResponseEntity.ok(new MessageResponse("Bank details added successfully!"));
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<?> uploadImage(@RequestBody MultipartFile image) throws IOException {
+        imageRepository.save(Image.builder()
+                .name(image.getOriginalFilename())
+                .type(image.getContentType())
+                .image(ImageUtility.compressImage(image.getBytes())).build());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("asd");
+    }
+
+    @GetMapping(path = {"/image/info/{name}"})
+    public Image getImageDetails(@PathVariable("name") String name) throws IOException {
+        final Optional<Image> dbImage = imageRepository.findByName(name);
+        return Image.builder()
+                .name(dbImage.get().getName())
+                .type(dbImage.get().getType())
+                .image(ImageUtility.decompressImage(dbImage.get().getImage())).build();
+    }
+
+    @GetMapping(path = {"/image/{name}"})
+    public ResponseEntity<byte[]> getImage(@PathVariable String name) throws IOException {
+        final Optional<Image> dbImage = imageRepository.findByName(name);
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(dbImage.get().getType()))
+                .body(ImageUtility.decompressImage(dbImage.get().getImage()));
     }
 }

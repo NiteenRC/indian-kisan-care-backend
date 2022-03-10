@@ -10,6 +10,8 @@ import com.nc.med.repo.SalesOrderRepo;
 import com.nc.med.service.SalesOrderDetailService;
 import com.nc.med.service.SalesOrderService;
 import com.nc.med.util.ValidationProperties;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -27,21 +29,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/salesOrder")
 @Validated
+@Slf4j
+@AllArgsConstructor
 public class SalesOrderController {
-    public static final Logger LOGGER = LoggerFactory.getLogger(SalesOrderController.class);
     private final SalesOrderService orderService;
     private final SalesOrderDetailService orderDetailService;
     private final ValidationProperties validationProperties;
     private final CustomerRepo customerRepo;
     private final SalesOrderRepo salesOrderRepo;
-
-    public SalesOrderController(SalesOrderService orderService, SalesOrderDetailService orderDetailService, ValidationProperties validationProperties, CustomerRepo customerRepo, SalesOrderRepo salesOrderRepo) {
-        this.orderService = orderService;
-        this.orderDetailService = orderDetailService;
-        this.validationProperties = validationProperties;
-        this.customerRepo = customerRepo;
-        this.salesOrderRepo = salesOrderRepo;
-    }
 
     @PostMapping
     public ResponseEntity<?> addOrderList(@RequestBody SalesOrder salesOrder) {
@@ -77,6 +72,7 @@ public class SalesOrderController {
         order.setPreviousBalance(balancePayment.getCurrentBalance() - balancePayment.getPayAmount());
         order.setSalesOrderDetail(Collections.emptyList());
         order.setBillDate(new Date());
+        order.setDueDate(balancePayment.getDueDate());
         order.setStatus(balancePayment.getStatus());
         order.setCurrentDue(orderService.findCustomerBalanceByCustomer(order.getCustomer().getId()).getBalance());
         SalesOrder salesOrderRes = orderService.saveOrder(order);
@@ -134,7 +130,7 @@ public class SalesOrderController {
 
     @GetMapping("/sales-order-search")
     public ResponseEntity<?> fetchSalesOrderProduct(@RequestBody SalesOrderSearch salesOrderSearch) {
-        LOGGER.info("criteria: {}", salesOrderSearch.getCustomerId());
+        log.info("criteria: {}", salesOrderSearch.getCustomerId());
         return new ResponseEntity<>(orderService.salesOrderDetailSearch(salesOrderSearch), HttpStatus.OK);
     }
 

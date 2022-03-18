@@ -1,7 +1,6 @@
 package com.nc.med.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nc.med.model.BankAccount;
 import com.nc.med.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,16 +20,13 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
-    private BankAccount bankAccount;
     private byte[] image;
 
-    public UserDetailsImpl(Long id, String username, String password,
-                           BankAccount bankAccount, Collection<? extends GrantedAuthority> authorities, byte[] image) {
+    public UserDetailsImpl(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities, byte[] image) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
-        this.bankAccount = bankAccount;
         this.image = image;
     }
 
@@ -38,7 +34,7 @@ public class UserDetailsImpl implements UserDetails {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
-        return new UserDetailsImpl(user.getId(), user.getUsername(), user.getPassword(), user.getBankAccount(),
+        return new UserDetailsImpl(user.getId(), user.getUsername(), user.getPassword(),
                 authorities, user.getImage());
     }
 
@@ -89,14 +85,6 @@ public class UserDetailsImpl implements UserDetails {
             return false;
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id, user.id);
-    }
-
-    public BankAccount getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
     }
 
     public byte[] getImage() {

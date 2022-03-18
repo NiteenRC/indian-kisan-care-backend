@@ -38,11 +38,21 @@ public class BankController {
     @PostMapping("/image")
     public ResponseEntity<?> uploadImage(@RequestBody MultipartFile image) throws IOException {
         imageRepository.save(Image.builder()
+                .id(1L)
                 .name(image.getOriginalFilename())
                 .type(image.getContentType())
                 .image(ImageUtility.compressImage(image.getBytes())).build());
         return ResponseEntity.status(HttpStatus.OK)
                 .body("asd");
+    }
+
+    @GetMapping(path = "/image")
+    public Image getImages() {
+        final Optional<Image> dbImage = imageRepository.findById(1L);
+        return Image.builder()
+                .name(dbImage.get().getName())
+                .type(dbImage.get().getType())
+                .image(ImageUtility.decompressImage(dbImage.get().getImage())).build();
     }
 
     @GetMapping(path = {"/image/info/{name}"})
@@ -60,5 +70,22 @@ public class BankController {
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf(dbImage.get().getType()))
                 .body(ImageUtility.decompressImage(dbImage.get().getImage()));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBankDetails(@PathVariable Long id) {
+        final Optional<Image> dbImage = imageRepository.findById(1L);
+        Image image = Image.builder()
+                .name(dbImage.get().getName())
+                .type(dbImage.get().getType())
+                .image(ImageUtility.decompressImage(dbImage.get().getImage())).build();
+
+        final Optional<BankAccount> bankAccount = bankAccountRepo.findById(id);
+        if (bankAccount.isPresent()) {
+            BankAccount bankAccount1 = bankAccount.get();
+                    bankAccount1.setImage(image);
+            return new ResponseEntity<>(bankAccount1, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

@@ -14,17 +14,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Image {
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "name")
-	private String name;
+    @Column(name = "name")
+    private String name;
 
-	@Column(name = "type")
-	private String type;
+    @Column(name = "type")
+    private String type;
 
-	@Column(name = "image", unique = true, nullable = false, length = 100000)
-	private byte[] image;
+    @Column(name = "image", unique = true, nullable = false, length = 100000)
+    private byte[] image;
 }

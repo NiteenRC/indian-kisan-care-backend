@@ -43,7 +43,6 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = null;
         if (userRepository.findAll().isEmpty()) {
             User user = new User(loginRequest.getUsername().toLowerCase(),
                     encoder.encode(loginRequest.getPassword()), "image".getBytes());
@@ -52,12 +51,11 @@ public class AuthController {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             Set<Role> roles = new HashSet<>();
             roles.add(adminRole);
-            user.setBankAccount(bankAccountRepo.getById(1L));
             user.setRoles(roles);
             userRepository.save(user);
         }
 
-        authentication = authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername().toLowerCase(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -67,8 +65,7 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-                 userDetails.getBankAccount(), roles, userDetails.getImage()));
+        return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles, userDetails.getImage()));
     }
 
     @PostMapping("/signup")
@@ -108,7 +105,6 @@ public class AuthController {
                 }
             });
         }
-        user.setBankAccount(bankAccountRepo.getById(1L));
         user.setRoles(roles);
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

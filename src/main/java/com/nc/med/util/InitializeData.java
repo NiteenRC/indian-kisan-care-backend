@@ -1,7 +1,6 @@
 package com.nc.med.util;
 
 import com.nc.med.repo.RoleRepository;
-import com.nc.med.repo.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -21,7 +20,7 @@ public class InitializeData {
     public void loadDataProducts() {
         if (roleRepository.findAll().isEmpty()) {
             ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
-                    new ClassPathResource("/scripts/prod.sql"));
+                    new ClassPathResource("/scripts/local.sql"));
             resourceDatabasePopulator.execute(dataSource);
         }
     }

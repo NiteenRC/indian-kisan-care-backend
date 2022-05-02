@@ -23,6 +23,7 @@ public class Product implements Serializable {
     @Column(name = "Price", nullable = false)
     private double price;
     private double currentPrice;
+    private double purchasePrice;
     private double profit;
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;

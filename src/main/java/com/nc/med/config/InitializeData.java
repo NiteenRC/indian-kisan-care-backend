@@ -1,4 +1,4 @@
-package com.nc.med.util;
+package com.nc.med.config;
 
 import com.nc.med.repo.RoleRepository;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class InitializeData {
     public void loadDataProducts() {
         if (roleRepository.findAll().isEmpty()) {
             ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
-                    new ClassPathResource("/scripts/local.sql"));
+                    new ClassPathResource("/scripts/prod.sql"));
             resourceDatabasePopulator.execute(dataSource);
         }
     }

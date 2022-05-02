@@ -42,6 +42,6 @@ jasypt:
 
 root:
   dir:
-    path: C:\Users\User\Documents\smart-accounting-book\
+    path: D:\smart-accounting-book\database_back_up
     dump_exe_path: C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump
 

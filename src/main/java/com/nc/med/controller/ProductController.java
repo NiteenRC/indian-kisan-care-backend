@@ -55,7 +55,12 @@ public class ProductController {
     public ResponseEntity<?> updateProducts(@RequestBody List<Product> products) {
         products.forEach(product -> {
             Product productObj = productService.findByProductID(product.getId());
-            productObj.setCurrentPrice(product.getPrice());
+            if(product.getPrice() != 0) {
+                productObj.setCurrentPrice(product.getPrice());
+            }
+            if(product.getPurchasePrice() != 0) {
+                productObj.setPurchasePrice(product.getPurchasePrice());
+            }
             productService.saveProduct(productObj);
         });
         return new ResponseEntity<>(HttpStatus.OK);

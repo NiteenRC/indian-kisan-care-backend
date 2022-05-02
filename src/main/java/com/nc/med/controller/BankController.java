@@ -83,7 +83,7 @@ public class BankController {
         final Optional<BankAccount> bankAccount = bankAccountRepo.findById(id);
         if (bankAccount.isPresent()) {
             BankAccount bankAccount1 = bankAccount.get();
-                    bankAccount1.setImage(image);
+            bankAccount1.setImage(image);
             return new ResponseEntity<>(bankAccount1, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.OK);

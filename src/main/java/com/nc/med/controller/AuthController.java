@@ -42,7 +42,7 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         if (userRepository.findAll().isEmpty()) {
-            User user = new User(loginRequest.getUsername().toLowerCase(),
+            User user = new User(loginRequest.getUsername(),
                     encoder.encode(loginRequest.getPassword()), "image".getBytes());
 
             Role adminRole = roleRepository.findByName(ERole.ROLE_SUPER_ADMIN)
@@ -54,7 +54,7 @@ public class AuthController {
         }
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername().toLowerCase(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -73,7 +73,7 @@ public class AuthController {
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername().toLowerCase(),
+        User user = new User(signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()), "image".getBytes());
 
         Set<String> strRoles = signUpRequest.getRole();

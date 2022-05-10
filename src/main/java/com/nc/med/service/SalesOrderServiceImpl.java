@@ -2,22 +2,22 @@ package com.nc.med.service;
 
 import com.nc.med.mapper.*;
 import com.nc.med.model.*;
-import com.nc.med.repo.CustomerRepo;
-import com.nc.med.repo.DailySummaryRepository;
-import com.nc.med.repo.SalesOrderDetailRepo;
-import com.nc.med.repo.SalesOrderRepo;
+import com.nc.med.repo.*;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@AllArgsConstructor
 public class SalesOrderServiceImpl implements SalesOrderService {
     public static final Logger LOGGER = LoggerFactory.getLogger(SalesOrderServiceImpl.class);
     private final SalesOrderRepo salesOrderRepo;
@@ -25,16 +25,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private final ProductService productService;
     private final SalesOrderDetailRepo orderDetailRepo;
     private final DailySummaryRepository dailySummaryRepository;
-
-    public SalesOrderServiceImpl(SalesOrderRepo salesOrderRepo, CustomerRepo customerRepo,
-                                 ProductService productService, SalesOrderDetailRepo orderDetailRepo,
-                                 DailySummaryRepository dailySummaryRepository) {
-        this.salesOrderRepo = salesOrderRepo;
-        this.customerRepo = customerRepo;
-        this.productService = productService;
-        this.orderDetailRepo = orderDetailRepo;
-        this.dailySummaryRepository = dailySummaryRepository;
-    }
+    private final PurchaseOrderDetailRepo purchaseOrderDetailRepo;
 
     @Override
     public SalesOrder saveOrder(SalesOrder order) {
@@ -275,6 +266,17 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             }
             stock = 0;
         }
+
+        List<String> productNames = stockData.stream().map(x -> x.getStockBook().getProductName()).collect(Collectors.toList());
+        List<PurchaseOrderDetail> purchaseOrderDetails = purchaseOrderDetailRepo.findAll().stream()
+                .filter(x -> !productNames.contains(x.getProduct().getProductName()))
+                .filter(x -> x.getProduct().getQty() > 0)
+                .collect(Collectors.toList());
+        purchaseOrderDetails.forEach(x -> {
+            StockBook stockBook = new StockBook(x.getProduct().getProductName(), x.getQtyOrdered(), 0,
+                    0, x.getPrice(), x.getProduct().getProfit());
+            stockData.add(new StockData(x.getPurchaseOrder().getBillDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), stockBook));
+        });
         return getStockBookData(productName, startDate, endDate, stockData);
     }
 

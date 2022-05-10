@@ -23,10 +23,10 @@ public class CustomerServiceImpl implements CustomerService {
         String locationName = customer.getLocation().getCityName();
         Location location = locationRepo.findByCityName(locationName);
 
-        if (location == null) {
+        if (location == null && locationName != null) {
             location = locationRepo.save(Location.builder().cityName(locationName.toUpperCase(Locale.ROOT)).build());
-            customer.setLocation(location);
         }
+        customer.setLocation(location);
         return customerRepo.save(customer);
     }
 

@@ -31,6 +31,7 @@ public class DatabaseBackup {
 
     public static void backup_mac(String dbUsername, String dbPassword, String dbName, String outputFile)
             throws IOException, InterruptedException {
+        outputFile = System.getProperty("user.home")+"/Documents/smart-accounting-book/database_back_up";
         String command = String.format("mysqldump -u%s -p%s --add-drop-table --databases %s -r %s",
                 dbUsername, dbPassword, dbName, outputFile);
 

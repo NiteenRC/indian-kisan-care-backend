@@ -5,6 +5,7 @@ import com.nc.med.mapper.SupplierBalance;
 import com.nc.med.mapper.SupplierBalanceSheet;
 import com.nc.med.model.PurchaseOrder;
 import com.nc.med.model.PurchaseOrderDetail;
+import com.nc.med.model.Supplier;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface PurchaseOrderService {
     List<SupplierBalanceSheet> findCurrentBalanceBySuppliers();
 
     PurchaseOrder getPurchaseOrder(BalancePayment balancePayment);
+
+    List<PurchaseOrder> findBySupplier(Long supplierId);
 }

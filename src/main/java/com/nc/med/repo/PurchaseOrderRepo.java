@@ -16,4 +16,6 @@ public interface PurchaseOrderRepo extends JpaRepository<PurchaseOrder, Long> {
 
     @Query(value = "SELECT sum(current_balance) FROM PURCHASE_ORDER where supplier_id = :#{#supplier.id}  group by supplier_id", nativeQuery = true)
     int findCurrentSum(@Param("supplier") Supplier supplier);
+
+    List<PurchaseOrder> findBySupplier(Supplier supplier);
 }

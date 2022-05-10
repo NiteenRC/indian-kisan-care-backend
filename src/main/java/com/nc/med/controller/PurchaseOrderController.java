@@ -55,9 +55,14 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(orderService.findAllOrders());
     }
 
-    @GetMapping("/supplier/{supplierID}")
+    @GetMapping("/supplier/balance/{supplierID}")
     public ResponseEntity<?> fetchCustomerBalance(@PathVariable Long supplierID) {
         return new ResponseEntity<>(orderService.findSupplierBalanceBySupplier(supplierID), HttpStatus.OK);
+    }
+
+    @GetMapping("/supplier/{supplierID}")
+    public ResponseEntity<?> fetchSupplierById(@PathVariable Long supplierID) {
+        return new ResponseEntity<>(orderService.findBySupplier(supplierID), HttpStatus.OK);
     }
 
     @GetMapping("/supplier")

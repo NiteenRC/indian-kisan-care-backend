@@ -209,4 +209,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         order.setBillDate(new Date());
         return order;
     }
+
+    @Override
+    public List<PurchaseOrder> findBySupplier(Long supplierId) {
+        return purchaseOrderRepo.findBySupplier(supplierRepo.findById(supplierId).orElse(null));
+    }
 }

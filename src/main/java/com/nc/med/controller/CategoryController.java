@@ -62,11 +62,11 @@ public class CategoryController {
                     new CustomErrorTypeException("Category with categoryID " + categoryID + " not found."),
                     HttpStatus.NOT_FOUND);
         }
-        if (!category.getProducts().isEmpty()) {
+        /*if (!category.getProducts().isEmpty()) {
             return new ResponseEntity<>(
                     new CustomErrorTypeException("Category is associated with product. Please delete product before deleting category"),
                     HttpStatus.CONFLICT);
-        }
+        }*/
         categoryService.deleteCategory(category);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }

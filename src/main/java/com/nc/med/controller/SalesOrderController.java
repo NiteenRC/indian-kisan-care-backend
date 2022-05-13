@@ -62,6 +62,31 @@ public class SalesOrderController {
     }
 
     @PutMapping
+    public ResponseEntity<?>  updateSalesOrderList(@RequestBody SalesOrder salesOrder) {
+        salesOrder.setTotalQty(salesOrder.getSalesOrderDetail().size());
+        if (salesOrder.getBillDate() == null) {
+            salesOrder.setBillDate(new Date());
+        }
+        SalesOrder salesOrderRes = orderService.saveOrder(salesOrder);
+        double totalProfit = 0d;
+        for (SalesOrderDetail salesOrderDetail : salesOrder.getSalesOrderDetail()) {
+            salesOrderDetail.setSalesOrder(salesOrderRes);
+            try {
+                SalesOrderDetail orderDetail = orderDetailService.saveSalesOrderDetail(salesOrderDetail);
+                totalProfit += orderDetail.getProfit();
+            } catch (Exception e) {
+                e.printStackTrace();
+                orderService.deleteOrder(salesOrderRes);
+                return ResponseEntity.ok(new CustomErrorTypeException(validationProperties.getStock()));
+            }
+        }
+        salesOrderRes.setTotalProfit(totalProfit);
+        orderService.saveProfitInDailySummary(salesOrderRes, salesOrder.getCustomer(), totalProfit);
+        salesOrderRes = salesOrderRepo.save(salesOrderRes);
+        return ResponseEntity.ok(salesOrderRes);
+    }
+
+    @PutMapping("/payment/balance")
     public ResponseEntity<?> updateOrderList(@RequestBody BalancePayment balancePayment) {
         SalesOrder order = new SalesOrder();
         order.setCustomer(customerRepo.findById(balancePayment.getId()).orElse(null));
@@ -80,6 +105,11 @@ public class SalesOrderController {
     @GetMapping
     public ResponseEntity<?> fetchAllOrderList() {
         return ResponseEntity.ok(orderService.findAllOrders());
+    }
+
+    @GetMapping("/transactions/count")
+    public ResponseEntity<?> transactionsCount() {
+        return ResponseEntity.ok(orderService.findTransactionsCount());
     }
 
     @GetMapping("/customer/balance/{customerID}")

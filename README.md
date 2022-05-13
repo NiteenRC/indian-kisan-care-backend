@@ -66,6 +66,18 @@ docker run -e MYSQL_ROOT_PASSWORD=password mysql_image
 mysql.server start GitHub token: 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 docker run -e MYSQL_ROOT_PASSWORD=password
 mysql_image
 
+---Change mysql password in mac
+started the mysql server through
+mysql.server start 
+then
+mysql_secure_installation
+
+To secure the server
+mysql -u root -p
+or
+sudo mysql -u root -p
+---
+
 #### Postgres
 
 brew instal postgresql

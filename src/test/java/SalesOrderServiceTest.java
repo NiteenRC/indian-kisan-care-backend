@@ -56,8 +56,8 @@ public class SalesOrderServiceTest {
         Customer customer = Customer.builder().customerName("AAA").phoneNumber("98323453245").build();
         salesOrder.setCustomer(customer);
 
-        Category category = Category.builder().categoryName("Fertilizer").build();
-        Product product = Product.builder().createdDate(new Date()).price(100).productDesc("").productName("").qty(0).category(category).build();
+        //Category category = Category.builder().categoryName("Fertilizer").build();
+        Product product = Product.builder().createdDate(new Date()).price(100).productDesc("").productName("").qty(0).build();//.category(category).build();
 
         SalesOrderDetail salesOrderDetail = new SalesOrderDetail();
         salesOrderDetail.setSalesOrderDetailID(3L);

@@ -173,6 +173,11 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
 
     @Override
+    public Long findTransactionsCount() {
+        return salesOrderRepo.findAll().stream().filter(salesOrder -> salesOrder.getTotalPrice() > 0).count();
+    }
+
+    @Override
     public CustomerBalance findCustomerBalanceByCustomer(Long customerID) {
         Customer customer = customerRepo.findById(customerID).orElse(null);
         double balance = salesOrderRepo.findDueAmount(customer);

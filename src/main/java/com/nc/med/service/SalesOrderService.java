@@ -21,6 +21,8 @@ public interface SalesOrderService {
 
     List<SalesOrder> findAllOrders();
 
+    Long findTransactionsCount();
+
     CustomerBalance findCustomerBalanceByCustomer(Long customerID);
 
     double findAllCustomersBalance();

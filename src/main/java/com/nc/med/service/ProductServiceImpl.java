@@ -38,13 +38,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(Product product) {
-        String categoryName = product.getCategory().getCategoryName();
+        /*String categoryName = product.getCategory().getCategoryName();
         Category category = categoryRepo.findByCategoryName(categoryName);
 
         if (category == null) {
             category = categoryRepo.save(Category.builder().categoryName(categoryName).build());
             product.setCategory(category);
-        }
+        }*/
         return productRepo.save(product);
     }
 

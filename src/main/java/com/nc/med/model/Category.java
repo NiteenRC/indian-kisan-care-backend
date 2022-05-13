@@ -25,9 +25,9 @@ public class Category {
     private Long id;
     private String categoryName;
     private String categoryDesc;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    /*@OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     @JsonIgnore
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();*/
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;

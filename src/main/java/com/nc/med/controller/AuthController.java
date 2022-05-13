@@ -119,4 +119,9 @@ public class AuthController {
         }
         return ResponseEntity.ok(new MessageResponse("User doesn't exist"));
     }
+
+    @GetMapping
+    public ResponseEntity<?> fetchAllUser() {
+        return ResponseEntity.ok(userRepository.findAll());
+    }
 }

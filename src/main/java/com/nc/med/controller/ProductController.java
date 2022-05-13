@@ -1,7 +1,6 @@
 package com.nc.med.controller;
 
 import com.nc.med.exception.CustomErrorTypeException;
-import com.nc.med.model.Category;
 import com.nc.med.model.Product;
 import com.nc.med.service.CategoryService;
 import com.nc.med.service.ProductService;
@@ -68,8 +67,8 @@ public class ProductController {
 
     @PostMapping("/{categoryID}")
     public ResponseEntity<?> saveProduct(@PathVariable Long categoryID, @RequestBody Product product) {
-        Category category = categoryService.findByCategoryID(categoryID);
-        product.setCategory(category);
+        //Category category = categoryService.findByCategoryID(categoryID);
+        //product.setCategory(category);
         Product productName = productService.findByProductName(product.getProductName());
         if (productName != null) {
             log.info("Product already exist!!");

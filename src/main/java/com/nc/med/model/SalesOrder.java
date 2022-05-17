@@ -37,6 +37,24 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
     private Date billDate;
     private double totalProfit;
     private double currentDue;
+    private double upiPayment;
+    private double cashPayment;
+
+    public void setUpiPayment(double upiPayment) {
+        this.upiPayment = upiPayment;
+    }
+
+    public void setCashPayment(double cashPayment) {
+        this.cashPayment = cashPayment;
+    }
+
+    public double getUpiPayment() {
+        return upiPayment;
+    }
+
+    public double getCashPayment() {
+        return cashPayment;
+    }
 
     public DeliverStatus getDeliverStatus() {
         return deliverStatus;

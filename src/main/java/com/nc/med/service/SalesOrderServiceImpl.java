@@ -116,17 +116,24 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         List<DailySummary> dailySummaries = dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(),
                 order.getCustomer());
 
+        System.out.println("aaaaaa "+order.getCashPayment() +" "+ order.getUpiPayment());
         if (dailySummaries.isEmpty()) {
             dailySummary = new DailySummary(order.getBillDate(), order.getTotalPrice(), order.getTotalProfit(),
-                    total_due, todays_collections, order.getCustomer());
+                    total_due, todays_collections, order.getCustomer(), order.getCashPayment(), order.getUpiPayment());
+            System.out.println("bbb");
         } else {
+            System.out.println("cccc");
             dailySummary = dailySummaries.get(0);
             todays_collections += dailySummary.getDueCollection();
 
             double transaction = dailySummary.getTransaction() + order.getTotalPrice();
             double profit = dailySummary.getProfit() + order.getTotalProfit();
+            double cashPayment = dailySummary.getCashPayment() + order.getCashPayment();
+            double upiPayment = dailySummary.getUpiPayment() + order.getUpiPayment();
             dailySummary.setTransaction(transaction);
             dailySummary.setProfit(profit);
+            dailySummary.setCashPayment(cashPayment);
+            dailySummary.setUpiPayment(upiPayment);
             dailySummary.setDueAmount(total_due);
             dailySummary.setDueCollection(todays_collections);
         }

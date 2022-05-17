@@ -98,8 +98,8 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 40, order.getCustomer());
-        DailySummary dailySummary2 = new DailySummary(order.getBillDate(), 10, 20, 30, 40, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 40, order.getCustomer(),10,20);
+        DailySummary dailySummary2 = new DailySummary(order.getBillDate(), 10, 20, 30, 40, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Arrays.asList(dailySummary1, dailySummary2);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -156,7 +156,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -184,7 +184,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -211,7 +211,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer(), 10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -238,7 +238,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -265,7 +265,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 200, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 200, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -292,7 +292,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 200, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 200, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -319,7 +319,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -346,7 +346,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 300, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 300, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -373,7 +373,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 0, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -400,7 +400,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 300, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 300, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -427,7 +427,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 300, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 300, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))
@@ -454,7 +454,7 @@ public class SalesOrderServiceTest {
         String StringFormatDate = dmyFormat.format(myDate);
         Date billDate = dmyFormat.parse(StringFormatDate);
 
-        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 600, order.getCustomer());
+        DailySummary dailySummary1 = new DailySummary(billDate, 10, 20, 30, 600, order.getCustomer(),10,20);
         List<DailySummary> dailySummaries = Collections.singletonList(dailySummary1);
 
         Mockito.when(dailySummaryRepository.findByBillDateAndCustomer(order.getBillDate(), order.getCustomer()))

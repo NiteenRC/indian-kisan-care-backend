@@ -18,11 +18,29 @@ public class DailySummary extends BaseEntity<String> implements Serializable {
     private Date billDate;
     @ManyToOne
     private Customer customer;
+    private double upiPayment;
+    private double cashPayment;
 
     public DailySummary() {
     }
 
-    public DailySummary(Date billDate, double transaction, double profit, double dueAmount, double dueCollection, Customer customer) {
+    public void setUpiPayment(double upiPayment) {
+        this.upiPayment = upiPayment;
+    }
+
+    public void setCashPayment(double cashPayment) {
+        this.cashPayment = cashPayment;
+    }
+
+    public double getUpiPayment() {
+        return upiPayment;
+    }
+
+    public double getCashPayment() {
+        return cashPayment;
+    }
+
+    public DailySummary(Date billDate, double transaction, double profit, double dueAmount, double dueCollection, Customer customer, double cashPayment, double upiPayment) {
         super();
         this.billDate = billDate;
         this.transaction = transaction;
@@ -30,15 +48,19 @@ public class DailySummary extends BaseEntity<String> implements Serializable {
         this.dueAmount = dueAmount;
         this.dueCollection = dueCollection;
         this.customer = customer;
+        this.cashPayment = cashPayment;
+        this.upiPayment = upiPayment;
     }
 
-    public DailySummary(Date billDate, double transaction, double profit, double dueAmount, double dueCollection) {
+    public DailySummary(Date billDate, double transaction, double profit, double dueAmount, double dueCollection, double cashPayment, double upiPayment) {
         super();
         this.billDate = billDate;
         this.transaction = transaction;
         this.profit = profit;
         this.dueAmount = dueAmount;
         this.dueCollection = dueCollection;
+        this.cashPayment = cashPayment;
+        this.upiPayment = upiPayment;
     }
 
     public Long getId() {

@@ -6,8 +6,6 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -22,15 +20,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RestController
 @EnableEncryptableProperties
 @Slf4j
-public class AppLauncher extends SpringBootServletInitializer {
+public class AppLauncher {
+    //extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(AppLauncher.class);
     }
 
-    @Override
+    /*@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(AppLauncher.class);
-    }
+    }*/
 
     @Bean
     public AuditorAware<String> auditorAware() {

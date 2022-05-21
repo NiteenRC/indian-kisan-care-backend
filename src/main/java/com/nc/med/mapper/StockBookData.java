@@ -7,12 +7,22 @@ public class StockBookData {
     private double totalPrice;
     private double totalProfit;
     private List<StockData> stockData;
+    private double totalTransaction;
 
-    public StockBookData(List<StockData> stockData, int totalQtySold, double totalPrice, double totalProfit) {
+    public StockBookData(List<StockData> stockData, int totalQtySold, double totalPrice, double totalProfit, double totalTransaction) {
         this.totalQtySold = totalQtySold;
         this.totalPrice = totalPrice;
         this.totalProfit = totalProfit;
         this.stockData = stockData;
+        this.totalTransaction = totalTransaction;
+    }
+
+    public double getTotalTransaction() {
+        return totalTransaction;
+    }
+
+    public void setTotalTransaction(double totalTransaction) {
+        this.totalTransaction = totalTransaction;
     }
 
     public double getTotalPrice() {

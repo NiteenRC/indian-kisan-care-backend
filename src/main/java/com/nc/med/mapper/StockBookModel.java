@@ -6,6 +6,7 @@ public class StockBookModel implements Comparable<StockBookModel> {
     private Integer soldStock;
     private double price;
     private double profit;
+    private double totalPrice;
 
     public StockBookModel(String date, String productName, Integer soldStock) {
         this.date = date;
@@ -13,12 +14,21 @@ public class StockBookModel implements Comparable<StockBookModel> {
         this.soldStock = soldStock;
     }
 
-    public StockBookModel(String date, String productName, Integer soldStock, double price, double profit) {
+    public StockBookModel(String date, String productName, Integer soldStock, double price, double profit, double totalPrice) {
         this.date = date;
         this.productName = productName;
         this.soldStock = soldStock;
         this.price = price;
         this.profit = profit;
+        this.totalPrice = totalPrice;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public double getPrice() {

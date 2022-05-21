@@ -346,7 +346,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         double totalPrice = stockDa.stream()
                 .mapToDouble(x -> x.getStockBook().getOpeningBalance() * x.getStockBook().getSoldStock()).sum();
         double totalProfit = stockDa.stream().mapToDouble(x -> x.getStockBook().getClosingBalance()).sum();
-        return new StockBookData(stockDa, totalSoldStock, totalPrice, totalProfit);
+        double totalTransaction = stockDa.stream().mapToDouble(x -> x.getStockBook().getClosingBalance()).sum();
+        return new StockBookData(stockDa, totalSoldStock, totalPrice, totalProfit, totalTransaction);
     }
 
     private void mapObjectToData(List<Object[]> purchaseStockObj, Set<String> dates,
@@ -359,8 +360,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                                 purchaseStockObj.get(i)[1].toString(),
                                 Integer.parseInt(purchaseStockObj.get(i)[2].toString()),
                                 Double.parseDouble(purchaseStockObj.get(i)[3].toString()),
-                                Double.parseDouble(purchaseStockObj.get(i)[4].toString())));
-            } catch (IndexOutOfBoundsException e) {
+                                Double.parseDouble(purchaseStockObj.get(i)[4].toString()),
+                                Double.parseDouble(purchaseStockObj.get(i)[5].toString())));
+            } catch (IndexOutOfBoundsException ignored) {
             }
         } else {
             try {
@@ -368,7 +370,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 purchaseStockMap.put(purchaseStockObj.get(i)[0].toString(),
                         new StockBookModel(purchaseStockObj.get(i)[0].toString(), purchaseStockObj.get(i)[1].toString(),
                                 Integer.parseInt(purchaseStockObj.get(i)[2].toString())));
-            } catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException ignored) {
             }
         }
     }

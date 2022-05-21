@@ -25,7 +25,7 @@ import java.util.Optional;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @AllArgsConstructor
 public class MyFilter extends OncePerRequestFilter {
-    //private SubscriptionRepo subscriptionRepo;
+    private SubscriptionRepo subscriptionRepo;
 
     @Override
     protected boolean shouldNotFilterAsyncDispatch() {
@@ -40,16 +40,16 @@ public class MyFilter extends OncePerRequestFilter {
         Date expiryDate = formatter.parse(expiryDateString);
 
         Date now = new Date();
-        //Optional<Subscription> subscription = subscriptionRepo.findById(1L);
-       // if (subscription.isPresent() && now.before(subscription.get().getEndAt())) {
+        Optional<Subscription> subscription = subscriptionRepo.findById(1L);
+        if (subscription.isPresent() && now.before(subscription.get().getEndAt())) {
             filterChain.doFilter(request, response);
-      /*  } else {
+        } else {
             if (subscriptionRepo.findAll().isEmpty()) {
                 saveSubscription();
             } else {
                 throw new RuntimeException("Application expired. Please contact Admin");
             }
-        }*/
+        }
     }
 
     private void saveSubscription() {
@@ -63,6 +63,6 @@ public class MyFilter extends OncePerRequestFilter {
         c.add(Calendar.MONTH, 3);
         Date newDate = c.getTime();
         subscription.setEndAt(newDate);
-        //subscriptionRepo.save(subscription);
+        subscriptionRepo.save(subscription);
     }
 }

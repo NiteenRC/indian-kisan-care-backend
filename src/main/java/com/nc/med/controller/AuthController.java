@@ -5,10 +5,9 @@ import com.nc.med.auth.payload.JwtResponse;
 import com.nc.med.auth.payload.LoginRequest;
 import com.nc.med.auth.payload.MessageResponse;
 import com.nc.med.auth.payload.SignupRequest;
-import com.nc.med.model.ERole;
-import com.nc.med.model.Role;
-import com.nc.med.model.User;
+import com.nc.med.model.*;
 import com.nc.med.repo.RoleRepository;
+import com.nc.med.repo.SubscriptionRepo;
 import com.nc.med.repo.UserRepository;
 import com.nc.med.service.UserDetailsImpl;
 import lombok.AllArgsConstructor;
@@ -21,10 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,28 +32,38 @@ public class AuthController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
+    private final SubscriptionRepo subscriptionRepo;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        subscriptionFilter();
+
         if (userRepository.findAll().isEmpty()) {
             User user = new User(loginRequest.getUsername(), encoder.encode(loginRequest.getPassword()), "image".getBytes());
-
             Role adminRole = roleRepository.findByName(ERole.ROLE_SUPER_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             Set<Role> roles = new HashSet<>();
             roles.add(adminRole);
             user.setRoles(roles);
+
             userRepository.save(user);
+            saveSubscription();
         }
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles, userDetails.getImage()));
+    }
+
+    private void subscriptionFilter() {
+        Date now = new Date();
+        Optional<Subscription> subscription = subscriptionRepo.findById(1L);
+
+        if (subscription.isPresent() && now.after(subscription.get().getEndAt())) {
+            throw new RuntimeException("Subscription period is expired. Please contact Administrator");
+        }
     }
 
     @PostMapping("/signup")
@@ -112,5 +118,19 @@ public class AuthController {
     @GetMapping
     public ResponseEntity<?> fetchAllUser() {
         return ResponseEntity.ok(userRepository.findAll());
+    }
+
+    private void saveSubscription() {
+        Subscription subscription = new Subscription();
+        subscription.setId(1L);
+        subscription.setPeriod(Period.MONTHS_3);
+        subscription.setCreatedAt(new Date());
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, 3);
+        Date newDate = c.getTime();
+        subscription.setEndAt(newDate);
+        subscriptionRepo.save(subscription);
     }
 }

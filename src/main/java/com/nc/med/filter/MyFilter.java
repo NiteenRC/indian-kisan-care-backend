@@ -55,7 +55,7 @@ public class MyFilter extends OncePerRequestFilter {
     private void saveSubscription() {
         Subscription subscription = new Subscription();
         subscription.setId(1L);
-        subscription.setPeriod(Period.MONTHS_3);
+        subscription.setPeriod(Period.MONTH_3);
         subscription.setCreatedAt(new Date());
 
         Calendar c = Calendar.getInstance();

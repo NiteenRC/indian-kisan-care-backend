@@ -22,4 +22,5 @@ public class Subscription {
     private Date createdAt;
     @Temporal(TemporalType.DATE)
     private Date endAt;
+    private String accessCode;
 }

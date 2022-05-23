@@ -15,7 +15,6 @@ public class SalesOrder extends BaseEntity<String> implements Serializable, Comp
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long salesOrderID;
-    @Column(name = "totalPrice", nullable = false)
     private double totalPrice;
     private double amountPaid;
     private double currentBalance;

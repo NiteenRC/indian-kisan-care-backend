@@ -185,7 +185,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Override
     public CustomerBalance findCustomerBalanceByCustomer(Long customerID) {
         Customer customer = customerRepo.findById(customerID).orElse(null);
-        double balance = salesOrderRepo.findDueAmount(customer);
+        //double balance = salesOrderRepo.findDueAmount(customer);
+        double balance = salesOrderRepo.findAmountBalanceByCustomer(customer)
+                .stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
         return new CustomerBalance(customer, balance);
     }
 
@@ -339,8 +341,20 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         dailySummary.setProfit(profit);
         dailySummary.setCashPayment(cashPayment);
         dailySummary.setUpiPayment(upiPayment);
-        dailySummary.setDueAmount(dailySummary.getDueAmount() - salesOrder.getCurrentBalance());
-        //dailySummary.setDueCollection(dailySummary.getDueCollection() - );
+        if (salesOrder.getTotalPrice() == 0) {
+            dailySummary.setDueAmount(dailySummary.getDueAmount() + salesOrder.getAmountPaid());
+        } else {
+            dailySummary.setDueAmount(dailySummary.getDueAmount() - salesOrder.getCurrentBalance());
+        }
+
+        if (dailySummary.getDueCollection() > 0) {
+            if (dailySummary.getDueCollection() - salesOrder.getAmountPaid() < 0) {
+                dailySummary.setDueCollection(0);
+            } else {
+                dailySummary.setDueCollection(dailySummary.getDueCollection() - salesOrder.getAmountPaid());
+            }
+
+        }
         dailySummaryRepository.save(dailySummary);
     }
 

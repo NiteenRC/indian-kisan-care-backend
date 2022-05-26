@@ -301,15 +301,16 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         orderDetailRepo.delete(orderDetails);
 
         List<SalesOrderDetail> salesOrderDetailList = orderDetailRepo.findBySalesOrder(orderDetails.getSalesOrder());
+
         if (salesOrderDetailList.isEmpty()) {
-            SalesOrder salesOrder = orderDetails.getSalesOrder();
-            saveDailySummary(salesOrder);
             salesOrderRepo.delete(orderDetails.getSalesOrder());
+            saveDailySummary(orderDetails.getSalesOrder());
             return Collections.emptyList();
         } else {
             SalesOrder salesOrder = salesOrderRepo.findById(orderDetails.getSalesOrder().getSalesOrderID())
                     .orElse(null);
             assert salesOrder != null;
+            saveDailySummaryForSalesOrderDetails(orderDetails, salesOrder);
             int totalQty = salesOrder.getTotalQty() - orderDetails.getQtyOrdered();
             double orderedTotalPrice = orderDetails.getSalesPrice() * orderDetails.getQtyOrdered();
             double salesPrice = salesOrder.getTotalPrice();
@@ -317,8 +318,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             double profitPerProduct = (orderDetails.getSalesPrice() - orderDetails.getPurchasePrice())
                     * orderDetails.getQtyOrdered();
             double totalProfit = salesOrder.getTotalProfit() - profitPerProduct;
-
-            saveDailySummary(salesOrder);
             salesOrder.setTotalProfit(totalProfit);
             salesOrder.setTotalQty(totalQty);
             salesOrder.setTotalPrice(salesPrice - orderedTotalPrice);
@@ -326,6 +325,35 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             salesOrder.setSalesOrderDetail(salesOrderDetailList);
             return salesOrderRepo.save(salesOrder).getSalesOrderDetail();
         }
+    }
+
+    private void saveDailySummaryForSalesOrderDetails(SalesOrderDetail orderDetails, SalesOrder salesOrder) {
+        List<DailySummary> dailySummaries = dailySummaryRepository.findByBillDateAndCustomer(salesOrder.getBillDate(),
+                salesOrder.getCustomer());
+        DailySummary dailySummary = dailySummaries.get(0);
+
+        double transaction = dailySummary.getTransaction() - orderDetails.getSalesPrice();
+        double profit = dailySummary.getProfit() - orderDetails.getProfit();
+        double cashPayment = dailySummary.getCashPayment() - salesOrder.getCashPayment();
+        double upiPayment = dailySummary.getUpiPayment() - salesOrder.getUpiPayment();
+        dailySummary.setTransaction(transaction);
+        dailySummary.setProfit(profit);
+        dailySummary.setCashPayment(cashPayment);
+        dailySummary.setUpiPayment(upiPayment);
+        if (salesOrder.getTotalPrice() == 0) {
+            dailySummary.setDueAmount(dailySummary.getDueAmount() + salesOrder.getAmountPaid());
+        } else {
+            dailySummary.setDueAmount(salesOrder.getCurrentBalance());
+        }
+
+        if (dailySummary.getDueCollection() > 0) {
+            if (dailySummary.getDueCollection() - salesOrder.getAmountPaid() < 0) {
+                dailySummary.setDueCollection(0);
+            } else {
+                dailySummary.setDueCollection(dailySummary.getDueCollection() - salesOrder.getAmountPaid());
+            }
+        }
+        dailySummaryRepository.save(dailySummary);
     }
 
     private void saveDailySummary(SalesOrder salesOrder) {

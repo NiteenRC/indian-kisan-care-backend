@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'smart-accounting-book'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0E330673DF53498D88BDDE7FEC2C7DF0 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_46AF035C943E4BB5B013049C9C2D2800 }}
           package: '*.jar'

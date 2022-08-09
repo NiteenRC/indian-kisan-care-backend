@@ -3,9 +3,9 @@ email:
     host: smtp.gmail.com
     port: 587
     username: niteen2010@gmail.com
-    password: password
+    password: npqtjcwiswoiwnoe
   receiver:
-    username: niteen2010@gmail.com
+    username: niteen.cg@gmail.com
   transport.protocol: smtp
   smtp:
     auth: true

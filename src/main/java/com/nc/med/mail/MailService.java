@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 @Service
 public class MailService {
@@ -23,15 +25,29 @@ public class MailService {
     @Value("${email.receiver.username}")
     private String username;
 
-    @Scheduled(cron = "10 02 23 * * ?")
-    public void sendMail() throws MessagingException {
-        sendMailMultipart(username, "Subject", "Mail body", null);
+    @Value("${root.dir.path}")
+    private String dirPath;
+
+    private File getLatestFilefromDir(String dirPath) {
+        File dir = new File(dirPath);
+        File[] files = dir.listFiles();
+        if (files == null || files.length == 0) {
+            return null;
+        }
+
+        File lastModifiedFile = files[0];
+        for (int i = 1; i < files.length; i++) {
+            if (lastModifiedFile.lastModified() < files[i].lastModified()) {
+                lastModifiedFile = files[i];
+            }
+        }
+        return lastModifiedFile;
     }
 
-    @Scheduled(cron = "10 12 23 * * ?")
-    public void sendMailAttachment() throws MessagingException {
-        File file = new File("/Users/niteenchougula/Downloads/AMTM/Task Notes.txt");
-        sendMailMultipart(username, "Subject", "Mail body", file);
+    @Scheduled(fixedRate = 60 * 60 * 1000)
+    public void sendMailAttachment() throws MessagingException, IOException {
+        File fileDirPath = getLatestFilefromDir(dirPath);
+        sendMailMultipart(username, "Backup on " + new Date(), "Mail body", fileDirPath);
     }
 
     public void sendMailMultipart(String toEmail, String subject, String message, File file) throws MessagingException {

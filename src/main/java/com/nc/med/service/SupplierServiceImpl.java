@@ -23,10 +23,10 @@ public class SupplierServiceImpl implements SupplierService {
         String locationName = supplier.getLocation().getCityName();
         Location location = locationRepo.findByCityName(locationName);
 
-        if (location == null && locationName != null) {
+        if (location == null) {
             location = locationRepo.save(Location.builder().cityName(locationName.toUpperCase(Locale.ROOT)).build());
+            supplier.setLocation(location);
         }
-        supplier.setLocation(location);
         return supplierRepo.save(supplier);
     }
 

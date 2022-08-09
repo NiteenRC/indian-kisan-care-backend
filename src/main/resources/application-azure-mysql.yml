@@ -3,15 +3,13 @@ mysql:
 
 spring:
   datasource:
-    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://smartaccountingbookserver.database.windows.net:1433;database=smartaccoutingbookdb;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30; 
-    #jdbc:sqlserver://smartaccountingbookserver.database.windows.net:1433;database=${mysql.db_name};
-    username: sqladmin
+    url: jdbc:mysql://smartaccountingbookmysqlserver.mysql.database.azure.com:3306/${mysql.db_name}?createDatabaseIfNotExist=true
+    username: sqladmin@smartaccountingbookmysqlserver
     password: SmartUser@123
   jpa:
     show-sql: false
     hibernate:
       ddl-auto: update
-   # properties:
-   #   hibernate:
-   #     dialect: org.hibernate.dialect.SQLServer2012Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect

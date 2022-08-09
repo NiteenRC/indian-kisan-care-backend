@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 public class DailySummary extends BaseEntity<String> implements Serializable {
-    private static final long serialVersionUID = -1000219078147252957L;
+    private static final long serialVersionUID = -1001219078147252957L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

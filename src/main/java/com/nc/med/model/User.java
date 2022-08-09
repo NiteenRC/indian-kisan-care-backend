@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
+@Table(name = "userModel", uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
 @Getter
 @Setter
 public class User {

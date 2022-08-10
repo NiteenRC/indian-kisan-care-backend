@@ -16,6 +16,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/supplier")
 @Validated
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SupplierController {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(SupplierController.class);

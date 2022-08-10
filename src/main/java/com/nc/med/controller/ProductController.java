@@ -17,6 +17,7 @@ import java.util.Objects;
 @RequestMapping("/product")
 @AllArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;

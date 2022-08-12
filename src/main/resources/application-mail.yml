@@ -2,10 +2,10 @@ email:
   sender:
     host: smtp.gmail.com
     port: 587
-    username: niteen2010@gmail.com
-    password: npqtjcwiswoiwnoe
+    username: smart.acc.book@gmail.com
+    password: njiliqdcmatsggkb
   receiver:
-    username: niteen.cg@gmail.com
+    username: niteen.java@gmail.com
   transport.protocol: smtp
   smtp:
     auth: true

@@ -1,4 +1,5 @@
-INSERT INTO roles
-VALUES (1, 'ROLE_SUPER_ADMIN'),
-       (2, 'ROLE_ADMIN'),
-       (3, 'ROLE_USER');
+INSERT INTO roles VALUES (1, 'ROLE_SUPER_ADMIN'), (2, 'ROLE_ADMIN'), (3, 'ROLE_USER');
+
+INSERT INTO image VALUES (1,_binary 'xÚí’ùSTÇ?ïÝ,@P!YZ(- P©•VII¥–aˆñ\0A‹ˆ,’ ì;ˆŠ2E“‹Š‘ŒC£)àhdd2l…,é\0ÉNWýú¡_úÞùÞ9ßsÎ½÷œ9réé!w-|f!°XRº0ç¡ÿ`aø÷íûœšš–œbjzšiÉ±ÑQÚo£©ñ-W\Zééîdrb‚I™ÓÕÑÎ™Ê|ö9i;œÍ·§Ë©={’Á~n¶Ý ªâzÿìadè.~é„çæ2ö÷§Ë¾¦ÿv/Õ•¥Ü½s‡‰ñqÚ¹Æª¼b\\òŠøãÖoÔT•366ÊÅú:nþÚÊ…õ¨£\"pÔhpÐ ŽÝOsóe\Z/ÖÓzý*ÃCCÔVŸ”gÆhõZV`ˆel:–¥ö÷QWSEwW —~¨ÃÉÏÛ½ñ¬÷÷£õjçd¬M¾Ó|¹óçÏ¡J=Äj/Va—šKÓO?R_÷m7~&16¬Œ02“#‰Ù½¡áØìKÆ*>“5AÁÄíñ\'3#”Œ”þ\Z §«“°cÖ¨³ñˆ4cÓ[–‡Eáì¶G7BÂØì¡bk¸9Þùz$oàÞð=F†GH+rÇ3Áß\\#¼’Ì°Î–ýÄe³$¥û¬¼bÍðÍ_À¶hSJ*“äÜf¨9S†_¾Þi¦ÒÅ-d®N¸¯Å=\\…O–1 T\\oif\\Î3)ÛŸƒ†Vè£ùr>þE•éá›·µsPÇ›r¼$	™>9É­¶6âŽ» N1&XÆ5%Wë¢9¡/ï^DÎW;\nì`Bæ=’LT±þ©*s–SèHyéQº;:åŸjàZËúzo333Ãÿø¯¡TŠÄü‚Â#¥´uB+\'÷`Þ¡Ã&BH­É)©ié™YÙ „øBGiòùÞè˜}ûcãâE’ŽÞ²+twXø®ˆÈ=\"Jé©öòöÙîë·Ã_¤7}ôñæOÜ¶|ê¾ÕcÛgB89¿³ÎåÝ÷Ö»¾¿îƒ7ñúB¬^óæ[o;\nÖÚñŠƒªWWØ­\\%´_³J+ëeÂÆÖî¥—-…ýr…añœx~ñ’^\\*T–B æ.2153êiíÙÏ<+„¬Þ|Ã\',œgd,h1{ÎãOèêéÏ•R P(Å#³}LK[v\'õ¿Ä?˜ò^','favicon.ico','image/x-icon');
+
+INSERT INTO bank_account VALUES (1, 'ACCNOXXXXXXXXXX', 'HDFC', 'MG ROADXXXXXXX', 'MY SHOP XXXXXXXXX', 'EMAIL@GMAIL.COM', 'GSTXXXXXXXXX', 'IFSCXXXXXXXXXX', 'PANNOXXXXXXX', '90365XXXXXXX', 1);

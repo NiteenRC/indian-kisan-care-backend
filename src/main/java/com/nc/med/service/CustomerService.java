@@ -17,4 +17,6 @@ public interface CustomerService {
     List<Customer> fetchAllCategories();
 
     Customer findByCustomerNameContainingIgnoreCase(String customerName);
+
+    void createDirectory(String customerName, String prevCustomerName);
 }

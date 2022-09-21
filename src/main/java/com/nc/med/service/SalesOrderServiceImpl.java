@@ -185,9 +185,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Override
     public CustomerBalance findCustomerBalanceByCustomer(Long customerID) {
         Customer customer = customerRepo.findById(customerID).orElse(null);
-        //double balance = salesOrderRepo.findDueAmount(customer);
-        double balance = salesOrderRepo.findAmountBalanceByCustomer(customer)
-                .stream().mapToDouble(SalesOrder::getCurrentBalance).sum();
+        double balance = salesOrderRepo.findDueAmount(customer);
+        //double balance = salesOrderRepo.findAmountBalanceByCustomer(customer)
+          //      .stream().mapToDouble(SalesOrder::getPreviousBalance).sum();
         return new CustomerBalance(customer, balance);
     }
 

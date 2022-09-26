@@ -20,7 +20,7 @@ public class InitializeData {
     public void loadDataProducts() {
         if (roleRepository.findAll().isEmpty()) {
             ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(false, false, "UTF-8",
-                    new ClassPathResource("/scripts/prod.sql"));
+                    new ClassPathResource("/scripts/local.sql"));
             resourceDatabasePopulator.execute(dataSource);
         }
     }

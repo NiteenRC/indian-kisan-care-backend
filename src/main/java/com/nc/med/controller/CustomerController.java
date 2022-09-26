@@ -11,6 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,7 +29,7 @@ public class CustomerController {
     public CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> addCustomer(@RequestBody Customer customer) throws IOException {
         if (customer == null) {
             return new ResponseEntity<>(new CustomErrorTypeException("Customer is not saved"), HttpStatus.NOT_FOUND);
         }
@@ -35,6 +41,7 @@ public class CustomerController {
                     HttpStatus.NOT_FOUND);
         }
         customer.setCustomerName(customerName);
+        Files.createDirectories(Paths.get("D://customers/"+customerName));
         return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.CREATED);
     }
 
@@ -42,10 +49,12 @@ public class CustomerController {
     public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
         LOGGER.info("customer " + customer.getCustomerName());
         String customerName = customer.getCustomerName().toUpperCase();
+        String PrevCustomerName = customerService.findByCustomerID(customer.getId()).getCustomerName();
 
         Customer categoryObj = customerService.findByCustomerName(customerName);
         if (categoryObj == null || Objects.equals(categoryObj.getId(), customer.getId())) {
             customer.setCustomerName(customerName);
+            customerService.createDirectory(customerName, PrevCustomerName);
             return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new CustomErrorTypeException("Customer already exist!!"), HttpStatus.CONFLICT);

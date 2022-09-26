@@ -8,6 +8,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -55,5 +60,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findByCustomerNameContainingIgnoreCase(String customerName) {
         return customerRepo.findByCustomerNameContainingIgnoreCase(customerName);
+    }
+
+    @Override
+    public void createDirectory(String customerName, String prevCustomerName) {
+        Path sourceFilePath = Paths.get("D://customers/" + prevCustomerName);
+        Path targetFilePath = Paths.get("D://customers/" + customerName);
+
+        try {
+            Files.move(sourceFilePath, targetFilePath);
+        } catch (FileAlreadyExistsException ex) {
+            System.out.println("Target file already exists");
+        } catch (IOException ex) {
+            System.out.format("I/O error: %s%n", ex);
+        }
     }
 }

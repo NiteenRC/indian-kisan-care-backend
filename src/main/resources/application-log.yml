@@ -6,4 +6,4 @@ logging:
     console: '%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n'
     file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
   file:
-    path: /Users/niteenchougula/Downloads/application.log
+    path: D:\smart-accounting-book\database_back_up\application.log

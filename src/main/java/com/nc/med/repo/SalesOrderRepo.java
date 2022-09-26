@@ -1,6 +1,8 @@
 package com.nc.med.repo;
 
 import com.nc.med.mapper.OrderStatus;
+import com.nc.med.mapper.ProductDetail;
+import com.nc.med.mapper.ProductSaleSummary;
 import com.nc.med.model.Customer;
 import com.nc.med.model.SalesOrder;
 import org.springframework.data.jpa.repository.JpaRepository;

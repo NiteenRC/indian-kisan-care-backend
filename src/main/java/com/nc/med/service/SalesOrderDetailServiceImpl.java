@@ -1,5 +1,6 @@
 package com.nc.med.service;
 
+import com.nc.med.mapper.ProductDetail;
 import com.nc.med.mapper.ProductSaleSummary;
 import com.nc.med.model.Product;
 import com.nc.med.model.SalesOrderDetail;
@@ -10,8 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
@@ -49,6 +54,7 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
 
         salesOrderDetail.setPurchasePrice(purchasePrice);
         salesOrderDetail.setProfit(round);
+        salesOrderDetail.setProductName(product.getProductName());
 
         LOGGER.info("Profit for this {} is {} ", product.getProductName(), profit);
         productRepo.save(product);
@@ -56,15 +62,30 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
     }
 
     @Override
-    public List<ProductSaleSummary> salesOrderDetailProductWise() {
-        List<ProductSaleSummary> productSaleSummaries = orderDetailRepo.findAll().stream()
-                .collect(Collectors.groupingBy(SalesOrderDetail::getProduct)).entrySet().stream().map(x -> {
-                    int sumOfQtyOrdered = x.getValue().stream().mapToInt(SalesOrderDetail::getQtyOrdered).sum();
-                    double sumOfProfit = x.getValue().stream().mapToDouble(SalesOrderDetail::getProfit).sum();
-                    return new ProductSaleSummary(x.getKey().getProductName(), sumOfQtyOrdered, sumOfProfit);
-                }).sorted().collect(Collectors.toList());
-        LOGGER.info("productSaleSummaries {} ", productSaleSummaries);
-        return productSaleSummaries;
+    public ProductSaleSummary salesOrderDetailProductWise(String productName, LocalDate start, LocalDate end) {
+        List<ProductDetail> productDetails = new ArrayList<>();
+        List<Object[]> productDetailsObj;
+
+        if (!Objects.equals(productName, "null") && start != null & end != null) {
+            productDetailsObj = orderDetailRepo.productSalesSummaryWithAllFields(productName, start, end);
+        } else if (start != null && end != null) {
+            productDetailsObj = orderDetailRepo.productSalesSummaryWithoutProductName(start, end);
+        } else if (!Objects.equals(productName, "null")) {
+            productDetailsObj = orderDetailRepo.productSalesSummaryWithoutDates(productName);
+        } else {
+            productDetailsObj = orderDetailRepo.productSalesSummaryAllData();
+        }
+
+        int totalQty = 0;
+        double totalProfit = 0;
+
+        for (Object[] objects : productDetailsObj) {
+            totalQty += ((BigDecimal) objects[2]).intValue();
+            totalProfit += (Double) objects[3];
+            productDetails.add(new ProductDetail((Date) objects[0], (String) objects[1],
+                    ((BigDecimal) objects[2]).intValue(), (Double) objects[3]));
+        }
+        return new ProductSaleSummary(productDetails, totalQty, totalProfit);
     }
 
     @Override

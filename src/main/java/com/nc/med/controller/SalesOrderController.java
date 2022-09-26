@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -47,6 +49,9 @@ public class SalesOrderController {
         for (SalesOrderDetail salesOrderDetail : salesOrder.getSalesOrderDetail()) {
             salesOrderDetail.setSalesOrder(salesOrderRes);
             try {
+                //DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                //salesOrderDetail.setBillDate(formatter.parse(formatter.format((salesOrder.getBillDate()));
+                salesOrderDetail.setBillDate(salesOrder.getBillDate());
                 SalesOrderDetail orderDetail = orderDetailService.saveSalesOrderDetail(salesOrderDetail);
                 totalProfit += orderDetail.getProfit();
             } catch (Exception e) {
@@ -152,8 +157,17 @@ public class SalesOrderController {
     }
 
     @GetMapping("/product")
-    public ResponseEntity<?> fetchSalesOrderProductWiseSale() {
-        return new ResponseEntity<>(orderDetailService.salesOrderDetailProductWise(), HttpStatus.OK);
+    public ResponseEntity<?> fetchSalesOrderProductWiseSale(@RequestParam String productName, @RequestParam String startDate, @RequestParam String endDate) {
+        LocalDate start;
+        LocalDate end;
+        if (startDate.equalsIgnoreCase("null") && endDate.equalsIgnoreCase("null")) {
+            start = null;
+            end = null;
+        } else {
+            start = Instant.ofEpochMilli(Long.parseLong(startDate)).atZone(ZoneId.of("UTC")).toLocalDate();
+            end = Instant.ofEpochMilli(Long.parseLong(endDate)).atZone(ZoneId.of("UTC")).toLocalDate();
+        }
+        return new ResponseEntity<>(orderDetailService.salesOrderDetailProductWise(productName, start, end), HttpStatus.OK);
     }
 
     @GetMapping("/sales-order-search")

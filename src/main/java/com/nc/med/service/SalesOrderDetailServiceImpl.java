@@ -65,6 +65,8 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
     public ProductSaleSummary salesOrderDetailProductWise(String productName, LocalDate start, LocalDate end) {
         List<ProductDetail> productDetails = new ArrayList<>();
         List<Object[]> productDetailsObj;
+        int totalQty = 0;
+        double totalProfit = 0;
 
         if (!Objects.equals(productName, "null") && start != null & end != null) {
             productDetailsObj = orderDetailRepo.productSalesSummaryWithAllFields(productName, start, end);
@@ -75,9 +77,6 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
         } else {
             productDetailsObj = orderDetailRepo.productSalesSummaryAllData();
         }
-
-        int totalQty = 0;
-        double totalProfit = 0;
 
         for (Object[] objects : productDetailsObj) {
             totalQty += ((BigDecimal) objects[2]).intValue();

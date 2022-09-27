@@ -1,6 +1,5 @@
 package com.nc.med.service;
 
-import com.nc.med.model.Category;
 import com.nc.med.model.Product;
 import com.nc.med.repo.CategoryRepo;
 import com.nc.med.repo.ProductRepo;

@@ -1,6 +1,5 @@
 package com.nc.med.mapper;
 
-import com.nc.med.model.PurchaseOrderDetail;
 import lombok.Getter;
 import lombok.Setter;
 

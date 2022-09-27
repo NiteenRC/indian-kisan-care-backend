@@ -8,6 +8,7 @@ import com.nc.med.repo.ProductRepo;
 import com.nc.med.repo.PurchaseOrderDetailRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -51,19 +52,19 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
     public CurrentStock findCurrentStock(String productName) {
         List<ProductDetail> productDetails = new ArrayList<>();
         List<Product> products = new ArrayList<>();
+        double totalPurchasePrice = 0;
+        int totalQtyPurchased = 0;
 
         if (!Objects.equals(productName, "null")) {
             assert false;
             products.add(productRepo.findByProductName(productName));
         } else {
-            products = productRepo.findAll();
+            products = productRepo.findAll(Sort.by("productName"));
         }
-        double totalPurchasePrice = 0;
-        int totalQtyPurchased = 0;
 
         for (Product product : products) {
             totalQtyPurchased += product.getQty();
-            totalPurchasePrice += product.getPurchasePrice();
+            totalPurchasePrice += product.getQty() * product.getPurchasePrice();
             productDetails.add(new ProductDetail(product.getProductName(),
                     product.getQty(), product.getPurchasePrice()));
         }

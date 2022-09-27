@@ -1,6 +1,5 @@
 package com.nc.med.repo;
 
-import com.nc.med.model.Customer;
 import com.nc.med.model.PurchaseOrder;
 import com.nc.med.model.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,5 +1,7 @@
 package com.nc.med.service;
 
+import com.nc.med.mapper.CurrentStock;
+import com.nc.med.mapper.ProductDetail;
 import com.nc.med.model.Product;
 import com.nc.med.model.PurchaseOrderDetail;
 import com.nc.med.repo.ProductRepo;
@@ -7,6 +9,10 @@ import com.nc.med.repo.PurchaseOrderDetailRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailService {
@@ -30,6 +36,8 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
         long averagePurchasePrice = Math.round(averagePrice);
         product.setQty(product.getQty() + purchaseOrderDetail.getQtyOrdered());
         product.setPrice(averagePurchasePrice);
+        purchaseOrderDetail.setProductName(product.getProductName());
+        purchaseOrderDetail.setCurrentStock(product.getQty() + purchaseOrderDetail.getQtyOrdered());
         productRepo.save(product);
         orderDetailRepo.save(purchaseOrderDetail);
     }
@@ -37,5 +45,28 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
     @Override
     public PurchaseOrderDetail findById(long id) {
         return orderDetailRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public CurrentStock findCurrentStock(String productName) {
+        List<ProductDetail> productDetails = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
+
+        if (!Objects.equals(productName, "null")) {
+            assert false;
+            products.add(productRepo.findByProductName(productName));
+        } else {
+            products = productRepo.findAll();
+        }
+        double totalPurchasePrice = 0;
+        int totalQtyPurchased = 0;
+
+        for (Product product : products) {
+            totalQtyPurchased += product.getQty();
+            totalPurchasePrice += product.getPurchasePrice();
+            productDetails.add(new ProductDetail(product.getProductName(),
+                    product.getQty(), product.getPurchasePrice()));
+        }
+        return new CurrentStock(productDetails, totalPurchasePrice, totalQtyPurchased);
     }
 }

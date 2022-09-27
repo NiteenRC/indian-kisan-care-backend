@@ -1,11 +1,17 @@
 package com.nc.med.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor
 public class PurchaseOrderDetail implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -18,46 +24,14 @@ public class PurchaseOrderDetail implements Serializable {
     @ManyToOne
     //@JoinColumn(name = "productID") // , insertable = false, updatable = false
     private Product product;
+    private String productName;
     private Integer qtyOrdered;
     private double price;
+    private long currentStock;
 
-    public Long getPurchaseOrderDetailID() {
-        return purchaseOrderDetailID;
-    }
-
-    public void setPurchaseOrderDetailID(Long purchaseOrderDetailID) {
-        this.purchaseOrderDetailID = purchaseOrderDetailID;
-    }
-
-    public PurchaseOrder getPurchaseOrder() {
-        return purchaseOrder;
-    }
-
-    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Integer getQtyOrdered() {
-        return qtyOrdered;
-    }
-
-    public void setQtyOrdered(Integer qtyOrdered) {
+    public PurchaseOrderDetail(String productName, double price, Integer qtyOrdered) {
+        this.productName = productName;
         this.qtyOrdered = qtyOrdered;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
         this.price = price;
     }
 }

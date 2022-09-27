@@ -108,4 +108,9 @@ public class PurchaseOrderController {
         PurchaseOrder purchaseOrder = orderService.findByOrderID(order.getPurchaseOrder().getPurchaseOrderID());
         return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);
     }
+
+    @GetMapping("/current-stock")
+    public ResponseEntity<?> fetchCurrentStock(@RequestParam String productName) {
+        return ResponseEntity.ok(orderDetailService.findCurrentStock(productName));
+    }
 }

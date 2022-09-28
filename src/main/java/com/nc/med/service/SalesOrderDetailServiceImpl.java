@@ -82,7 +82,7 @@ public class SalesOrderDetailServiceImpl implements SalesOrderDetailService {
             totalQty += ((BigDecimal) objects[2]).intValue();
             totalProfit += (Double) objects[3];
             productDetails.add(new ProductDetail((Date) objects[0], (String) objects[1],
-                    ((BigDecimal) objects[2]).intValue(), (Double) objects[3]));
+                    ((BigDecimal) objects[2]).intValue(), (Double) objects[3], (Double) objects[4]));
         }
         return new ProductSaleSummary(productDetails, totalQty, totalProfit);
     }

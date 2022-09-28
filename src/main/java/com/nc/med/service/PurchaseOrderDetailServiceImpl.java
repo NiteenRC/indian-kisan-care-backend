@@ -66,7 +66,7 @@ public class PurchaseOrderDetailServiceImpl implements PurchaseOrderDetailServic
             totalQtyPurchased += product.getQty();
             totalPurchasePrice += product.getQty() * product.getPurchasePrice();
             productDetails.add(new ProductDetail(product.getProductName(),
-                    product.getQty(), product.getPurchasePrice()));
+                    product.getQty(), product.getPurchasePrice(), product.getCurrentPrice() - product.getPurchasePrice()));
         }
         return new CurrentStock(productDetails, totalPurchasePrice, totalQtyPurchased);
     }

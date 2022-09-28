@@ -14,19 +14,22 @@ public class ProductDetail {
     private String productName;
     private double profit;
     private int qtySold;
+    private double margin;
 
-    public ProductDetail(String productName, int qtySold, double profit) {
+    public ProductDetail(String productName, int qtySold, double profit, double margin) {
         super();
         this.productName = productName;
         this.qtySold = qtySold;
         this.profit = profit;
+        this.margin = margin;
     }
 
-    public ProductDetail(Date billDate, String productName, int qtySold, double profit) {
+    public ProductDetail(Date billDate, String productName, int qtySold, double profit, double margin) {
         super();
         this.billDate = billDate;
         this.productName = productName;
         this.qtySold = qtySold;
         this.profit = profit;
+        this.margin = margin;
     }
 }

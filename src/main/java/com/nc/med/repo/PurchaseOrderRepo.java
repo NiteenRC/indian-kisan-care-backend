@@ -15,10 +15,10 @@ public interface PurchaseOrderRepo extends JpaRepository<PurchaseOrder, Long> {
     List<PurchaseOrder> findAmountBalanceBySupplier(Supplier supplier);
 
     @Query(value = "SELECT sum(current_balance) FROM PURCHASE_ORDER where supplier_id = :#{#supplier.id}  group by supplier_id", nativeQuery = true)
-    int findCurrentSum(@Param("supplier") Supplier supplier);
+    Double findCurrentSum(@Param("supplier") Supplier supplier);
 
     @Query(value = "SELECT previous_balance FROM PURCHASE_ORDER where supplier_id = :#{#supplier.id} order by  purchase_orderid desc limit 1", nativeQuery = true)
-    int findDueAmount(@Param("supplier") Supplier supplier);
+    Double findDueAmount(@Param("supplier") Supplier supplier);
 
     List<PurchaseOrder> findBySupplier(Supplier supplier);
 }

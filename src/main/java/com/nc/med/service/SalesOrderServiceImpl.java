@@ -6,6 +6,7 @@ import com.nc.med.repo.*;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -185,7 +186,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Override
     public CustomerBalance findCustomerBalanceByCustomer(Long customerID) {
         Customer customer = customerRepo.findById(customerID).orElse(null);
-        double balance = salesOrderRepo.findDueAmount(customer);
+        Double balance = salesOrderRepo.findDueAmount(customer);
         //double balance = salesOrderRepo.findAmountBalanceByCustomer(customer)
           //      .stream().mapToDouble(SalesOrder::getPreviousBalance).sum();
         return new CustomerBalance(customer, balance);
@@ -203,7 +204,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     List<SalesOrder> salesOrders = x.getValue();
                     double totalPrice = salesOrders.stream().mapToDouble(SalesOrder::getTotalPrice).sum();
                     double amountPaid = salesOrders.stream().mapToDouble(SalesOrder::getAmountPaid).sum();
-                    double dueAmount = salesOrderRepo.findDueAmount(x.getKey());
+                    Double dueAmount = salesOrderRepo.findDueAmount(x.getKey());
 
                     int size = salesOrders.size();
                     SalesOrder order = salesOrders.get(size - 1);

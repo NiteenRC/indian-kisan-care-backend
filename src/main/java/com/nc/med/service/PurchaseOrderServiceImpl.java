@@ -169,7 +169,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
     public SupplierBalance findSupplierBalanceBySupplier(Long supplierID) {
         Supplier supplier = supplierRepo.findById(supplierID).orElse(null);
-        double balance = purchaseOrderRepo.findDueAmount(supplier);
+        Double balance = purchaseOrderRepo.findDueAmount(supplier);
         //double balance = purchaseOrderRepo.findAmountBalanceBySupplier(supplier)
         //       .stream().mapToDouble(PurchaseOrder::getCurrentBalance).sum();
         return new SupplierBalance(supplier, balance);

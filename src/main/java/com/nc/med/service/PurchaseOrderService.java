@@ -5,6 +5,8 @@ import com.nc.med.mapper.SupplierBalance;
 import com.nc.med.mapper.SupplierBalanceSheet;
 import com.nc.med.model.PurchaseOrder;
 import com.nc.med.model.PurchaseOrderDetail;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public interface PurchaseOrderService {
 
     List<PurchaseOrderDetail> deleteOrderDetails(PurchaseOrderDetail orderDetail) throws Exception;
 
-    List<PurchaseOrder> findAllOrders();
+    Page<PurchaseOrder> findAllOrders(Pageable pageable);
 
     SupplierBalance findSupplierBalanceBySupplier(Long supplierID);
 
@@ -28,4 +30,6 @@ public interface PurchaseOrderService {
     PurchaseOrder getPurchaseOrder(BalancePayment balancePayment);
 
     List<PurchaseOrder> findBySupplier(Long supplierId);
+
+    Page<PurchaseOrder> findBySupplierSupplierNameIgnoreCaseContaining(String supplierName, Pageable pageable);
 }

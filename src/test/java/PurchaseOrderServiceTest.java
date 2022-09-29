@@ -49,11 +49,6 @@ public class PurchaseOrderServiceTest {
     }
 
     @Test
-    public void findAllTest() {
-        Assertions.assertEquals(purchaseOrderList, purchaseOrderService.findAllOrders());
-    }
-
-    @Test
     public void findCustomerBalanceByCustomerTest() {
         Supplier supplier = supplierRepo.findById(1L).orElse(null);
         Mockito.when(purchaseOrderRepo.findAmountBalanceBySupplier(supplier)).thenReturn(purchaseOrderList);

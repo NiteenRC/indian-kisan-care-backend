@@ -12,6 +12,8 @@ import com.nc.med.service.SalesOrderService;
 import com.nc.med.util.ValidationProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -65,7 +67,7 @@ public class SalesOrderController {
     }
 
     @PutMapping
-    public ResponseEntity<?>  updateSalesOrderList(@RequestBody SalesOrder salesOrder) {
+    public ResponseEntity<?> updateSalesOrderList(@RequestBody SalesOrder salesOrder) {
         salesOrder.setTotalQty(salesOrder.getSalesOrderDetail().size());
         if (salesOrder.getBillDate() == null) {
             salesOrder.setBillDate(new Date());
@@ -106,8 +108,17 @@ public class SalesOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> fetchAllOrderList() {
-        return ResponseEntity.ok(orderService.findAllOrders());
+    public ResponseEntity<?> fetchAllOrderList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
+        return ResponseEntity.ok(orderService.findAllOrders(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "billDate"))));
+    }
+
+    @GetMapping("/customer/name")
+    public ResponseEntity<?> fetchSalesOrdersByCustomerName(@RequestParam String customerName, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "billDate"));
+        if (customerName.equals("null")) {
+            return ResponseEntity.ok(orderService.findAllOrders(pageRequest));
+        }
+        return ResponseEntity.ok(orderService.findByCustomerCustomerNameIgnoreCaseContaining(customerName, pageRequest));
     }
 
     @GetMapping("/transactions/count")

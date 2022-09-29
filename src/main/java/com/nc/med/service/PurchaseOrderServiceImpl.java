@@ -12,7 +12,8 @@ import com.nc.med.repo.PurchaseOrderRepo;
 import com.nc.med.repo.SupplierRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -162,8 +163,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     }
 
     @Override
-    public List<PurchaseOrder> findAllOrders() {
-        return purchaseOrderRepo.findAll(Sort.by("billDate").descending());
+    public Page<PurchaseOrder> findAllOrders(Pageable pageable) {
+        return purchaseOrderRepo.findAll(pageable);
     }
 
     @Override
@@ -214,5 +215,10 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
     @Override
     public List<PurchaseOrder> findBySupplier(Long supplierId) {
         return purchaseOrderRepo.findBySupplier(supplierRepo.findById(supplierId).orElse(null));
+    }
+
+    @Override
+    public Page<PurchaseOrder> findBySupplierSupplierNameIgnoreCaseContaining(String supplierName, Pageable pageable) {
+        return purchaseOrderRepo.findBySupplierSupplierNameIgnoreCaseContaining(supplierName, pageable);
     }
 }

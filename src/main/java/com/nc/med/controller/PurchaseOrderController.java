@@ -8,6 +8,8 @@ import com.nc.med.service.PurchaseOrderDetailService;
 import com.nc.med.service.PurchaseOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -51,8 +53,18 @@ public class PurchaseOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> fetchAllOrderList() {
-        return ResponseEntity.ok(orderService.findAllOrders());
+    public ResponseEntity<?> fetchAllOrderList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "billDate"));
+        return ResponseEntity.ok(orderService.findAllOrders(pageRequest));
+    }
+
+    @GetMapping("/supplier/name")
+    public ResponseEntity<?> fetchSalesOrdersByCustomerName(@RequestParam String supplierName, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "billDate"));
+        if (supplierName.equals("null")) {
+            return ResponseEntity.ok(orderService.findAllOrders(pageRequest));
+        }
+        return ResponseEntity.ok(orderService.findBySupplierSupplierNameIgnoreCaseContaining(supplierName, pageRequest));
     }
 
     @GetMapping("/supplier/balance/{supplierID}")

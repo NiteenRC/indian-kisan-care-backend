@@ -6,8 +6,8 @@ import com.nc.med.repo.*;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -174,8 +174,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
 
     @Override
-    public List<SalesOrder> findAllOrders() {
-        return salesOrderRepo.findAll(Sort.by("billDate").descending());
+    public Page<SalesOrder> findAllOrders(Pageable pageable) {
+        return salesOrderRepo.findAll(pageable);
+    }
+
+    @Override
+    public Page<SalesOrder> findByCustomerCustomerNameIgnoreCaseContaining(String customerName, Pageable pageable) {
+        return salesOrderRepo.findByCustomerCustomerNameIgnoreCaseContaining(customerName, pageable);
     }
 
     @Override
@@ -188,7 +193,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         Customer customer = customerRepo.findById(customerID).orElse(null);
         Double balance = salesOrderRepo.findDueAmount(customer);
         //double balance = salesOrderRepo.findAmountBalanceByCustomer(customer)
-          //      .stream().mapToDouble(SalesOrder::getPreviousBalance).sum();
+        //      .stream().mapToDouble(SalesOrder::getPreviousBalance).sum();
         return new CustomerBalance(customer, balance);
     }
 

@@ -3,6 +3,8 @@ package com.nc.med.repo;
 import com.nc.med.mapper.OrderStatus;
 import com.nc.med.model.Customer;
 import com.nc.med.model.SalesOrder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +19,8 @@ public interface SalesOrderRepo extends JpaRepository<SalesOrder, Long> {
 
     List<SalesOrder> findByCustomerIdAndCreatedDateBetweenAndStatus(Long customerId, LocalDateTime startDate,
                                                                     LocalDateTime endDate, OrderStatus orderStatus);
+
+    Page<SalesOrder> findByCustomerCustomerNameIgnoreCaseContaining(String customerName, Pageable pageable);
 
     @Query(value = "SELECT previous_balance FROM SALES_ORDER where customer_id = :#{#customer.id} order by  sales_orderid desc limit 1", nativeQuery = true)
     Double findDueAmount(@Param("customer") Customer customer);

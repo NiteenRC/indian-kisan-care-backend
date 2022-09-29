@@ -8,6 +8,8 @@ import com.nc.med.model.Customer;
 import com.nc.med.model.DailySummary;
 import com.nc.med.model.SalesOrder;
 import com.nc.med.model.SalesOrderDetail;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,8 +20,6 @@ public interface SalesOrderService {
     SalesOrder findByOrderID(Long orderID);
 
     void deleteOrder(SalesOrder orderID);
-
-    List<SalesOrder> findAllOrders();
 
     Long findTransactionsCount();
 
@@ -40,4 +40,8 @@ public interface SalesOrderService {
     List<SalesOrderDetail> deleteOrderDetails(SalesOrderDetail orderDetail);
 
     void saveProfitInDailySummary(SalesOrder order, Customer customer, double profit);
+
+    Page<SalesOrder> findAllOrders(Pageable pageable);
+
+    Page<SalesOrder> findByCustomerCustomerNameIgnoreCaseContaining(String customerName, Pageable pageable);
 }

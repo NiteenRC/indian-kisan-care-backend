@@ -1,4 +1,4 @@
-import com.nc.med.mapper.CustomerBalance;
+/*import com.nc.med.mapper.CustomerBalance;
 import com.nc.med.mapper.OrderStatus;
 import com.nc.med.model.*;
 import com.nc.med.repo.CustomerRepo;
@@ -464,4 +464,4 @@ public class SalesOrderServiceTest {
         assertThat(dailySummaries.get(0).getDueAmount()).isEqualTo(750);
         //assertThat(dailySummaries.get(0).getDueCollection()).isEqualTo(600);
     }
-}
+}*/

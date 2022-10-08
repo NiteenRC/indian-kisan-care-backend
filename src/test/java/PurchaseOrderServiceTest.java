@@ -1,4 +1,4 @@
-import com.nc.med.mapper.OrderStatus;
+/*import com.nc.med.mapper.OrderStatus;
 import com.nc.med.mapper.SupplierBalance;
 import com.nc.med.model.PurchaseOrder;
 import com.nc.med.model.PurchaseOrderDetail;
@@ -57,3 +57,4 @@ public class PurchaseOrderServiceTest {
         Assertions.assertEquals(50, supplierBalance.getBalance());
     }
 }
+*/

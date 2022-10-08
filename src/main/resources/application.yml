@@ -4,6 +4,8 @@
 #servlet:
 #context-path: /smart-accounting-book-backend
 
+env:
+  profile: prod
 
 ##### Profile Activation #####
 spring:

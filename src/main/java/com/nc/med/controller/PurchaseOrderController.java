@@ -9,7 +9,9 @@ import com.nc.med.service.PurchaseOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -53,18 +55,8 @@ public class PurchaseOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> fetchAllOrderList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "billDate"));
-        return ResponseEntity.ok(orderService.findAllOrders(pageRequest));
-    }
-
-    @GetMapping("/supplier/name")
-    public ResponseEntity<?> fetchSalesOrdersByCustomerName(@RequestParam String supplierName, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "billDate"));
-        if (supplierName.equals("null")) {
-            return ResponseEntity.ok(orderService.findAllOrders(pageRequest));
-        }
-        return ResponseEntity.ok(orderService.findBySupplierSupplierNameIgnoreCaseContaining(supplierName, pageRequest));
+    public ResponseEntity<?> fetchAllOrderList(@RequestParam String name, @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(orderService.findBySupplierSupplierNameIgnoreCaseContaining(name, pageable));
     }
 
     @GetMapping("/supplier/balance/{supplierID}")

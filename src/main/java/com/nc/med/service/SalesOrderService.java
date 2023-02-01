@@ -27,7 +27,7 @@ public interface SalesOrderService {
 
     double findAllCustomersBalance();
 
-    List<CustomerBalanceSheet> findCurrentBalanceByCustomers();
+    List<CustomerBalanceSheet> findCurrentBalanceByCustomers(Pageable pageable);
 
     List<DailySummary> findBarChartModels();
 
@@ -40,8 +40,6 @@ public interface SalesOrderService {
     List<SalesOrderDetail> deleteOrderDetails(SalesOrderDetail orderDetail);
 
     void saveProfitInDailySummary(SalesOrder order, Customer customer, double profit);
-
-    Page<SalesOrder> findAllOrders(Pageable pageable);
 
     Page<SalesOrder> findByCustomerCustomerNameIgnoreCaseContaining(String customerName, Pageable pageable);
 }

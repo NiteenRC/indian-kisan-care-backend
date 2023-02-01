@@ -174,11 +174,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
 
     @Override
-    public Page<SalesOrder> findAllOrders(Pageable pageable) {
-        return salesOrderRepo.findAll(pageable);
-    }
-
-    @Override
     public Page<SalesOrder> findByCustomerCustomerNameIgnoreCaseContaining(String customerName, Pageable pageable) {
         return salesOrderRepo.findByCustomerCustomerNameIgnoreCaseContaining(customerName, pageable);
     }
@@ -203,7 +198,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
 
     @Override
-    public List<CustomerBalanceSheet> findCurrentBalanceByCustomers() {
+    public List<CustomerBalanceSheet> findCurrentBalanceByCustomers(Pageable pageable) {
         return salesOrderRepo.findAll().stream().collect(Collectors.groupingBy(SalesOrder::getCustomer)).entrySet()
                 .stream().map(x -> {
                     List<SalesOrder> salesOrders = x.getValue();

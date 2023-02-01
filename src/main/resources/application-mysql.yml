@@ -1,5 +1,5 @@
 mysql:
-  db_name: smart_accounting_book001
+  db_name: ikc001
 
 spring:
   datasource:

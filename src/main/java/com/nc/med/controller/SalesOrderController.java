@@ -13,7 +13,9 @@ import com.nc.med.util.ValidationProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -108,17 +110,8 @@ public class SalesOrderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> fetchAllOrderList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
-        return ResponseEntity.ok(orderService.findAllOrders(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "billDate"))));
-    }
-
-    @GetMapping("/customer/name")
-    public ResponseEntity<?> fetchSalesOrdersByCustomerName(@RequestParam String customerName, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "billDate"));
-        if (customerName.equals("null")) {
-            return ResponseEntity.ok(orderService.findAllOrders(pageRequest));
-        }
-        return ResponseEntity.ok(orderService.findByCustomerCustomerNameIgnoreCaseContaining(customerName, pageRequest));
+    public ResponseEntity<?> fetchAllOrderList(@RequestParam String name, @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(orderService.findByCustomerCustomerNameIgnoreCaseContaining(name, pageable));
     }
 
     @GetMapping("/transactions/count")
@@ -137,8 +130,9 @@ public class SalesOrderController {
     }
 
     @GetMapping("/customer/balance")
-    public ResponseEntity<?> fetchCustomerBalanceSheet() {
-        return ResponseEntity.ok(orderService.findCurrentBalanceByCustomers());
+    public ResponseEntity<?> fetchCustomerBalanceSheet(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return ResponseEntity.ok(orderService.findCurrentBalanceByCustomers(pageRequest));
     }
 
     @GetMapping("/customer/{customerID}")

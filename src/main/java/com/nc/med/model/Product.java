@@ -25,8 +25,8 @@ public class Product implements Serializable {
     private double currentPrice;
     private double purchasePrice;
     private double profit;
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //private Category category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
     private String productDesc;
     private int qty;
     @CreationTimestamp
